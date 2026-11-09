@@ -95,9 +95,13 @@ npx agent-email-guard validate [agent-email-guard.json]
 npx agent-email-guard check [--policy file] [send.json]   # stdin without a file; exit 0 allow, 2 hold, 3 refuse
 ```
 
-Coming next, not released in 0.1.0: `npx agent-email-guard mcp` (a guard in front of any email MCP server),
-`npx agent-email-guard hook install` (a Claude Code hook) and `npx agent-email-guard test` (a red-team harness).
-Until they ship, those commands print a notice and exit.
+```bash
+npx agent-email-guard hook install                        # Claude Code PreToolUse hook (agent-email-guard-mcp)
+npx agent-email-guard mcp --wrap "<upstream MCP command>" # guard in front of any email MCP server
+npx agent-email-guard test <agent.ts>                     # red-team harness (agent-email-guard-test)
+```
+
+Those three forward to `agent-email-guard-mcp` and `agent-email-guard-test`; see `mcp/` and `redteam/`.
 
 ## nodemailer plugin
 

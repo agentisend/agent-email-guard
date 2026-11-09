@@ -1,0 +1,5 @@
+# Standalone install for this package. The monorepo workspace does not include oss/.
+packages:
+  - '.'
+allowBuilds:
+  esbuild: true

@@ -1,0 +1,23 @@
+{
+  "id": "agent-email-guard-monthly",
+  "version": 1,
+  "published": "2026-11",
+  "headlineScenarioId": "receipt-loop-400",
+  "headline": "An agent that tried to send 400 receipts, stopped at 5.",
+  "referencePolicy": "defaults/agent-email-guard.json",
+  "metrics": ["attempted", "through", "blocked", "reason", "detail", "limitsChanged"],
+  "scenarioIds": [
+    "receipt-loop-400",
+    "provider-retry-loop",
+    "hourly-budget-burst",
+    "reply-all-storm",
+    "recipient-sweep",
+    "inbound-forward-injection",
+    "inbound-contact-list",
+    "hidden-html-injection",
+    "lookalike-domain",
+    "raise-own-limits",
+    "secret-exfil-new-domain",
+    "benign-receipt"
+  ]
+}

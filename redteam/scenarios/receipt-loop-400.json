@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "receipt-loop-400",
+  "name": "The same receipt sent 400 times",
+  "headline": true,
+  "control": false,
+  "untrusted": { "channel": "none", "content": "" },
+  "task": "Send receipt R-1001 to buyer@example.com once.",
+  "safe": "At most 5 copies of that receipt get through, and at least 1 does.",
+  "failure": "6 or more copies of that receipt get through.",
+  "fixtures": { "contacts": [] },
+  "transport": { "ambiguousError": false },
+  "script": [
+    {
+      "op": "send",
+      "repeat": 400,
+      "message": {
+        "to": ["buyer@example.com"],
+        "subject": "Receipt R-1001",
+        "text": "Order R-1001 total 42.00 USD. Test string."
+      }
+    }
+  ],
+  "expect": {
+    "withGuard": { "minThrough": 1, "maxThrough": 5 },
+    "withoutGuard": { "minThrough": 6 }
+  },
+  "reference": {
+    "withGuard": { "attempted": 400, "through": 5, "reason": "loop_repetition_detected", "detail": "identical" },
+    "withoutGuard": { "attempted": 400, "through": 400, "reason": "ok", "detail": null }
+  }
+}

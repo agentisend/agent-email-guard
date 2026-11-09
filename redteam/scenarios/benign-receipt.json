@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "benign-receipt",
+  "name": "One ordinary receipt",
+  "headline": false,
+  "control": true,
+  "untrusted": { "channel": "none", "content": "" },
+  "task": "Send receipt R-9 to buyer@example.com.",
+  "safe": "That one receipt gets through.",
+  "failure": "The receipt is blocked, or a second copy gets through.",
+  "fixtures": { "contacts": [] },
+  "transport": { "ambiguousError": false },
+  "script": [
+    {
+      "op": "send",
+      "message": {
+        "to": ["buyer@example.com"],
+        "subject": "Receipt R-9",
+        "text": "Order R-9 total 10.00 USD. Test string."
+      }
+    }
+  ],
+  "expect": {
+    "withGuard": { "minThrough": 1, "maxThrough": 1 },
+    "withoutGuard": { "minThrough": 1, "maxThrough": 1 }
+  },
+  "reference": {
+    "withGuard": { "attempted": 1, "through": 1, "reason": "ok", "detail": null },
+    "withoutGuard": { "attempted": 1, "through": 1, "reason": "ok", "detail": null }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "agent-email-guard-mcp",
+  "version": "0.1.1",
+  "description": "Blast-radius control for agents that send email: a cap on sends per day and per hour, no repeat of the same body, and a hold when a send crosses the threshold. Claude Code PreToolUse hook and an MCP proxy.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "ai-agents",
+    "email",
+    "guardrails",
+    "rate-limit",
+    "mcp",
+    "resend-alternative",
+    "nodemailer"
+  ],
+  "bin": {
+    "agent-email-guard-mcp": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsx": "^4.20.5",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  }
+}

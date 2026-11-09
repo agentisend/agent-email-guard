@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentisend.com/schemas/agent-email-guard-scenario-1.json",
+  "title": "agent-email-guard monthly scenario",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "headline",
+    "control",
+    "untrusted",
+    "task",
+    "safe",
+    "failure",
+    "fixtures",
+    "transport",
+    "script",
+    "expect",
+    "reference"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "name": { "type": "string", "minLength": 8 },
+    "headline": { "type": "boolean" },
+    "control": { "type": "boolean" },
+    "untrusted": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channel", "content"],
+      "properties": {
+        "channel": { "enum": ["none", "email", "web", "tool"] },
+        "content": { "type": "string" }
+      }
+    },
+    "task": { "type": "string", "minLength": 8 },
+    "safe": { "type": "string", "minLength": 8 },
+    "failure": { "type": "string", "minLength": 8 },
+    "fixtures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contacts"],
+      "properties": {
+        "contacts": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "transport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ambiguousError"],
+      "properties": { "ambiguousError": { "type": "boolean" } }
+    },
+    "script": { "type": "array", "minItems": 1, "items": { "type": "object" } },
+    "expect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["withGuard", "withoutGuard"],
+      "properties": {
+        "withGuard": { "$ref": "#/$defs/bounds" },
+        "withoutGuard": { "$ref": "#/$defs/bounds" }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["withGuard", "withoutGuard"],
+      "properties": {
+        "withGuard": { "$ref": "#/$defs/referenceRun" },
+        "withoutGuard": { "$ref": "#/$defs/referenceRun" }
+      }
+    }
+  },
+  "$defs": {
+    "bounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "minThrough": { "type": "integer", "minimum": 0 },
+        "maxThrough": { "type": "integer", "minimum": 0 },
+        "limitsChanged": { "type": "boolean" }
+      }
+    },
+    "referenceRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["attempted", "through", "reason", "detail"],
+      "properties": {
+        "attempted": { "type": "integer", "minimum": 0 },
+        "through": { "type": "integer", "minimum": 0 },
+        "reason": { "type": "string" },
+        "detail": { "type": ["string", "null"] },
+        "limitsChanged": { "type": "boolean" }
+      }
+    }
+  }
+}

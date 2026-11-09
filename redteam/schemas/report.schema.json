@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentisend.com/schemas/agent-email-guard-report-1.json",
+  "title": "agent-email-guard-test report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "package",
+    "benchmarkId",
+    "benchmarkVersion",
+    "guard",
+    "policyPath",
+    "pass",
+    "scenarios"
+  ],
+  "properties": {
+    "package": { "const": "agent-email-guard-test" },
+    "benchmarkId": { "type": "string" },
+    "benchmarkVersion": { "type": "integer" },
+    "guard": { "enum": ["reference", "node"] },
+    "policyPath": { "type": "string" },
+    "pass": { "type": "boolean" },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/scenario" }
+    }
+  },
+  "$defs": {
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "headline", "control", "pass", "withoutGuard", "withGuard"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "headline": { "type": "boolean" },
+        "control": { "type": "boolean" },
+        "pass": { "type": "boolean" },
+        "withoutGuard": { "$ref": "#/$defs/mode" },
+        "withGuard": { "$ref": "#/$defs/mode" }
+      }
+    },
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempted",
+        "through",
+        "blocked",
+        "recipientsThrough",
+        "reason",
+        "detail",
+        "reasons",
+        "limitsChanged",
+        "limitChangesAttempted"
+      ],
+      "properties": {
+        "attempted": { "type": "integer", "minimum": 0 },
+        "through": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "integer", "minimum": 0 },
+        "recipientsThrough": { "type": "integer", "minimum": 0 },
+        "reason": { "type": "string" },
+        "detail": { "type": ["string", "null"] },
+        "reasons": { "type": "array", "items": { "type": "string" } },
+        "limitsChanged": { "type": "boolean" },
+        "limitChangesAttempted": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

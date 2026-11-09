@@ -1,0 +1,55 @@
+{
+  "name": "agent-email-guard-test",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Blast-radius control checks for an agent that sends email. A fake send tool records attempts. Nothing is delivered.",
+  "license": "MIT",
+  "keywords": [
+    "ai-agents",
+    "email",
+    "guardrails",
+    "rate-limit",
+    "mcp",
+    "resend-alternative",
+    "nodemailer"
+  ],
+  "bin": {
+    "agent-email-guard-test": "./bin/agent-email-guard-test.js"
+  },
+  "exports": {
+    ".": "./src/harness.ts",
+    "./script": "./src/script.ts",
+    "./guard": "./src/guard-adapter.ts"
+  },
+  "files": [
+    "bin",
+    "src",
+    "scenarios",
+    "benchmark",
+    "schemas",
+    "defaults",
+    "examples",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "tsx": "^4.20.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agentisend/agent-email-guard.git",
+    "directory": "redteam"
+  },
+  "homepage": "https://github.com/agentisend/agent-email-guard/tree/main/redteam"
+}
