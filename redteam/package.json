@@ -1,6 +1,6 @@
 {
   "name": "agent-email-guard-test",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Blast-radius control checks for an agent that sends email. A fake send tool records attempts. Nothing is delivered.",
   "license": "MIT",
