@@ -1,0 +1,682 @@
+{
+  "$schema": "./vector.schema.json",
+  "name": "loop_modes",
+  "description": "mode full runs both signals, repetition_only ignores recipient collapse, off holds nothing.",
+  "source": "packages/agent-guard/test/loop_guard_mode_repetition_only_ignores_entropy_collapse.test.ts",
+  "cases": [
+    {
+      "name": "repetition_only does not hold a dominant recipient",
+      "config": {
+        "loop": {
+          "mode": "repetition_only"
+        }
+      },
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799998200000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 0 ",
+            "text": "Reading 0 crossed  in region 0."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998260000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 1 abc",
+            "text": "Reading 17 crossed z in region 1."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998320000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 2 abcabc",
+            "text": "Reading 34 crossed zz in region 2."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998380000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 3 abcabcabc",
+            "text": "Reading 51 crossed zzz in region 3."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998440000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 4 abcabcabcabc",
+            "text": "Reading 68 crossed zzzz in region 4."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998500000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 5 ",
+            "text": "Reading 85 crossed zzzzz in region 5."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998560000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 6 abc",
+            "text": "Reading 102 crossed zzzzzz in region 6."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998620000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 7 abcabc",
+            "text": "Reading 119 crossed  in region 7."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998680000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 8 abcabcabc",
+            "text": "Reading 136 crossed z in region 8."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998740000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 9 abcabcabcabc",
+            "text": "Reading 153 crossed zz in region 9."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998800000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 10 ",
+            "text": "Reading 170 crossed zzz in region 10."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998860000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 11 abc",
+            "text": "Reading 187 crossed zzzz in region 11."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998920000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 12 abcabc",
+            "text": "Reading 204 crossed zzzzz in region 12."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998980000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 13 abcabcabc",
+            "text": "Reading 221 crossed zzzzzz in region 13."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999040000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 14 abcabcabcabc",
+            "text": "Reading 238 crossed  in region 14."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999100000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 15 ",
+            "text": "Reading 255 crossed z in region 15."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999160000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 16 abc",
+            "text": "Reading 272 crossed zz in region 16."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999220000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 17 abcabc",
+            "text": "Reading 289 crossed zzz in region 17."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999280000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 18 abcabcabc",
+            "text": "Reading 306 crossed zzzz in region 18."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999340000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 19 abcabcabcabc",
+            "text": "Reading 323 crossed zzzzz in region 19."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999400000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 20 ",
+            "text": "Reading 340 crossed zzzzzz in region 20."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999460000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 21 abc",
+            "text": "Reading 357 crossed  in region 21."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999520000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 22 abcabc",
+            "text": "Reading 374 crossed z in region 22."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999580000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 23 abcabcabc",
+            "text": "Reading 391 crossed zz in region 23."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999640000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 24 abcabcabcabc",
+            "text": "Reading 408 crossed zzz in region 24."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 25 ",
+            "text": "Reading 425 crossed zzzz in region 25."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 26 abc",
+            "text": "Reading 442 crossed zzzzz in region 26."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 27 abcabc",
+            "text": "Reading 459 crossed zzzzzz in region 27."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 28 abcabcabc",
+            "text": "Reading 476 crossed  in region 28."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 29 abcabcabcabc",
+            "text": "Reading 493 crossed z in region 29."
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "A new sentence",
+            "text": "Nothing like the alerts."
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 30,
+              "distinct_recipients": 1,
+              "entropy_bits": 0,
+              "effective_recipients": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "off holds nothing, including a repeated body",
+      "config": {
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "same",
+            "text": "same body"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "same",
+            "text": "same body"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "same",
+            "text": "same body"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "same",
+            "text": "same body"
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "same",
+            "text": "same body"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "full holds the dominant recipient",
+      "config": {
+        "loop": {
+          "mode": "full"
+        }
+      },
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799998200000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 0 ",
+            "text": "Reading 0 crossed  in region 0."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998260000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 1 abc",
+            "text": "Reading 17 crossed z in region 1."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998320000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 2 abcabc",
+            "text": "Reading 34 crossed zz in region 2."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998380000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 3 abcabcabc",
+            "text": "Reading 51 crossed zzz in region 3."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998440000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 4 abcabcabcabc",
+            "text": "Reading 68 crossed zzzz in region 4."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998500000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 5 ",
+            "text": "Reading 85 crossed zzzzz in region 5."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998560000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 6 abc",
+            "text": "Reading 102 crossed zzzzzz in region 6."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998620000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 7 abcabc",
+            "text": "Reading 119 crossed  in region 7."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998680000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 8 abcabcabc",
+            "text": "Reading 136 crossed z in region 8."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998740000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 9 abcabcabcabc",
+            "text": "Reading 153 crossed zz in region 9."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998800000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 10 ",
+            "text": "Reading 170 crossed zzz in region 10."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998860000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 11 abc",
+            "text": "Reading 187 crossed zzzz in region 11."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998920000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 12 abcabc",
+            "text": "Reading 204 crossed zzzzz in region 12."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998980000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 13 abcabcabc",
+            "text": "Reading 221 crossed zzzzzz in region 13."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999040000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 14 abcabcabcabc",
+            "text": "Reading 238 crossed  in region 14."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999100000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 15 ",
+            "text": "Reading 255 crossed z in region 15."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999160000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 16 abc",
+            "text": "Reading 272 crossed zz in region 16."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999220000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 17 abcabc",
+            "text": "Reading 289 crossed zzz in region 17."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999280000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 18 abcabcabc",
+            "text": "Reading 306 crossed zzzz in region 18."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999340000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 19 abcabcabcabc",
+            "text": "Reading 323 crossed zzzzz in region 19."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999400000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 20 ",
+            "text": "Reading 340 crossed zzzzzz in region 20."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999460000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 21 abc",
+            "text": "Reading 357 crossed  in region 21."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999520000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 22 abcabc",
+            "text": "Reading 374 crossed z in region 22."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999580000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 23 abcabcabc",
+            "text": "Reading 391 crossed zz in region 23."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999640000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 24 abcabcabcabc",
+            "text": "Reading 408 crossed zzz in region 24."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 25 ",
+            "text": "Reading 425 crossed zzzz in region 25."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 26 abc",
+            "text": "Reading 442 crossed zzzzz in region 26."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 27 abcabc",
+            "text": "Reading 459 crossed zzzzzz in region 27."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 28 abcabcabc",
+            "text": "Reading 476 crossed  in region 28."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "Alert 29 abcabcabcabc",
+            "text": "Reading 493 crossed z in region 29."
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "owner@example.com",
+            "subject": "A new sentence",
+            "text": "Nothing like the alerts."
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "recipient_entropy_collapse",
+            "message": "Blocked: the last 30 emails went to about 1 effective recipient, and this one goes to the same inbox again, which looks like a loop; mail to other recipients still sends.",
+            "evidence": {
+              "signal_repetition": false,
+              "signal_entropy": true,
+              "matching_sends_in_window": 0,
+              "repetition_threshold": 3,
+              "closest_subject_similarity": null,
+              "closest_body_similarity": null,
+              "window_size": 30,
+              "distinct_recipients": 1,
+              "entropy_bits": 0,
+              "effective_recipients": 1,
+              "perplexity_floor": 3,
+              "candidate_recipient_share": 1,
+              "dominant_share_floor": 0.333,
+              "window_ms": 3600000
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

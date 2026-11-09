@@ -1,0 +1,10 @@
+/node export-ignore
+/python export-ignore
+/go export-ignore
+/spec export-ignore
+/.github export-ignore
+/php/tests export-ignore
+/php/bin export-ignore
+/php/phpunit.xml.dist export-ignore
+/php/phpstan.neon.dist export-ignore
+/php/PUBLISH.md export-ignore

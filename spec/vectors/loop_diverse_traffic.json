@@ -1,0 +1,2627 @@
+{
+  "$schema": "./vector.schema.json",
+  "name": "loop_diverse_traffic",
+  "description": "False-positive guard: varied legitimate traffic is never flagged.",
+  "source": "packages/agent-guard/test/diverse-traffic-not-flagged.test.ts",
+  "cases": [
+    {
+      "name": "120 varied transactional sends",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799996400000,
+          "send": {
+            "to": "carlos@acme.com",
+            "subject": "Your password reset (#22255)",
+            "text": "Hello dee, here are the details you asked for regarding invoice. Reference 447281285."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996430000,
+          "send": {
+            "to": "belle@granitetech.com",
+            "subject": "Your shipping notice (#85320)",
+            "text": "Hello elena, here are the details you asked for regarding password reset. Reference 861456187."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996460000,
+          "send": {
+            "to": "farid@acme.com",
+            "subject": "Your invoice (#95008)",
+            "text": "Hello jonas, here are the details you asked for regarding shipping notice. Reference 550508370."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996490000,
+          "send": {
+            "to": "belle@deltaworks.com",
+            "subject": "Your receipt (#94312)",
+            "text": "Hello ines, here are the details you asked for regarding invoice. Reference 829394710."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996520000,
+          "send": {
+            "to": "elena@acme.com",
+            "subject": "Your invoice (#53728)",
+            "text": "Hello ines, here are the details you asked for regarding shipping notice. Reference 680918066."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996550000,
+          "send": {
+            "to": "dee@everly.com",
+            "subject": "Your weekly digest (#71136)",
+            "text": "Hello hugo, here are the details you asked for regarding shipping notice. Reference 449752849."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996580000,
+          "send": {
+            "to": "ana@bright.com",
+            "subject": "Your welcome (#12700)",
+            "text": "Hello hugo, here are the details you asked for regarding password reset. Reference 804644059."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996610000,
+          "send": {
+            "to": "dee@bright.com",
+            "subject": "Your receipt (#1908)",
+            "text": "Hello carlos, here are the details you asked for regarding welcome. Reference 882866115."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996640000,
+          "send": {
+            "to": "jonas@bright.com",
+            "subject": "Your shipping notice (#58232)",
+            "text": "Hello dee, here are the details you asked for regarding receipt. Reference 129359273."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996670000,
+          "send": {
+            "to": "jonas@acme.com",
+            "subject": "Your shipping notice (#80573)",
+            "text": "Hello elena, here are the details you asked for regarding weekly digest. Reference 306664593."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996700000,
+          "send": {
+            "to": "belle@deltaworks.com",
+            "subject": "Your invoice (#24352)",
+            "text": "Hello gita, here are the details you asked for regarding weekly digest. Reference 490679907."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996730000,
+          "send": {
+            "to": "carlos@bright.com",
+            "subject": "Your weekly digest (#88182)",
+            "text": "Hello ines, here are the details you asked for regarding weekly digest. Reference 839476827."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996760000,
+          "send": {
+            "to": "elena@bright.com",
+            "subject": "Your invoice (#53981)",
+            "text": "Hello gita, here are the details you asked for regarding shipping notice. Reference 425962668."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996790000,
+          "send": {
+            "to": "hugo@deltaworks.com",
+            "subject": "Your invoice (#7725)",
+            "text": "Hello ines, here are the details you asked for regarding shipping notice. Reference 799701976."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996820000,
+          "send": {
+            "to": "belle@cedarline.com",
+            "subject": "Your receipt (#48988)",
+            "text": "Hello ines, here are the details you asked for regarding shipping notice. Reference 197580138."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996850000,
+          "send": {
+            "to": "dee@deltaworks.com",
+            "subject": "Your receipt (#40386)",
+            "text": "Hello ana, here are the details you asked for regarding password reset. Reference 366681328."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996880000,
+          "send": {
+            "to": "elena@bright.com",
+            "subject": "Your password reset (#70072)",
+            "text": "Hello farid, here are the details you asked for regarding password reset. Reference 231860827."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996910000,
+          "send": {
+            "to": "dee@cedarline.com",
+            "subject": "Your shipping notice (#23541)",
+            "text": "Hello jonas, here are the details you asked for regarding shipping notice. Reference 571358008."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996940000,
+          "send": {
+            "to": "jonas@acme.com",
+            "subject": "Your receipt (#54105)",
+            "text": "Hello farid, here are the details you asked for regarding shipping notice. Reference 979919479."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799996970000,
+          "send": {
+            "to": "hugo@foxglove.com",
+            "subject": "Your receipt (#56403)",
+            "text": "Hello gita, here are the details you asked for regarding invoice. Reference 339259082."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997000000,
+          "send": {
+            "to": "elena@foxglove.com",
+            "subject": "Your shipping notice (#3828)",
+            "text": "Hello farid, here are the details you asked for regarding receipt. Reference 645079786."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997030000,
+          "send": {
+            "to": "gita@deltaworks.com",
+            "subject": "Your receipt (#72111)",
+            "text": "Hello farid, here are the details you asked for regarding invoice. Reference 844467037."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997060000,
+          "send": {
+            "to": "hugo@granitetech.com",
+            "subject": "Your weekly digest (#53692)",
+            "text": "Hello jonas, here are the details you asked for regarding shipping notice. Reference 621005721."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997090000,
+          "send": {
+            "to": "hugo@acme.com",
+            "subject": "Your password reset (#61585)",
+            "text": "Hello carlos, here are the details you asked for regarding weekly digest. Reference 24067949."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997120000,
+          "send": {
+            "to": "jonas@deltaworks.com",
+            "subject": "Your welcome (#57529)",
+            "text": "Hello farid, here are the details you asked for regarding invoice. Reference 407509261."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997150000,
+          "send": {
+            "to": "farid@acme.com",
+            "subject": "Your invoice (#10792)",
+            "text": "Hello carlos, here are the details you asked for regarding receipt. Reference 560571450."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997180000,
+          "send": {
+            "to": "elena@granitetech.com",
+            "subject": "Your weekly digest (#59861)",
+            "text": "Hello dee, here are the details you asked for regarding weekly digest. Reference 279791339."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997210000,
+          "send": {
+            "to": "jonas@granitetech.com",
+            "subject": "Your password reset (#65534)",
+            "text": "Hello hugo, here are the details you asked for regarding password reset. Reference 277492925."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997240000,
+          "send": {
+            "to": "belle@bright.com",
+            "subject": "Your invoice (#34238)",
+            "text": "Hello elena, here are the details you asked for regarding weekly digest. Reference 644099422."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997270000,
+          "send": {
+            "to": "ines@cedarline.com",
+            "subject": "Your weekly digest (#42629)",
+            "text": "Hello dee, here are the details you asked for regarding weekly digest. Reference 523171185."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997300000,
+          "send": {
+            "to": "hugo@everly.com",
+            "subject": "Your receipt (#80278)",
+            "text": "Hello jonas, here are the details you asked for regarding weekly digest. Reference 880949175."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997330000,
+          "send": {
+            "to": "belle@everly.com",
+            "subject": "Your password reset (#69762)",
+            "text": "Hello ana, here are the details you asked for regarding welcome. Reference 52465172."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997360000,
+          "send": {
+            "to": "ines@bright.com",
+            "subject": "Your welcome (#97385)",
+            "text": "Hello gita, here are the details you asked for regarding password reset. Reference 118659235."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997390000,
+          "send": {
+            "to": "elena@everly.com",
+            "subject": "Your shipping notice (#14487)",
+            "text": "Hello belle, here are the details you asked for regarding weekly digest. Reference 967731053."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997420000,
+          "send": {
+            "to": "hugo@acme.com",
+            "subject": "Your receipt (#78576)",
+            "text": "Hello ines, here are the details you asked for regarding shipping notice. Reference 857487184."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997450000,
+          "send": {
+            "to": "ana@everly.com",
+            "subject": "Your shipping notice (#62169)",
+            "text": "Hello farid, here are the details you asked for regarding shipping notice. Reference 761926388."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997480000,
+          "send": {
+            "to": "hugo@deltaworks.com",
+            "subject": "Your weekly digest (#23817)",
+            "text": "Hello elena, here are the details you asked for regarding password reset. Reference 240631363."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997510000,
+          "send": {
+            "to": "belle@cedarline.com",
+            "subject": "Your invoice (#79356)",
+            "text": "Hello gita, here are the details you asked for regarding receipt. Reference 230320875."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997540000,
+          "send": {
+            "to": "ana@foxglove.com",
+            "subject": "Your shipping notice (#39958)",
+            "text": "Hello elena, here are the details you asked for regarding invoice. Reference 105277244."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997570000,
+          "send": {
+            "to": "ines@bright.com",
+            "subject": "Your welcome (#59269)",
+            "text": "Hello dee, here are the details you asked for regarding weekly digest. Reference 295613460."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997600000,
+          "send": {
+            "to": "carlos@granitetech.com",
+            "subject": "Your weekly digest (#4982)",
+            "text": "Hello ines, here are the details you asked for regarding receipt. Reference 307218631."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997630000,
+          "send": {
+            "to": "dee@granitetech.com",
+            "subject": "Your weekly digest (#46243)",
+            "text": "Hello ana, here are the details you asked for regarding weekly digest. Reference 436763435."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997660000,
+          "send": {
+            "to": "ines@acme.com",
+            "subject": "Your weekly digest (#9148)",
+            "text": "Hello hugo, here are the details you asked for regarding receipt. Reference 258873026."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997690000,
+          "send": {
+            "to": "ines@everly.com",
+            "subject": "Your invoice (#82117)",
+            "text": "Hello belle, here are the details you asked for regarding receipt. Reference 737038459."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997720000,
+          "send": {
+            "to": "belle@cedarline.com",
+            "subject": "Your shipping notice (#75957)",
+            "text": "Hello elena, here are the details you asked for regarding password reset. Reference 715237055."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997750000,
+          "send": {
+            "to": "belle@acme.com",
+            "subject": "Your password reset (#66107)",
+            "text": "Hello jonas, here are the details you asked for regarding receipt. Reference 384165237."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997780000,
+          "send": {
+            "to": "ines@everly.com",
+            "subject": "Your receipt (#92902)",
+            "text": "Hello jonas, here are the details you asked for regarding password reset. Reference 647991927."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997810000,
+          "send": {
+            "to": "jonas@cedarline.com",
+            "subject": "Your receipt (#76855)",
+            "text": "Hello farid, here are the details you asked for regarding invoice. Reference 77538921."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997840000,
+          "send": {
+            "to": "hugo@granitetech.com",
+            "subject": "Your password reset (#76988)",
+            "text": "Hello elena, here are the details you asked for regarding weekly digest. Reference 127070430."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997870000,
+          "send": {
+            "to": "belle@cedarline.com",
+            "subject": "Your password reset (#27259)",
+            "text": "Hello carlos, here are the details you asked for regarding invoice. Reference 36705082."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997900000,
+          "send": {
+            "to": "hugo@cedarline.com",
+            "subject": "Your welcome (#44256)",
+            "text": "Hello ines, here are the details you asked for regarding welcome. Reference 544036069."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997930000,
+          "send": {
+            "to": "ines@bright.com",
+            "subject": "Your password reset (#15831)",
+            "text": "Hello farid, here are the details you asked for regarding receipt. Reference 474273459."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997960000,
+          "send": {
+            "to": "carlos@granitetech.com",
+            "subject": "Your welcome (#77237)",
+            "text": "Hello jonas, here are the details you asked for regarding password reset. Reference 825101482."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997990000,
+          "send": {
+            "to": "carlos@cedarline.com",
+            "subject": "Your shipping notice (#58677)",
+            "text": "Hello carlos, here are the details you asked for regarding password reset. Reference 307555452."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998020000,
+          "send": {
+            "to": "jonas@cedarline.com",
+            "subject": "Your invoice (#70697)",
+            "text": "Hello hugo, here are the details you asked for regarding shipping notice. Reference 556027353."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998050000,
+          "send": {
+            "to": "gita@bright.com",
+            "subject": "Your weekly digest (#40222)",
+            "text": "Hello dee, here are the details you asked for regarding shipping notice. Reference 849037681."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998080000,
+          "send": {
+            "to": "gita@cedarline.com",
+            "subject": "Your password reset (#15427)",
+            "text": "Hello belle, here are the details you asked for regarding invoice. Reference 738994585."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998110000,
+          "send": {
+            "to": "belle@foxglove.com",
+            "subject": "Your welcome (#64672)",
+            "text": "Hello hugo, here are the details you asked for regarding invoice. Reference 48811715."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998140000,
+          "send": {
+            "to": "farid@foxglove.com",
+            "subject": "Your shipping notice (#33447)",
+            "text": "Hello dee, here are the details you asked for regarding shipping notice. Reference 285331583."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998170000,
+          "send": {
+            "to": "hugo@bright.com",
+            "subject": "Your shipping notice (#30092)",
+            "text": "Hello dee, here are the details you asked for regarding receipt. Reference 874775416."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998200000,
+          "send": {
+            "to": "hugo@cedarline.com",
+            "subject": "Your password reset (#37067)",
+            "text": "Hello ana, here are the details you asked for regarding invoice. Reference 880205036."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998230000,
+          "send": {
+            "to": "farid@deltaworks.com",
+            "subject": "Your shipping notice (#39329)",
+            "text": "Hello ines, here are the details you asked for regarding invoice. Reference 421304128."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998260000,
+          "send": {
+            "to": "elena@bright.com",
+            "subject": "Your shipping notice (#30056)",
+            "text": "Hello jonas, here are the details you asked for regarding welcome. Reference 598546652."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998290000,
+          "send": {
+            "to": "belle@acme.com",
+            "subject": "Your weekly digest (#12833)",
+            "text": "Hello ines, here are the details you asked for regarding weekly digest. Reference 646660263."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998320000,
+          "send": {
+            "to": "elena@bright.com",
+            "subject": "Your invoice (#32946)",
+            "text": "Hello hugo, here are the details you asked for regarding welcome. Reference 168089896."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998350000,
+          "send": {
+            "to": "ana@deltaworks.com",
+            "subject": "Your password reset (#34182)",
+            "text": "Hello ana, here are the details you asked for regarding shipping notice. Reference 66167669."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998380000,
+          "send": {
+            "to": "jonas@foxglove.com",
+            "subject": "Your shipping notice (#77469)",
+            "text": "Hello carlos, here are the details you asked for regarding password reset. Reference 127929781."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998410000,
+          "send": {
+            "to": "farid@everly.com",
+            "subject": "Your weekly digest (#45929)",
+            "text": "Hello carlos, here are the details you asked for regarding password reset. Reference 584622440."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998440000,
+          "send": {
+            "to": "jonas@granitetech.com",
+            "subject": "Your receipt (#8588)",
+            "text": "Hello elena, here are the details you asked for regarding shipping notice. Reference 881995393."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998470000,
+          "send": {
+            "to": "gita@everly.com",
+            "subject": "Your welcome (#77541)",
+            "text": "Hello ines, here are the details you asked for regarding weekly digest. Reference 750044671."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998500000,
+          "send": {
+            "to": "dee@deltaworks.com",
+            "subject": "Your weekly digest (#37783)",
+            "text": "Hello dee, here are the details you asked for regarding receipt. Reference 858738836."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998530000,
+          "send": {
+            "to": "elena@cedarline.com",
+            "subject": "Your welcome (#34961)",
+            "text": "Hello farid, here are the details you asked for regarding shipping notice. Reference 364195958."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998560000,
+          "send": {
+            "to": "farid@cedarline.com",
+            "subject": "Your password reset (#39344)",
+            "text": "Hello farid, here are the details you asked for regarding invoice. Reference 223695887."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998590000,
+          "send": {
+            "to": "gita@granitetech.com",
+            "subject": "Your invoice (#68919)",
+            "text": "Hello ines, here are the details you asked for regarding password reset. Reference 405795268."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998620000,
+          "send": {
+            "to": "gita@cedarline.com",
+            "subject": "Your weekly digest (#53857)",
+            "text": "Hello carlos, here are the details you asked for regarding password reset. Reference 912862691."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998650000,
+          "send": {
+            "to": "ana@everly.com",
+            "subject": "Your invoice (#72812)",
+            "text": "Hello belle, here are the details you asked for regarding weekly digest. Reference 922561097."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998680000,
+          "send": {
+            "to": "carlos@foxglove.com",
+            "subject": "Your receipt (#90824)",
+            "text": "Hello carlos, here are the details you asked for regarding invoice. Reference 724559393."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998710000,
+          "send": {
+            "to": "elena@deltaworks.com",
+            "subject": "Your invoice (#96997)",
+            "text": "Hello belle, here are the details you asked for regarding receipt. Reference 740590664."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998740000,
+          "send": {
+            "to": "jonas@granitetech.com",
+            "subject": "Your receipt (#86981)",
+            "text": "Hello farid, here are the details you asked for regarding password reset. Reference 888115669."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998770000,
+          "send": {
+            "to": "jonas@cedarline.com",
+            "subject": "Your password reset (#10997)",
+            "text": "Hello elena, here are the details you asked for regarding receipt. Reference 836657202."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998800000,
+          "send": {
+            "to": "ana@foxglove.com",
+            "subject": "Your weekly digest (#9343)",
+            "text": "Hello gita, here are the details you asked for regarding shipping notice. Reference 481814678."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998830000,
+          "send": {
+            "to": "ines@deltaworks.com",
+            "subject": "Your password reset (#54556)",
+            "text": "Hello carlos, here are the details you asked for regarding shipping notice. Reference 833264200."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998860000,
+          "send": {
+            "to": "dee@granitetech.com",
+            "subject": "Your weekly digest (#73774)",
+            "text": "Hello farid, here are the details you asked for regarding welcome. Reference 362571032."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998890000,
+          "send": {
+            "to": "hugo@bright.com",
+            "subject": "Your receipt (#99068)",
+            "text": "Hello belle, here are the details you asked for regarding receipt. Reference 620240786."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998920000,
+          "send": {
+            "to": "farid@deltaworks.com",
+            "subject": "Your shipping notice (#12076)",
+            "text": "Hello dee, here are the details you asked for regarding invoice. Reference 458294908."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998950000,
+          "send": {
+            "to": "farid@deltaworks.com",
+            "subject": "Your weekly digest (#48826)",
+            "text": "Hello farid, here are the details you asked for regarding welcome. Reference 392795243."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998980000,
+          "send": {
+            "to": "hugo@cedarline.com",
+            "subject": "Your weekly digest (#44516)",
+            "text": "Hello dee, here are the details you asked for regarding password reset. Reference 423308544."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999010000,
+          "send": {
+            "to": "ines@granitetech.com",
+            "subject": "Your password reset (#53005)",
+            "text": "Hello ana, here are the details you asked for regarding receipt. Reference 736763951."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999040000,
+          "send": {
+            "to": "carlos@cedarline.com",
+            "subject": "Your receipt (#31610)",
+            "text": "Hello ana, here are the details you asked for regarding welcome. Reference 330032864."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999070000,
+          "send": {
+            "to": "belle@granitetech.com",
+            "subject": "Your password reset (#30677)",
+            "text": "Hello hugo, here are the details you asked for regarding shipping notice. Reference 599800888."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999100000,
+          "send": {
+            "to": "ines@deltaworks.com",
+            "subject": "Your shipping notice (#70090)",
+            "text": "Hello jonas, here are the details you asked for regarding password reset. Reference 328951089."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999130000,
+          "send": {
+            "to": "farid@cedarline.com",
+            "subject": "Your password reset (#38571)",
+            "text": "Hello farid, here are the details you asked for regarding invoice. Reference 374948113."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999160000,
+          "send": {
+            "to": "hugo@cedarline.com",
+            "subject": "Your welcome (#94572)",
+            "text": "Hello carlos, here are the details you asked for regarding password reset. Reference 616082721."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999190000,
+          "send": {
+            "to": "dee@bright.com",
+            "subject": "Your password reset (#91099)",
+            "text": "Hello hugo, here are the details you asked for regarding shipping notice. Reference 702910467."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999220000,
+          "send": {
+            "to": "carlos@deltaworks.com",
+            "subject": "Your invoice (#29724)",
+            "text": "Hello hugo, here are the details you asked for regarding shipping notice. Reference 665365359."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999250000,
+          "send": {
+            "to": "farid@granitetech.com",
+            "subject": "Your receipt (#80525)",
+            "text": "Hello ana, here are the details you asked for regarding shipping notice. Reference 283928053."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999280000,
+          "send": {
+            "to": "farid@deltaworks.com",
+            "subject": "Your weekly digest (#39033)",
+            "text": "Hello ana, here are the details you asked for regarding receipt. Reference 74943385."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999310000,
+          "send": {
+            "to": "dee@granitetech.com",
+            "subject": "Your password reset (#98399)",
+            "text": "Hello farid, here are the details you asked for regarding invoice. Reference 791897872."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999340000,
+          "send": {
+            "to": "ana@foxglove.com",
+            "subject": "Your weekly digest (#16723)",
+            "text": "Hello ines, here are the details you asked for regarding shipping notice. Reference 603901592."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999370000,
+          "send": {
+            "to": "farid@deltaworks.com",
+            "subject": "Your receipt (#33667)",
+            "text": "Hello jonas, here are the details you asked for regarding receipt. Reference 214841266."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999400000,
+          "send": {
+            "to": "ines@acme.com",
+            "subject": "Your weekly digest (#365)",
+            "text": "Hello ines, here are the details you asked for regarding receipt. Reference 601958400."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999430000,
+          "send": {
+            "to": "ana@foxglove.com",
+            "subject": "Your invoice (#74567)",
+            "text": "Hello farid, here are the details you asked for regarding weekly digest. Reference 419446696."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999460000,
+          "send": {
+            "to": "hugo@acme.com",
+            "subject": "Your weekly digest (#24374)",
+            "text": "Hello elena, here are the details you asked for regarding invoice. Reference 121547390."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999490000,
+          "send": {
+            "to": "jonas@bright.com",
+            "subject": "Your receipt (#76629)",
+            "text": "Hello ines, here are the details you asked for regarding weekly digest. Reference 765737631."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999520000,
+          "send": {
+            "to": "gita@bright.com",
+            "subject": "Your weekly digest (#20243)",
+            "text": "Hello jonas, here are the details you asked for regarding welcome. Reference 112067406."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999550000,
+          "send": {
+            "to": "carlos@granitetech.com",
+            "subject": "Your shipping notice (#34233)",
+            "text": "Hello elena, here are the details you asked for regarding invoice. Reference 993423179."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999580000,
+          "send": {
+            "to": "jonas@granitetech.com",
+            "subject": "Your welcome (#79221)",
+            "text": "Hello dee, here are the details you asked for regarding receipt. Reference 292370583."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999610000,
+          "send": {
+            "to": "dee@acme.com",
+            "subject": "Your password reset (#14356)",
+            "text": "Hello farid, here are the details you asked for regarding password reset. Reference 676684390."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999640000,
+          "send": {
+            "to": "dee@everly.com",
+            "subject": "Your invoice (#58482)",
+            "text": "Hello ines, here are the details you asked for regarding weekly digest. Reference 142284174."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999670000,
+          "send": {
+            "to": "ines@acme.com",
+            "subject": "Your weekly digest (#34658)",
+            "text": "Hello jonas, here are the details you asked for regarding receipt. Reference 111531968."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": "jonas@bright.com",
+            "subject": "Your welcome (#13879)",
+            "text": "Hello jonas, here are the details you asked for regarding invoice. Reference 9626167."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999730000,
+          "send": {
+            "to": "carlos@cedarline.com",
+            "subject": "Your password reset (#224)",
+            "text": "Hello jonas, here are the details you asked for regarding receipt. Reference 871941446."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": "farid@acme.com",
+            "subject": "Your receipt (#12389)",
+            "text": "Hello ana, here are the details you asked for regarding shipping notice. Reference 158276188."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999790000,
+          "send": {
+            "to": "jonas@deltaworks.com",
+            "subject": "Your password reset (#10205)",
+            "text": "Hello ines, here are the details you asked for regarding weekly digest. Reference 260229697."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": "ana@foxglove.com",
+            "subject": "Your password reset (#96602)",
+            "text": "Hello ana, here are the details you asked for regarding invoice. Reference 747902297."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999850000,
+          "send": {
+            "to": "dee@foxglove.com",
+            "subject": "Your receipt (#13717)",
+            "text": "Hello dee, here are the details you asked for regarding receipt. Reference 796081961."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": "farid@bright.com",
+            "subject": "Your password reset (#73324)",
+            "text": "Hello belle, here are the details you asked for regarding welcome. Reference 799420806."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999910000,
+          "send": {
+            "to": "belle@granitetech.com",
+            "subject": "Your shipping notice (#89713)",
+            "text": "Hello ines, here are the details you asked for regarding password reset. Reference 549771369."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": "elena@deltaworks.com",
+            "subject": "Your welcome (#59758)",
+            "text": "Hello belle, here are the details you asked for regarding welcome. Reference 224680349."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999970000,
+          "send": {
+            "to": "carlos@foxglove.com",
+            "subject": "Your shipping notice (#54609)",
+            "text": "Hello belle, here are the details you asked for regarding invoice. Reference 840933282."
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "newcustomer@brightco.io",
+            "subject": "Your invoice (#88213)",
+            "text": "Hello ana, here are the details you asked for regarding invoice. Reference 554032987."
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 120,
+              "distinct_recipients": 62,
+              "entropy_bits": 5.75,
+              "effective_recipients": 53.836
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a 12-send sample is below the entropy floor",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799999640000,
+          "send": {
+            "to": "carlos@granitetech.com",
+            "subject": "Your password reset (#92698)",
+            "text": "Hello ana, here are the details you asked for regarding shipping notice. Reference 360985156."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999670000,
+          "send": {
+            "to": "ana@acme.com",
+            "subject": "Your shipping notice (#97280)",
+            "text": "Hello farid, here are the details you asked for regarding welcome. Reference 547839395."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": "gita@foxglove.com",
+            "subject": "Your weekly digest (#41807)",
+            "text": "Hello elena, here are the details you asked for regarding shipping notice. Reference 362463913."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999730000,
+          "send": {
+            "to": "elena@acme.com",
+            "subject": "Your weekly digest (#83420)",
+            "text": "Hello dee, here are the details you asked for regarding receipt. Reference 981763497."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": "belle@deltaworks.com",
+            "subject": "Your welcome (#10800)",
+            "text": "Hello belle, here are the details you asked for regarding password reset. Reference 772828794."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999790000,
+          "send": {
+            "to": "ana@everly.com",
+            "subject": "Your shipping notice (#26572)",
+            "text": "Hello farid, here are the details you asked for regarding welcome. Reference 312762065."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": "farid@everly.com",
+            "subject": "Your receipt (#15819)",
+            "text": "Hello ines, here are the details you asked for regarding password reset. Reference 379314074."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999850000,
+          "send": {
+            "to": "jonas@deltaworks.com",
+            "subject": "Your receipt (#25370)",
+            "text": "Hello jonas, here are the details you asked for regarding password reset. Reference 492773577."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": "belle@deltaworks.com",
+            "subject": "Your receipt (#204)",
+            "text": "Hello gita, here are the details you asked for regarding weekly digest. Reference 144684704."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999910000,
+          "send": {
+            "to": "farid@foxglove.com",
+            "subject": "Your shipping notice (#37134)",
+            "text": "Hello elena, here are the details you asked for regarding password reset. Reference 828616132."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": "farid@deltaworks.com",
+            "subject": "Your weekly digest (#95719)",
+            "text": "Hello dee, here are the details you asked for regarding shipping notice. Reference 207127583."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999970000,
+          "send": {
+            "to": "carlos@granitetech.com",
+            "subject": "Your weekly digest (#20879)",
+            "text": "Hello ana, here are the details you asked for regarding receipt. Reference 825987308."
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "one@of-the-three.com",
+            "subject": "s",
+            "text": "b"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 12,
+              "distinct_recipients": 10,
+              "entropy_bits": 3.252,
+              "effective_recipients": 9.524
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "repeat correspondence with individually written content",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799997000000,
+          "send": {
+            "to": "customer0@theirco.com",
+            "subject": "Re: ticket 0 update 0",
+            "text": "Round 0 for ticket 0: we reproduced the issue on build 00 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997020000,
+          "send": {
+            "to": "customer1@theirco.com",
+            "subject": "Re: ticket 1 update 0",
+            "text": "Round 0 for ticket 1: we reproduced the issue on build 01 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997040000,
+          "send": {
+            "to": "customer2@theirco.com",
+            "subject": "Re: ticket 2 update 0",
+            "text": "Round 0 for ticket 2: we reproduced the issue on build 02 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997060000,
+          "send": {
+            "to": "customer3@theirco.com",
+            "subject": "Re: ticket 3 update 0",
+            "text": "Round 0 for ticket 3: we reproduced the issue on build 03 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997080000,
+          "send": {
+            "to": "customer4@theirco.com",
+            "subject": "Re: ticket 4 update 0",
+            "text": "Round 0 for ticket 4: we reproduced the issue on build 04 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997100000,
+          "send": {
+            "to": "customer5@theirco.com",
+            "subject": "Re: ticket 5 update 0",
+            "text": "Round 0 for ticket 5: we reproduced the issue on build 05 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997120000,
+          "send": {
+            "to": "customer6@theirco.com",
+            "subject": "Re: ticket 6 update 0",
+            "text": "Round 0 for ticket 6: we reproduced the issue on build 06 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997140000,
+          "send": {
+            "to": "customer7@theirco.com",
+            "subject": "Re: ticket 7 update 0",
+            "text": "Round 0 for ticket 7: we reproduced the issue on build 07 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997160000,
+          "send": {
+            "to": "customer8@theirco.com",
+            "subject": "Re: ticket 8 update 0",
+            "text": "Round 0 for ticket 8: we reproduced the issue on build 08 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997180000,
+          "send": {
+            "to": "customer9@theirco.com",
+            "subject": "Re: ticket 9 update 0",
+            "text": "Round 0 for ticket 9: we reproduced the issue on build 09 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997200000,
+          "send": {
+            "to": "customer10@theirco.com",
+            "subject": "Re: ticket 10 update 0",
+            "text": "Round 0 for ticket 10: we reproduced the issue on build 010 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997220000,
+          "send": {
+            "to": "customer11@theirco.com",
+            "subject": "Re: ticket 11 update 0",
+            "text": "Round 0 for ticket 11: we reproduced the issue on build 011 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997240000,
+          "send": {
+            "to": "customer12@theirco.com",
+            "subject": "Re: ticket 12 update 0",
+            "text": "Round 0 for ticket 12: we reproduced the issue on build 012 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997260000,
+          "send": {
+            "to": "customer13@theirco.com",
+            "subject": "Re: ticket 13 update 0",
+            "text": "Round 0 for ticket 13: we reproduced the issue on build 013 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997280000,
+          "send": {
+            "to": "customer14@theirco.com",
+            "subject": "Re: ticket 14 update 0",
+            "text": "Round 0 for ticket 14: we reproduced the issue on build 014 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997300000,
+          "send": {
+            "to": "customer15@theirco.com",
+            "subject": "Re: ticket 15 update 0",
+            "text": "Round 0 for ticket 15: we reproduced the issue on build 015 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997320000,
+          "send": {
+            "to": "customer16@theirco.com",
+            "subject": "Re: ticket 16 update 0",
+            "text": "Round 0 for ticket 16: we reproduced the issue on build 016 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997340000,
+          "send": {
+            "to": "customer17@theirco.com",
+            "subject": "Re: ticket 17 update 0",
+            "text": "Round 0 for ticket 17: we reproduced the issue on build 017 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997360000,
+          "send": {
+            "to": "customer18@theirco.com",
+            "subject": "Re: ticket 18 update 0",
+            "text": "Round 0 for ticket 18: we reproduced the issue on build 018 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997380000,
+          "send": {
+            "to": "customer19@theirco.com",
+            "subject": "Re: ticket 19 update 0",
+            "text": "Round 0 for ticket 19: we reproduced the issue on build 019 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997400000,
+          "send": {
+            "to": "customer20@theirco.com",
+            "subject": "Re: ticket 20 update 0",
+            "text": "Round 0 for ticket 20: we reproduced the issue on build 020 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997420000,
+          "send": {
+            "to": "customer21@theirco.com",
+            "subject": "Re: ticket 21 update 0",
+            "text": "Round 0 for ticket 21: we reproduced the issue on build 021 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997440000,
+          "send": {
+            "to": "customer22@theirco.com",
+            "subject": "Re: ticket 22 update 0",
+            "text": "Round 0 for ticket 22: we reproduced the issue on build 022 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997460000,
+          "send": {
+            "to": "customer23@theirco.com",
+            "subject": "Re: ticket 23 update 0",
+            "text": "Round 0 for ticket 23: we reproduced the issue on build 023 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997480000,
+          "send": {
+            "to": "customer24@theirco.com",
+            "subject": "Re: ticket 24 update 0",
+            "text": "Round 0 for ticket 24: we reproduced the issue on build 024 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997500000,
+          "send": {
+            "to": "customer0@theirco.com",
+            "subject": "Re: ticket 0 update 1",
+            "text": "Round 1 for ticket 0: we reproduced the issue on build 10 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997520000,
+          "send": {
+            "to": "customer1@theirco.com",
+            "subject": "Re: ticket 1 update 1",
+            "text": "Round 1 for ticket 1: we reproduced the issue on build 11 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997540000,
+          "send": {
+            "to": "customer2@theirco.com",
+            "subject": "Re: ticket 2 update 1",
+            "text": "Round 1 for ticket 2: we reproduced the issue on build 12 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997560000,
+          "send": {
+            "to": "customer3@theirco.com",
+            "subject": "Re: ticket 3 update 1",
+            "text": "Round 1 for ticket 3: we reproduced the issue on build 13 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997580000,
+          "send": {
+            "to": "customer4@theirco.com",
+            "subject": "Re: ticket 4 update 1",
+            "text": "Round 1 for ticket 4: we reproduced the issue on build 14 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997600000,
+          "send": {
+            "to": "customer5@theirco.com",
+            "subject": "Re: ticket 5 update 1",
+            "text": "Round 1 for ticket 5: we reproduced the issue on build 15 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997620000,
+          "send": {
+            "to": "customer6@theirco.com",
+            "subject": "Re: ticket 6 update 1",
+            "text": "Round 1 for ticket 6: we reproduced the issue on build 16 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997640000,
+          "send": {
+            "to": "customer7@theirco.com",
+            "subject": "Re: ticket 7 update 1",
+            "text": "Round 1 for ticket 7: we reproduced the issue on build 17 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997660000,
+          "send": {
+            "to": "customer8@theirco.com",
+            "subject": "Re: ticket 8 update 1",
+            "text": "Round 1 for ticket 8: we reproduced the issue on build 18 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997680000,
+          "send": {
+            "to": "customer9@theirco.com",
+            "subject": "Re: ticket 9 update 1",
+            "text": "Round 1 for ticket 9: we reproduced the issue on build 19 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997700000,
+          "send": {
+            "to": "customer10@theirco.com",
+            "subject": "Re: ticket 10 update 1",
+            "text": "Round 1 for ticket 10: we reproduced the issue on build 110 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997720000,
+          "send": {
+            "to": "customer11@theirco.com",
+            "subject": "Re: ticket 11 update 1",
+            "text": "Round 1 for ticket 11: we reproduced the issue on build 111 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997740000,
+          "send": {
+            "to": "customer12@theirco.com",
+            "subject": "Re: ticket 12 update 1",
+            "text": "Round 1 for ticket 12: we reproduced the issue on build 112 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997760000,
+          "send": {
+            "to": "customer13@theirco.com",
+            "subject": "Re: ticket 13 update 1",
+            "text": "Round 1 for ticket 13: we reproduced the issue on build 113 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997780000,
+          "send": {
+            "to": "customer14@theirco.com",
+            "subject": "Re: ticket 14 update 1",
+            "text": "Round 1 for ticket 14: we reproduced the issue on build 114 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997800000,
+          "send": {
+            "to": "customer15@theirco.com",
+            "subject": "Re: ticket 15 update 1",
+            "text": "Round 1 for ticket 15: we reproduced the issue on build 115 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997820000,
+          "send": {
+            "to": "customer16@theirco.com",
+            "subject": "Re: ticket 16 update 1",
+            "text": "Round 1 for ticket 16: we reproduced the issue on build 116 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997840000,
+          "send": {
+            "to": "customer17@theirco.com",
+            "subject": "Re: ticket 17 update 1",
+            "text": "Round 1 for ticket 17: we reproduced the issue on build 117 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997860000,
+          "send": {
+            "to": "customer18@theirco.com",
+            "subject": "Re: ticket 18 update 1",
+            "text": "Round 1 for ticket 18: we reproduced the issue on build 118 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997880000,
+          "send": {
+            "to": "customer19@theirco.com",
+            "subject": "Re: ticket 19 update 1",
+            "text": "Round 1 for ticket 19: we reproduced the issue on build 119 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997900000,
+          "send": {
+            "to": "customer20@theirco.com",
+            "subject": "Re: ticket 20 update 1",
+            "text": "Round 1 for ticket 20: we reproduced the issue on build 120 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997920000,
+          "send": {
+            "to": "customer21@theirco.com",
+            "subject": "Re: ticket 21 update 1",
+            "text": "Round 1 for ticket 21: we reproduced the issue on build 121 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997940000,
+          "send": {
+            "to": "customer22@theirco.com",
+            "subject": "Re: ticket 22 update 1",
+            "text": "Round 1 for ticket 22: we reproduced the issue on build 122 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997960000,
+          "send": {
+            "to": "customer23@theirco.com",
+            "subject": "Re: ticket 23 update 1",
+            "text": "Round 1 for ticket 23: we reproduced the issue on build 123 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799997980000,
+          "send": {
+            "to": "customer24@theirco.com",
+            "subject": "Re: ticket 24 update 1",
+            "text": "Round 1 for ticket 24: we reproduced the issue on build 124 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998000000,
+          "send": {
+            "to": "customer0@theirco.com",
+            "subject": "Re: ticket 0 update 2",
+            "text": "Round 2 for ticket 0: we reproduced the issue on build 20 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998020000,
+          "send": {
+            "to": "customer1@theirco.com",
+            "subject": "Re: ticket 1 update 2",
+            "text": "Round 2 for ticket 1: we reproduced the issue on build 21 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998040000,
+          "send": {
+            "to": "customer2@theirco.com",
+            "subject": "Re: ticket 2 update 2",
+            "text": "Round 2 for ticket 2: we reproduced the issue on build 22 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998060000,
+          "send": {
+            "to": "customer3@theirco.com",
+            "subject": "Re: ticket 3 update 2",
+            "text": "Round 2 for ticket 3: we reproduced the issue on build 23 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998080000,
+          "send": {
+            "to": "customer4@theirco.com",
+            "subject": "Re: ticket 4 update 2",
+            "text": "Round 2 for ticket 4: we reproduced the issue on build 24 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998100000,
+          "send": {
+            "to": "customer5@theirco.com",
+            "subject": "Re: ticket 5 update 2",
+            "text": "Round 2 for ticket 5: we reproduced the issue on build 25 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998120000,
+          "send": {
+            "to": "customer6@theirco.com",
+            "subject": "Re: ticket 6 update 2",
+            "text": "Round 2 for ticket 6: we reproduced the issue on build 26 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998140000,
+          "send": {
+            "to": "customer7@theirco.com",
+            "subject": "Re: ticket 7 update 2",
+            "text": "Round 2 for ticket 7: we reproduced the issue on build 27 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998160000,
+          "send": {
+            "to": "customer8@theirco.com",
+            "subject": "Re: ticket 8 update 2",
+            "text": "Round 2 for ticket 8: we reproduced the issue on build 28 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998180000,
+          "send": {
+            "to": "customer9@theirco.com",
+            "subject": "Re: ticket 9 update 2",
+            "text": "Round 2 for ticket 9: we reproduced the issue on build 29 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998200000,
+          "send": {
+            "to": "customer10@theirco.com",
+            "subject": "Re: ticket 10 update 2",
+            "text": "Round 2 for ticket 10: we reproduced the issue on build 210 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998220000,
+          "send": {
+            "to": "customer11@theirco.com",
+            "subject": "Re: ticket 11 update 2",
+            "text": "Round 2 for ticket 11: we reproduced the issue on build 211 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998240000,
+          "send": {
+            "to": "customer12@theirco.com",
+            "subject": "Re: ticket 12 update 2",
+            "text": "Round 2 for ticket 12: we reproduced the issue on build 212 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998260000,
+          "send": {
+            "to": "customer13@theirco.com",
+            "subject": "Re: ticket 13 update 2",
+            "text": "Round 2 for ticket 13: we reproduced the issue on build 213 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998280000,
+          "send": {
+            "to": "customer14@theirco.com",
+            "subject": "Re: ticket 14 update 2",
+            "text": "Round 2 for ticket 14: we reproduced the issue on build 214 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998300000,
+          "send": {
+            "to": "customer15@theirco.com",
+            "subject": "Re: ticket 15 update 2",
+            "text": "Round 2 for ticket 15: we reproduced the issue on build 215 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998320000,
+          "send": {
+            "to": "customer16@theirco.com",
+            "subject": "Re: ticket 16 update 2",
+            "text": "Round 2 for ticket 16: we reproduced the issue on build 216 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998340000,
+          "send": {
+            "to": "customer17@theirco.com",
+            "subject": "Re: ticket 17 update 2",
+            "text": "Round 2 for ticket 17: we reproduced the issue on build 217 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998360000,
+          "send": {
+            "to": "customer18@theirco.com",
+            "subject": "Re: ticket 18 update 2",
+            "text": "Round 2 for ticket 18: we reproduced the issue on build 218 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998380000,
+          "send": {
+            "to": "customer19@theirco.com",
+            "subject": "Re: ticket 19 update 2",
+            "text": "Round 2 for ticket 19: we reproduced the issue on build 219 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998400000,
+          "send": {
+            "to": "customer20@theirco.com",
+            "subject": "Re: ticket 20 update 2",
+            "text": "Round 2 for ticket 20: we reproduced the issue on build 220 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998420000,
+          "send": {
+            "to": "customer21@theirco.com",
+            "subject": "Re: ticket 21 update 2",
+            "text": "Round 2 for ticket 21: we reproduced the issue on build 221 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998440000,
+          "send": {
+            "to": "customer22@theirco.com",
+            "subject": "Re: ticket 22 update 2",
+            "text": "Round 2 for ticket 22: we reproduced the issue on build 222 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998460000,
+          "send": {
+            "to": "customer23@theirco.com",
+            "subject": "Re: ticket 23 update 2",
+            "text": "Round 2 for ticket 23: we reproduced the issue on build 223 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998480000,
+          "send": {
+            "to": "customer24@theirco.com",
+            "subject": "Re: ticket 24 update 2",
+            "text": "Round 2 for ticket 24: we reproduced the issue on build 224 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998500000,
+          "send": {
+            "to": "customer0@theirco.com",
+            "subject": "Re: ticket 0 update 3",
+            "text": "Round 3 for ticket 0: we reproduced the issue on build 30 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998520000,
+          "send": {
+            "to": "customer1@theirco.com",
+            "subject": "Re: ticket 1 update 3",
+            "text": "Round 3 for ticket 1: we reproduced the issue on build 31 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998540000,
+          "send": {
+            "to": "customer2@theirco.com",
+            "subject": "Re: ticket 2 update 3",
+            "text": "Round 3 for ticket 2: we reproduced the issue on build 32 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998560000,
+          "send": {
+            "to": "customer3@theirco.com",
+            "subject": "Re: ticket 3 update 3",
+            "text": "Round 3 for ticket 3: we reproduced the issue on build 33 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998580000,
+          "send": {
+            "to": "customer4@theirco.com",
+            "subject": "Re: ticket 4 update 3",
+            "text": "Round 3 for ticket 4: we reproduced the issue on build 34 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998600000,
+          "send": {
+            "to": "customer5@theirco.com",
+            "subject": "Re: ticket 5 update 3",
+            "text": "Round 3 for ticket 5: we reproduced the issue on build 35 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998620000,
+          "send": {
+            "to": "customer6@theirco.com",
+            "subject": "Re: ticket 6 update 3",
+            "text": "Round 3 for ticket 6: we reproduced the issue on build 36 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998640000,
+          "send": {
+            "to": "customer7@theirco.com",
+            "subject": "Re: ticket 7 update 3",
+            "text": "Round 3 for ticket 7: we reproduced the issue on build 37 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998660000,
+          "send": {
+            "to": "customer8@theirco.com",
+            "subject": "Re: ticket 8 update 3",
+            "text": "Round 3 for ticket 8: we reproduced the issue on build 38 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998680000,
+          "send": {
+            "to": "customer9@theirco.com",
+            "subject": "Re: ticket 9 update 3",
+            "text": "Round 3 for ticket 9: we reproduced the issue on build 39 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998700000,
+          "send": {
+            "to": "customer10@theirco.com",
+            "subject": "Re: ticket 10 update 3",
+            "text": "Round 3 for ticket 10: we reproduced the issue on build 310 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998720000,
+          "send": {
+            "to": "customer11@theirco.com",
+            "subject": "Re: ticket 11 update 3",
+            "text": "Round 3 for ticket 11: we reproduced the issue on build 311 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998740000,
+          "send": {
+            "to": "customer12@theirco.com",
+            "subject": "Re: ticket 12 update 3",
+            "text": "Round 3 for ticket 12: we reproduced the issue on build 312 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998760000,
+          "send": {
+            "to": "customer13@theirco.com",
+            "subject": "Re: ticket 13 update 3",
+            "text": "Round 3 for ticket 13: we reproduced the issue on build 313 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998780000,
+          "send": {
+            "to": "customer14@theirco.com",
+            "subject": "Re: ticket 14 update 3",
+            "text": "Round 3 for ticket 14: we reproduced the issue on build 314 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998800000,
+          "send": {
+            "to": "customer15@theirco.com",
+            "subject": "Re: ticket 15 update 3",
+            "text": "Round 3 for ticket 15: we reproduced the issue on build 315 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998820000,
+          "send": {
+            "to": "customer16@theirco.com",
+            "subject": "Re: ticket 16 update 3",
+            "text": "Round 3 for ticket 16: we reproduced the issue on build 316 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998840000,
+          "send": {
+            "to": "customer17@theirco.com",
+            "subject": "Re: ticket 17 update 3",
+            "text": "Round 3 for ticket 17: we reproduced the issue on build 317 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998860000,
+          "send": {
+            "to": "customer18@theirco.com",
+            "subject": "Re: ticket 18 update 3",
+            "text": "Round 3 for ticket 18: we reproduced the issue on build 318 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998880000,
+          "send": {
+            "to": "customer19@theirco.com",
+            "subject": "Re: ticket 19 update 3",
+            "text": "Round 3 for ticket 19: we reproduced the issue on build 319 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998900000,
+          "send": {
+            "to": "customer20@theirco.com",
+            "subject": "Re: ticket 20 update 3",
+            "text": "Round 3 for ticket 20: we reproduced the issue on build 320 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998920000,
+          "send": {
+            "to": "customer21@theirco.com",
+            "subject": "Re: ticket 21 update 3",
+            "text": "Round 3 for ticket 21: we reproduced the issue on build 321 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998940000,
+          "send": {
+            "to": "customer22@theirco.com",
+            "subject": "Re: ticket 22 update 3",
+            "text": "Round 3 for ticket 22: we reproduced the issue on build 322 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998960000,
+          "send": {
+            "to": "customer23@theirco.com",
+            "subject": "Re: ticket 23 update 3",
+            "text": "Round 3 for ticket 23: we reproduced the issue on build 323 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998980000,
+          "send": {
+            "to": "customer24@theirco.com",
+            "subject": "Re: ticket 24 update 3",
+            "text": "Round 3 for ticket 24: we reproduced the issue on build 324 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999000000,
+          "send": {
+            "to": "customer0@theirco.com",
+            "subject": "Re: ticket 0 update 4",
+            "text": "Round 4 for ticket 0: we reproduced the issue on build 40 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999020000,
+          "send": {
+            "to": "customer1@theirco.com",
+            "subject": "Re: ticket 1 update 4",
+            "text": "Round 4 for ticket 1: we reproduced the issue on build 41 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999040000,
+          "send": {
+            "to": "customer2@theirco.com",
+            "subject": "Re: ticket 2 update 4",
+            "text": "Round 4 for ticket 2: we reproduced the issue on build 42 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999060000,
+          "send": {
+            "to": "customer3@theirco.com",
+            "subject": "Re: ticket 3 update 4",
+            "text": "Round 4 for ticket 3: we reproduced the issue on build 43 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999080000,
+          "send": {
+            "to": "customer4@theirco.com",
+            "subject": "Re: ticket 4 update 4",
+            "text": "Round 4 for ticket 4: we reproduced the issue on build 44 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999100000,
+          "send": {
+            "to": "customer5@theirco.com",
+            "subject": "Re: ticket 5 update 4",
+            "text": "Round 4 for ticket 5: we reproduced the issue on build 45 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999120000,
+          "send": {
+            "to": "customer6@theirco.com",
+            "subject": "Re: ticket 6 update 4",
+            "text": "Round 4 for ticket 6: we reproduced the issue on build 46 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999140000,
+          "send": {
+            "to": "customer7@theirco.com",
+            "subject": "Re: ticket 7 update 4",
+            "text": "Round 4 for ticket 7: we reproduced the issue on build 47 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999160000,
+          "send": {
+            "to": "customer8@theirco.com",
+            "subject": "Re: ticket 8 update 4",
+            "text": "Round 4 for ticket 8: we reproduced the issue on build 48 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999180000,
+          "send": {
+            "to": "customer9@theirco.com",
+            "subject": "Re: ticket 9 update 4",
+            "text": "Round 4 for ticket 9: we reproduced the issue on build 49 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999200000,
+          "send": {
+            "to": "customer10@theirco.com",
+            "subject": "Re: ticket 10 update 4",
+            "text": "Round 4 for ticket 10: we reproduced the issue on build 410 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999220000,
+          "send": {
+            "to": "customer11@theirco.com",
+            "subject": "Re: ticket 11 update 4",
+            "text": "Round 4 for ticket 11: we reproduced the issue on build 411 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999240000,
+          "send": {
+            "to": "customer12@theirco.com",
+            "subject": "Re: ticket 12 update 4",
+            "text": "Round 4 for ticket 12: we reproduced the issue on build 412 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999260000,
+          "send": {
+            "to": "customer13@theirco.com",
+            "subject": "Re: ticket 13 update 4",
+            "text": "Round 4 for ticket 13: we reproduced the issue on build 413 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999280000,
+          "send": {
+            "to": "customer14@theirco.com",
+            "subject": "Re: ticket 14 update 4",
+            "text": "Round 4 for ticket 14: we reproduced the issue on build 414 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999300000,
+          "send": {
+            "to": "customer15@theirco.com",
+            "subject": "Re: ticket 15 update 4",
+            "text": "Round 4 for ticket 15: we reproduced the issue on build 415 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999320000,
+          "send": {
+            "to": "customer16@theirco.com",
+            "subject": "Re: ticket 16 update 4",
+            "text": "Round 4 for ticket 16: we reproduced the issue on build 416 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999340000,
+          "send": {
+            "to": "customer17@theirco.com",
+            "subject": "Re: ticket 17 update 4",
+            "text": "Round 4 for ticket 17: we reproduced the issue on build 417 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999360000,
+          "send": {
+            "to": "customer18@theirco.com",
+            "subject": "Re: ticket 18 update 4",
+            "text": "Round 4 for ticket 18: we reproduced the issue on build 418 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999380000,
+          "send": {
+            "to": "customer19@theirco.com",
+            "subject": "Re: ticket 19 update 4",
+            "text": "Round 4 for ticket 19: we reproduced the issue on build 419 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999400000,
+          "send": {
+            "to": "customer20@theirco.com",
+            "subject": "Re: ticket 20 update 4",
+            "text": "Round 4 for ticket 20: we reproduced the issue on build 420 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999420000,
+          "send": {
+            "to": "customer21@theirco.com",
+            "subject": "Re: ticket 21 update 4",
+            "text": "Round 4 for ticket 21: we reproduced the issue on build 421 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999440000,
+          "send": {
+            "to": "customer22@theirco.com",
+            "subject": "Re: ticket 22 update 4",
+            "text": "Round 4 for ticket 22: we reproduced the issue on build 422 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999460000,
+          "send": {
+            "to": "customer23@theirco.com",
+            "subject": "Re: ticket 23 update 4",
+            "text": "Round 4 for ticket 23: we reproduced the issue on build 423 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999480000,
+          "send": {
+            "to": "customer24@theirco.com",
+            "subject": "Re: ticket 24 update 4",
+            "text": "Round 4 for ticket 24: we reproduced the issue on build 424 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999500000,
+          "send": {
+            "to": "customer0@theirco.com",
+            "subject": "Re: ticket 0 update 5",
+            "text": "Round 5 for ticket 0: we reproduced the issue on build 50 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999520000,
+          "send": {
+            "to": "customer1@theirco.com",
+            "subject": "Re: ticket 1 update 5",
+            "text": "Round 5 for ticket 1: we reproduced the issue on build 51 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999540000,
+          "send": {
+            "to": "customer2@theirco.com",
+            "subject": "Re: ticket 2 update 5",
+            "text": "Round 5 for ticket 2: we reproduced the issue on build 52 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999560000,
+          "send": {
+            "to": "customer3@theirco.com",
+            "subject": "Re: ticket 3 update 5",
+            "text": "Round 5 for ticket 3: we reproduced the issue on build 53 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999580000,
+          "send": {
+            "to": "customer4@theirco.com",
+            "subject": "Re: ticket 4 update 5",
+            "text": "Round 5 for ticket 4: we reproduced the issue on build 54 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999600000,
+          "send": {
+            "to": "customer5@theirco.com",
+            "subject": "Re: ticket 5 update 5",
+            "text": "Round 5 for ticket 5: we reproduced the issue on build 55 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999620000,
+          "send": {
+            "to": "customer6@theirco.com",
+            "subject": "Re: ticket 6 update 5",
+            "text": "Round 5 for ticket 6: we reproduced the issue on build 56 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999640000,
+          "send": {
+            "to": "customer7@theirco.com",
+            "subject": "Re: ticket 7 update 5",
+            "text": "Round 5 for ticket 7: we reproduced the issue on build 57 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999660000,
+          "send": {
+            "to": "customer8@theirco.com",
+            "subject": "Re: ticket 8 update 5",
+            "text": "Round 5 for ticket 8: we reproduced the issue on build 58 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999680000,
+          "send": {
+            "to": "customer9@theirco.com",
+            "subject": "Re: ticket 9 update 5",
+            "text": "Round 5 for ticket 9: we reproduced the issue on build 59 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": "customer10@theirco.com",
+            "subject": "Re: ticket 10 update 5",
+            "text": "Round 5 for ticket 10: we reproduced the issue on build 510 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999720000,
+          "send": {
+            "to": "customer11@theirco.com",
+            "subject": "Re: ticket 11 update 5",
+            "text": "Round 5 for ticket 11: we reproduced the issue on build 511 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999740000,
+          "send": {
+            "to": "customer12@theirco.com",
+            "subject": "Re: ticket 12 update 5",
+            "text": "Round 5 for ticket 12: we reproduced the issue on build 512 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": "customer13@theirco.com",
+            "subject": "Re: ticket 13 update 5",
+            "text": "Round 5 for ticket 13: we reproduced the issue on build 513 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999780000,
+          "send": {
+            "to": "customer14@theirco.com",
+            "subject": "Re: ticket 14 update 5",
+            "text": "Round 5 for ticket 14: we reproduced the issue on build 514 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999800000,
+          "send": {
+            "to": "customer15@theirco.com",
+            "subject": "Re: ticket 15 update 5",
+            "text": "Round 5 for ticket 15: we reproduced the issue on build 515 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": "customer16@theirco.com",
+            "subject": "Re: ticket 16 update 5",
+            "text": "Round 5 for ticket 16: we reproduced the issue on build 516 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999840000,
+          "send": {
+            "to": "customer17@theirco.com",
+            "subject": "Re: ticket 17 update 5",
+            "text": "Round 5 for ticket 17: we reproduced the issue on build 517 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999860000,
+          "send": {
+            "to": "customer18@theirco.com",
+            "subject": "Re: ticket 18 update 5",
+            "text": "Round 5 for ticket 18: we reproduced the issue on build 518 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": "customer19@theirco.com",
+            "subject": "Re: ticket 19 update 5",
+            "text": "Round 5 for ticket 19: we reproduced the issue on build 519 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999900000,
+          "send": {
+            "to": "customer20@theirco.com",
+            "subject": "Re: ticket 20 update 5",
+            "text": "Round 5 for ticket 20: we reproduced the issue on build 520 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999920000,
+          "send": {
+            "to": "customer21@theirco.com",
+            "subject": "Re: ticket 21 update 5",
+            "text": "Round 5 for ticket 21: we reproduced the issue on build 521 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": "customer22@theirco.com",
+            "subject": "Re: ticket 22 update 5",
+            "text": "Round 5 for ticket 22: we reproduced the issue on build 522 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999960000,
+          "send": {
+            "to": "customer23@theirco.com",
+            "subject": "Re: ticket 23 update 5",
+            "text": "Round 5 for ticket 23: we reproduced the issue on build 523 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999980000,
+          "send": {
+            "to": "customer24@theirco.com",
+            "subject": "Re: ticket 24 update 5",
+            "text": "Round 5 for ticket 24: we reproduced the issue on build 524 and shipped a fix candidate."
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "customer7@theirco.com",
+            "subject": "Re: ticket 7 update 6",
+            "text": "Round 6 for ticket 7: fix verified in staging."
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 150,
+              "distinct_recipients": 25,
+              "entropy_bits": 4.644,
+              "effective_recipients": 25
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

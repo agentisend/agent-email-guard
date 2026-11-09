@@ -1,0 +1,481 @@
+{
+  "$schema": "./vector.schema.json",
+  "name": "budgets",
+  "description": "Hourly, daily and monthly budgets per key, counted in UTC calendar periods; check() reserves, release() gives back.",
+  "source": "packages/agent-guard/test/b08-budget-race.test.ts",
+  "cases": [
+    {
+      "name": "the third send in an hour with a budget of 2 is refused; the next hour opens",
+      "config": {
+        "budgets": {
+          "per_hour": 2
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "send",
+          "at": 1800000000000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "1",
+            "text": "one"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "hour_used": 1,
+              "hour_budget": 2
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000001000,
+          "send": {
+            "to": "b@example.com",
+            "subject": "2",
+            "text": "two"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "hour_used": 2,
+              "hour_budget": 2
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000002000,
+          "send": {
+            "to": "c@example.com",
+            "subject": "3",
+            "text": "three"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "agent_budget_exceeded",
+            "message": "Key \"default\" has used its hourly budget of 2 emails; it resets at 2027-01-15T09:00:00Z.",
+            "evidence": {
+              "key": "default",
+              "period": "hour",
+              "budget": 2,
+              "used": 2,
+              "resets_at": 1800003600000
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800003600000,
+          "send": {
+            "to": "c@example.com",
+            "subject": "3",
+            "text": "three"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "hour_used": 1,
+              "hour_budget": 2
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "keys count separately",
+      "config": {
+        "budgets": {
+          "per_day": 1
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "send",
+          "at": 1800000000000,
+          "send": {
+            "key": "billing-agent",
+            "to": "a@example.com",
+            "subject": "1",
+            "text": "one"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "billing-agent",
+              "day_used": 1,
+              "day_budget": 1
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000000001,
+          "send": {
+            "key": "support-agent",
+            "to": "a@example.com",
+            "subject": "1",
+            "text": "one"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "support-agent",
+              "day_used": 1,
+              "day_budget": 1
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000000002,
+          "send": {
+            "key": "billing-agent",
+            "to": "a@example.com",
+            "subject": "2",
+            "text": "two"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "agent_budget_exceeded",
+            "message": "Key \"billing-agent\" has used its daily budget of 1 email; it resets at 2027-01-16T00:00:00Z.",
+            "evidence": {
+              "key": "billing-agent",
+              "period": "day",
+              "budget": 1,
+              "used": 1,
+              "resets_at": 1800057600000
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000000003,
+          "send": {
+            "to": "a@example.com",
+            "subject": "3",
+            "text": "default key"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "day_used": 1,
+              "day_budget": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a budget of 1 email uses the singular",
+      "config": {
+        "key": "notifier",
+        "budgets": {
+          "per_month": 1
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "send",
+          "at": 1801439999000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "1",
+            "text": "one"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "notifier",
+              "month_used": 1,
+              "month_budget": 1
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1801439999500,
+          "send": {
+            "to": "a@example.com",
+            "subject": "2",
+            "text": "two"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "agent_budget_exceeded",
+            "message": "Key \"notifier\" has used its monthly budget of 1 email; it resets at 2027-02-01T00:00:00Z.",
+            "evidence": {
+              "key": "notifier",
+              "period": "month",
+              "budget": 1,
+              "used": 1,
+              "resets_at": 1801440000000
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1801440000000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "3",
+            "text": "February"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "notifier",
+              "month_used": 1,
+              "month_budget": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the smallest period refuses first, and a refusal gives back what it reserved",
+      "config": {
+        "budgets": {
+          "per_hour": 1,
+          "per_day": 2
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "send",
+          "at": 1800000000000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "1",
+            "text": "one"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "hour_used": 1,
+              "hour_budget": 1,
+              "day_used": 1,
+              "day_budget": 2
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000000001,
+          "send": {
+            "to": "a@example.com",
+            "subject": "2",
+            "text": "two"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "agent_budget_exceeded",
+            "message": "Key \"default\" has used its hourly budget of 1 email; it resets at 2027-01-15T09:00:00Z.",
+            "evidence": {
+              "key": "default",
+              "period": "hour",
+              "budget": 1,
+              "used": 1,
+              "resets_at": 1800003600000
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800003600000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "3",
+            "text": "three"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "hour_used": 1,
+              "hour_budget": 1,
+              "day_used": 2,
+              "day_budget": 2
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800007200000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "4",
+            "text": "four"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "agent_budget_exceeded",
+            "message": "Key \"default\" has used its daily budget of 2 emails; it resets at 2027-01-16T00:00:00Z.",
+            "evidence": {
+              "key": "default",
+              "period": "day",
+              "budget": 2,
+              "used": 2,
+              "resets_at": 1800057600000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "release() after a provider failure gives the budget back",
+      "config": {
+        "budgets": {
+          "per_hour": 1
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "1",
+            "text": "provider will fail"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "hour_used": 1,
+              "hour_budget": 1
+            }
+          }
+        },
+        {
+          "op": "release",
+          "at": 1800000000001,
+          "step": 0
+        },
+        {
+          "op": "release",
+          "at": 1800000000002,
+          "step": 0,
+          "note": "a second release changes nothing"
+        },
+        {
+          "op": "send",
+          "at": 1800000000003,
+          "send": {
+            "to": "a@example.com",
+            "subject": "1",
+            "text": "retry"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "hour_used": 1,
+              "hour_budget": 1
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000000004,
+          "send": {
+            "to": "a@example.com",
+            "subject": "2",
+            "text": "over"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "agent_budget_exceeded",
+            "message": "Key \"default\" has used its hourly budget of 1 email; it resets at 2027-01-15T09:00:00Z.",
+            "evidence": {
+              "key": "default",
+              "period": "hour",
+              "budget": 1,
+              "used": 1,
+              "resets_at": 1800003600000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a budget of 0 refuses everything",
+      "config": {
+        "budgets": {
+          "per_day": 0
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "send",
+          "at": 1800000000000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "1",
+            "text": "one"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "agent_budget_exceeded",
+            "message": "Key \"default\" has used its daily budget of 0 emails; it resets at 2027-01-16T00:00:00Z.",
+            "evidence": {
+              "key": "default",
+              "period": "day",
+              "budget": 0,
+              "used": 0,
+              "resets_at": 1800057600000
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

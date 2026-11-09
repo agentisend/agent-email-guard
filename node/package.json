@@ -1,0 +1,165 @@
+{
+  "name": "agent-email-guard",
+  "version": "0.1.0",
+  "description": "Blast-radius control for AI agents that send email: per-key budgets and rate ceilings, loop detection, a kill switch and approval holds. Works with nodemailer, SES, Resend, Postmark, SMTP or AgentiSend.",
+  "license": "MIT",
+  "author": "AgentiSend <hello@agentisend.com>",
+  "homepage": "https://github.com/agentisend/agent-email-guard#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agentisend/agent-email-guard.git",
+    "directory": "node"
+  },
+  "bugs": {
+    "url": "https://github.com/agentisend/agent-email-guard/issues"
+  },
+  "keywords": [
+    "ai-agents",
+    "email",
+    "guardrails",
+    "rate-limit",
+    "mcp",
+    "resend-alternative",
+    "nodemailer",
+    "budget",
+    "kill-switch",
+    "loop-detection",
+    "human-in-the-loop",
+    "ses",
+    "resend",
+    "postmark",
+    "openai-agents"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./redis": {
+      "import": {
+        "types": "./dist/stores/redis.d.ts",
+        "default": "./dist/stores/redis.js"
+      },
+      "require": {
+        "types": "./dist/stores/redis.d.cts",
+        "default": "./dist/stores/redis.cjs"
+      }
+    },
+    "./postgres": {
+      "import": {
+        "types": "./dist/stores/postgres.d.ts",
+        "default": "./dist/stores/postgres.js"
+      },
+      "require": {
+        "types": "./dist/stores/postgres.d.cts",
+        "default": "./dist/stores/postgres.cjs"
+      }
+    },
+    "./agentisend": {
+      "import": {
+        "types": "./dist/agentisend.d.ts",
+        "default": "./dist/agentisend.js"
+      },
+      "require": {
+        "types": "./dist/agentisend.d.cts",
+        "default": "./dist/agentisend.cjs"
+      }
+    },
+    "./policy": {
+      "import": {
+        "types": "./dist/policy-file.d.ts",
+        "default": "./dist/policy-file.js"
+      },
+      "require": {
+        "types": "./dist/policy-file.d.cts",
+        "default": "./dist/policy-file.cjs"
+      }
+    },
+    "./nodemailer": {
+      "import": {
+        "types": "./dist/nodemailer.d.ts",
+        "default": "./dist/nodemailer.js"
+      },
+      "require": {
+        "types": "./dist/nodemailer.d.cts",
+        "default": "./dist/nodemailer.cjs"
+      }
+    },
+    "./openai-agents": {
+      "import": {
+        "types": "./dist/openai-agents.d.ts",
+        "default": "./dist/openai-agents.js"
+      },
+      "require": {
+        "types": "./dist/openai-agents.d.cts",
+        "default": "./dist/openai-agents.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "vectors": "tsx scripts/gen-vectors.ts",
+    "vectors:check": "tsx scripts/gen-vectors.ts --check",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "peerDependencies": {
+    "ioredis": ">=5",
+    "pg": ">=8"
+  },
+  "peerDependenciesMeta": {
+    "ioredis": {
+      "optional": true
+    },
+    "pg": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@aws-sdk/client-sesv2": "^3.1164.0",
+    "@electric-sql/pglite": "^0.2.17",
+    "@openai/agents": "^0.21.0",
+    "@types/node": "^22.10.0",
+    "@types/nodemailer": "^8.0.2",
+    "agentisend": "^0.5.4",
+    "ai": "^7.0.165",
+    "ioredis": "^5.11.1",
+    "ioredis-mock": "^8.13.1",
+    "nodemailer": "^10.4.0",
+    "resend": "^6.37.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.0",
+    "zod": "^4.6.7"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "packageManager": "pnpm@11.22.0",
+  "bin": {
+    "agent-email-guard": "./dist/cli.js"
+  }
+}

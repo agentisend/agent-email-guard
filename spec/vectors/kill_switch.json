@@ -1,0 +1,349 @@
+{
+  "$schema": "./vector.schema.json",
+  "name": "kill_switch",
+  "description": "A paused guard refuses every send, never resumes on a timer, and resumes only through resume().",
+  "source": "packages/agent-guard/test/kill-switch-no-auto-resume.test.ts",
+  "cases": [
+    {
+      "name": "pause refuses with who, when and why",
+      "config": {},
+      "steps": [
+        {
+          "op": "send",
+          "at": 1000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "Hello",
+            "text": "First."
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 0,
+              "distinct_recipients": 0,
+              "entropy_bits": 0,
+              "effective_recipients": 1
+            }
+          }
+        },
+        {
+          "op": "pause",
+          "at": 2000,
+          "reason": "Agent was looping on one recipient.",
+          "by": "operator-7"
+        },
+        {
+          "op": "check",
+          "at": 5000,
+          "send": {
+            "to": "b@example.com",
+            "subject": "Hello",
+            "text": "Second."
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "kill_switch_active",
+            "message": "Sending is paused by the kill switch, so nothing sends until a person resumes it.",
+            "evidence": {
+              "paused_at": 2000,
+              "paused_by": "operator-7",
+              "pause_reason": "Agent was looping on one recipient."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a year later it is still paused",
+      "config": {},
+      "steps": [
+        {
+          "op": "pause",
+          "at": 1000,
+          "reason": "Entropy collapse detected.",
+          "by": "trust-system"
+        },
+        {
+          "op": "check",
+          "at": 31536001000,
+          "send": {
+            "to": "b@example.com",
+            "subject": "Hello",
+            "text": "Later."
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "kill_switch_active",
+            "message": "Sending is paused by the kill switch, so nothing sends until a person resumes it.",
+            "evidence": {
+              "paused_at": 1000,
+              "paused_by": "trust-system",
+              "pause_reason": "Entropy collapse detected."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "resume re-opens sending; a redundant resume returns false",
+      "config": {},
+      "steps": [
+        {
+          "op": "resume",
+          "at": 500,
+          "by": "operator-3",
+          "expect": {
+            "resumed": false
+          }
+        },
+        {
+          "op": "pause",
+          "at": 1000,
+          "reason": "Loop suspected.",
+          "by": "operator-7"
+        },
+        {
+          "op": "check",
+          "at": 86400000,
+          "send": {
+            "to": "c@example.com",
+            "subject": "Hi",
+            "text": "Still paused."
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "kill_switch_active",
+            "message": "Sending is paused by the kill switch, so nothing sends until a person resumes it.",
+            "evidence": {
+              "paused_at": 1000,
+              "paused_by": "operator-7",
+              "pause_reason": "Loop suspected."
+            }
+          }
+        },
+        {
+          "op": "resume",
+          "at": 86400000,
+          "by": "operator-3",
+          "expect": {
+            "resumed": true
+          }
+        },
+        {
+          "op": "check",
+          "at": 86400001,
+          "send": {
+            "to": "c@example.com",
+            "subject": "Hi",
+            "text": "Open again."
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 0,
+              "distinct_recipients": 0,
+              "entropy_bits": 0,
+              "effective_recipients": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the latest pause is the one reported",
+      "config": {},
+      "steps": [
+        {
+          "op": "pause",
+          "at": 1,
+          "reason": "one",
+          "by": "a"
+        },
+        {
+          "op": "resume",
+          "at": 2,
+          "by": "b",
+          "expect": {
+            "resumed": true
+          }
+        },
+        {
+          "op": "pause",
+          "at": 3,
+          "reason": "three",
+          "by": "c"
+        },
+        {
+          "op": "check",
+          "at": 4,
+          "send": {
+            "to": "d@example.com",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "kill_switch_active",
+            "message": "Sending is paused by the kill switch, so nothing sends until a person resumes it.",
+            "evidence": {
+              "paused_at": 3,
+              "paused_by": "c",
+              "pause_reason": "three"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "pause without by uses the default actor, and the default namespace names the state",
+      "config": {},
+      "steps": [
+        {
+          "op": "pause",
+          "at": 1000,
+          "reason": "Default actor."
+        },
+        {
+          "op": "check",
+          "at": 2000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "kill_switch_active",
+            "message": "Sending is paused by the kill switch, so nothing sends until a person resumes it.",
+            "evidence": {
+              "paused_at": 1000,
+              "paused_by": "agent-email-guard",
+              "pause_reason": "Default actor."
+            }
+          }
+        },
+        {
+          "op": "read_state",
+          "at": 2000,
+          "name": "agent-email-guard:kill",
+          "expect": {
+            "state": {
+              "paused_at": 1000,
+              "paused_by": "agent-email-guard",
+              "reason": "Default actor."
+            }
+          }
+        },
+        {
+          "op": "resume",
+          "at": 3000,
+          "by": "operator-3",
+          "expect": {
+            "resumed": true
+          }
+        },
+        {
+          "op": "read_state",
+          "at": 3000,
+          "name": "agent-email-guard:kill",
+          "expect": {
+            "state": null
+          }
+        },
+        {
+          "op": "read_state",
+          "at": 3000,
+          "name": "agent-email-guard:kill:last_resume",
+          "expect": {
+            "state": {
+              "paused_at": 1000,
+              "paused_by": "agent-email-guard",
+              "reason": "Default actor.",
+              "resumed_at": 3000,
+              "resumed_by": "operator-3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a custom namespace moves every store name",
+      "config": {
+        "namespace": "acme"
+      },
+      "steps": [
+        {
+          "op": "pause",
+          "at": 1000,
+          "reason": "Stop.",
+          "by": "ops"
+        },
+        {
+          "op": "read_state",
+          "at": 1000,
+          "name": "acme:kill",
+          "expect": {
+            "state": {
+              "paused_at": 1000,
+              "paused_by": "ops",
+              "reason": "Stop."
+            }
+          }
+        },
+        {
+          "op": "read_state",
+          "at": 1000,
+          "name": "agent-email-guard:kill",
+          "note": "the default namespace is untouched",
+          "expect": {
+            "state": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "the kill switch outranks every other check",
+      "config": {
+        "suppress": [
+          "d@example.com"
+        ],
+        "budgets": {
+          "per_hour": 0
+        }
+      },
+      "steps": [
+        {
+          "op": "pause",
+          "at": 1,
+          "reason": "stop",
+          "by": "a"
+        },
+        {
+          "op": "check",
+          "at": 2,
+          "send": {
+            "to": "d@example.com",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "kill_switch_active",
+            "message": "Sending is paused by the kill switch, so nothing sends until a person resumes it.",
+            "evidence": {
+              "paused_at": 1,
+              "paused_by": "a",
+              "pause_reason": "stop"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

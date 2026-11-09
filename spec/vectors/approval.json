@@ -1,0 +1,423 @@
+{
+  "$schema": "./vector.schema.json",
+  "name": "approval",
+  "description": "Approval rules hold a send for a person; holds reserve nothing; an approved re-check skips only the approval rules.",
+  "source": "packages/agent-guard/src/approval-policy.ts",
+  "cases": [
+    {
+      "name": "domain and exact-address rules",
+      "config": {
+        "approval": {
+          "recipients": [
+            "@bigco.com",
+            "vip@partner.example"
+          ]
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "CEO@BigCo.com",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "hold_for_approval",
+            "reason": "recipient_requires_approval",
+            "message": "ceo@bigco.com matches the approval rule @bigco.com, so this email waits for a person to approve it.",
+            "evidence": {
+              "rule": "recipient_list",
+              "recipient": "ceo@bigco.com",
+              "matched_rule": "@bigco.com"
+            }
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "someone@partner.example",
+            "cc": "vip@partner.example",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "hold_for_approval",
+            "reason": "recipient_requires_approval",
+            "message": "vip@partner.example matches the approval rule vip@partner.example, so this email waits for a person to approve it.",
+            "evidence": {
+              "rule": "recipient_list",
+              "recipient": "vip@partner.example",
+              "matched_rule": "vip@partner.example"
+            }
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "ceo@notbigco.com.evil",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default"
+            }
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "ceo@bigco.com",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "approved": true,
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "approved": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "rules are normalized before they are reported",
+      "config": {
+        "approval": {
+          "recipients": [
+            "@BigCo.com",
+            " VIP <VIP@Partner.Example> "
+          ]
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "ceo@bigco.com",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "hold_for_approval",
+            "reason": "recipient_requires_approval",
+            "message": "ceo@bigco.com matches the approval rule @bigco.com, so this email waits for a person to approve it.",
+            "evidence": {
+              "rule": "recipient_list",
+              "recipient": "ceo@bigco.com",
+              "matched_rule": "@bigco.com"
+            }
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "vip@partner.example",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "hold_for_approval",
+            "reason": "recipient_requires_approval",
+            "message": "vip@partner.example matches the approval rule vip@partner.example, so this email waits for a person to approve it.",
+            "evidence": {
+              "rule": "recipient_list",
+              "recipient": "vip@partner.example",
+              "matched_rule": "vip@partner.example"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "new recipients wait until a send to them is recorded",
+      "config": {
+        "key": "agent-1",
+        "approval": {
+          "new_recipients": true
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "send",
+          "at": 1800000000000,
+          "send": {
+            "to": [
+              "known@example.com",
+              "fresh@example.com"
+            ],
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "hold_for_approval",
+            "reason": "recipient_requires_approval",
+            "message": "known@example.com has not received email from key \"agent-1\" before, so this email waits for a person to approve it.",
+            "evidence": {
+              "rule": "new_recipient",
+              "recipient": "known@example.com",
+              "new_recipients": "known@example.com,fresh@example.com"
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000000001,
+          "send": {
+            "to": "Known <known@example.com>",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "note": "held: neither address has a recorded send yet",
+          "expect": {
+            "outcome": "hold_for_approval",
+            "reason": "recipient_requires_approval",
+            "message": "known@example.com has not received email from key \"agent-1\" before, so this email waits for a person to approve it.",
+            "evidence": {
+              "rule": "new_recipient",
+              "recipient": "known@example.com",
+              "new_recipients": "known@example.com"
+            }
+          }
+        },
+        {
+          "op": "record",
+          "at": 1800000000002,
+          "send": {
+            "to": "known@example.com",
+            "subject": "Hi",
+            "text": "approved by a person and sent"
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000000003,
+          "send": {
+            "to": "Known <KNOWN@example.com>",
+            "subject": "Hi again",
+            "text": "y"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "agent-1"
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000000004,
+          "send": {
+            "to": "known@example.com",
+            "bcc": "fresh@example.com",
+            "subject": "Hi again",
+            "text": "y"
+          },
+          "expect": {
+            "outcome": "hold_for_approval",
+            "reason": "recipient_requires_approval",
+            "message": "fresh@example.com has not received email from key \"agent-1\" before, so this email waits for a person to approve it.",
+            "evidence": {
+              "rule": "new_recipient",
+              "recipient": "fresh@example.com",
+              "new_recipients": "fresh@example.com"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "requireFor holds with your detail",
+      "config": {
+        "approval": {
+          "require_for": {
+            "subject_contains": "refund",
+            "detail": "Refunds over $500 need a person."
+          }
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "Your refund",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "hold_for_approval",
+            "reason": "recipient_requires_approval",
+            "message": "Your approval rule matched this email, so it waits for a person to approve it.",
+            "evidence": {
+              "rule": "custom",
+              "detail": "Refunds over $500 need a person."
+            }
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "Your receipt",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "requireFor returning true holds with no detail",
+      "config": {
+        "approval": {
+          "require_for": {
+            "subject_contains": "refund",
+            "detail": null
+          }
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "Your refund",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "hold_for_approval",
+            "reason": "recipient_requires_approval",
+            "message": "Your approval rule matched this email, so it waits for a person to approve it.",
+            "evidence": {
+              "rule": "custom",
+              "detail": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a hold reserves no budget, and the approved send spends it",
+      "config": {
+        "approval": {
+          "recipients": [
+            "@bigco.com"
+          ]
+        },
+        "budgets": {
+          "per_hour": 1
+        },
+        "rate": {
+          "per_minute": 1
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "ceo@bigco.com",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "hold_for_approval",
+            "reason": "recipient_requires_approval",
+            "message": "ceo@bigco.com matches the approval rule @bigco.com, so this email waits for a person to approve it.",
+            "evidence": {
+              "rule": "recipient_list",
+              "recipient": "ceo@bigco.com",
+              "matched_rule": "@bigco.com"
+            }
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000001,
+          "send": {
+            "to": "ceo@bigco.com",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "approved": true,
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "approved": true,
+              "rate_used": 1,
+              "rate_ceiling": 1,
+              "hour_used": 1,
+              "hour_budget": 1
+            }
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000002,
+          "send": {
+            "to": "other@example.com",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "rate_ceiling_exceeded",
+            "message": "Key \"default\" reached its ceiling of 1 send per minute; wait 60 seconds and try again.",
+            "evidence": {
+              "key": "default",
+              "sends_in_window": 1,
+              "ceiling_per_minute": 1,
+              "retry_after_seconds": 60
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

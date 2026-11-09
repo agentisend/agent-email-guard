@@ -1,0 +1,163 @@
+{
+  "name": "policy_validation",
+  "description": "agent-email-guard.json validation (SPEC §2.9): the exact problem sentences, in order. An empty list means the policy is valid.",
+  "cases": [
+    {
+      "name": "an empty object is valid",
+      "policy": {},
+      "expect": {
+        "problems": []
+      }
+    },
+    {
+      "name": "every key at once is valid",
+      "policy": {
+        "$schema": "https://example.test/agent-email-guard.schema.json",
+        "$comment": "Limits for the support agent.",
+        "version": 1,
+        "key": "support-agent",
+        "namespace": "acme",
+        "budgets": {
+          "per_hour": 50,
+          "per_day": 300,
+          "per_month": 5000
+        },
+        "rate": {
+          "per_minute": 10
+        },
+        "loop": {
+          "mode": "full",
+          "window_ms": 3600000,
+          "similarity_threshold": 0.85,
+          "max_identical_sends": 3,
+          "min_window_for_entropy": 20,
+          "recipient_perplexity_floor": 3
+        },
+        "approval": {
+          "new_recipients": true,
+          "recipients": [
+            "@bigcustomer.com"
+          ]
+        },
+        "suppress": [
+          "@competitor.example"
+        ]
+      },
+      "expect": {
+        "problems": []
+      }
+    },
+    {
+      "name": "$comment may hold any JSON value",
+      "policy": {
+        "$comment": [
+          "line one",
+          "line two"
+        ]
+      },
+      "expect": {
+        "problems": []
+      }
+    },
+    {
+      "name": "namespace must be a non-empty string",
+      "policy": {
+        "namespace": ""
+      },
+      "expect": {
+        "problems": [
+          "\"namespace\" has the wrong type."
+        ]
+      }
+    },
+    {
+      "name": "camelCase keys are unknown",
+      "policy": {
+        "budgets": {
+          "perDay": 3
+        },
+        "rate": {
+          "perMinute": 1
+        }
+      },
+      "expect": {
+        "problems": [
+          "Unknown key \"budgets.perDay\".",
+          "Unknown key \"rate.perMinute\"."
+        ]
+      }
+    },
+    {
+      "name": "wrong types and unknown keys are all reported, in key order",
+      "policy": {
+        "budgets": {
+          "per_hour": -1,
+          "per_day": 1.5
+        },
+        "loop": {
+          "mode": "loose"
+        },
+        "extra": 1,
+        "version": 2
+      },
+      "expect": {
+        "problems": [
+          "\"budgets.per_hour\" has the wrong type.",
+          "\"budgets.per_day\" has the wrong type.",
+          "\"loop.mode\" has the wrong type.",
+          "Unknown key \"extra\".",
+          "\"version\" has the wrong type."
+        ]
+      }
+    },
+    {
+      "name": "nested sections must be objects",
+      "policy": {
+        "budgets": 5,
+        "approval": []
+      },
+      "expect": {
+        "problems": [
+          "\"budgets\" must be an object.",
+          "\"approval\" must be an object."
+        ]
+      }
+    },
+    {
+      "name": "similarity_threshold must be above 0",
+      "policy": {
+        "loop": {
+          "similarity_threshold": 0
+        }
+      },
+      "expect": {
+        "problems": [
+          "\"loop.similarity_threshold\" has the wrong type."
+        ]
+      }
+    },
+    {
+      "name": "suppress must be a list of strings",
+      "policy": {
+        "suppress": [
+          "a@example.com",
+          3
+        ]
+      },
+      "expect": {
+        "problems": [
+          "\"suppress\" has the wrong type."
+        ]
+      }
+    },
+    {
+      "name": "the policy must be an object",
+      "policy": [],
+      "expect": {
+        "problems": [
+          "The policy must be a JSON object."
+        ]
+      }
+    }
+  ]
+}

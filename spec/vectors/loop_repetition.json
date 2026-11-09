@@ -1,0 +1,372 @@
+{
+  "$schema": "./vector.schema.json",
+  "name": "loop_repetition",
+  "description": "The retry loop that sends one message thousands of times: refused from the fourth near-identical send to the same To line inside the window.",
+  "source": "packages/agent-guard/test/loop-4000-repetition.test.ts",
+  "cases": [
+    {
+      "name": "4000 identical sends, then the 4,001st",
+      "description": "One recipient and identical content trip both signals; the token is loop_repetition_detected and the sentence names both.",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799999960000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "repeat": 4000,
+          "every_ms": 10
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "loop_repetition_detected",
+            "message": "Blocked: this key shows both a repetition loop (4000 near-identical emails to victim@example.com) and collapsed recipient diversity (about 1 effective recipient); review the agent before sending more.",
+            "evidence": {
+              "signal_repetition": true,
+              "signal_entropy": true,
+              "matching_sends_in_window": 4000,
+              "repetition_threshold": 3,
+              "closest_subject_similarity": 1,
+              "closest_body_similarity": 1,
+              "window_size": 4000,
+              "distinct_recipients": 1,
+              "entropy_bits": 0,
+              "effective_recipients": 1,
+              "perplexity_floor": 3,
+              "candidate_recipient_share": 1,
+              "dominant_share_floor": 0.333,
+              "window_ms": 3600000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a slightly reworded body still matches",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799999960000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "repeat": 4000,
+          "every_ms": 10
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about my Q3 roadmap. Any interest?"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "loop_repetition_detected",
+            "message": "Blocked: this key shows both a repetition loop (4000 near-identical emails to victim@example.com) and collapsed recipient diversity (about 1 effective recipient); review the agent before sending more.",
+            "evidence": {
+              "signal_repetition": true,
+              "signal_entropy": true,
+              "matching_sends_in_window": 4000,
+              "repetition_threshold": 3,
+              "closest_subject_similarity": 1,
+              "closest_body_similarity": 0.895,
+              "window_size": 4000,
+              "distinct_recipients": 1,
+              "entropy_bits": 0,
+              "effective_recipients": 1,
+              "perplexity_floor": 3,
+              "candidate_recipient_share": 1,
+              "dominant_share_floor": 0.333,
+              "window_ms": 3600000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "two prior sends: allowed",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799999999980,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "repeat": 2,
+          "every_ms": 10
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 2,
+              "distinct_recipients": 1,
+              "entropy_bits": 0,
+              "effective_recipients": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "three prior sends: refused",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799999999970,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "repeat": 3,
+          "every_ms": 10
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "loop_repetition_detected",
+            "message": "Blocked: 3 near-identical emails already went to victim@example.com within 60 minutes, which matches a retry or script loop; review the agent before sending more.",
+            "evidence": {
+              "signal_repetition": true,
+              "signal_entropy": false,
+              "matching_sends_in_window": 3,
+              "repetition_threshold": 3,
+              "closest_subject_similarity": 1,
+              "closest_body_similarity": 1,
+              "window_size": 3,
+              "distinct_recipients": 1,
+              "entropy_bits": 0,
+              "effective_recipients": 1,
+              "perplexity_floor": 3,
+              "candidate_recipient_share": 1,
+              "dominant_share_floor": 0.333,
+              "window_ms": 3600000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sends older than the window do not count",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799992800000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "repeat": 50,
+          "every_ms": 0
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 0,
+              "distinct_recipients": 0,
+              "entropy_bits": 0,
+              "effective_recipients": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the To line is compared as a sorted set",
+      "description": "B,A after A,B three times is the same recipient set.",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799999997000,
+          "send": {
+            "to": [
+              "a@example.com",
+              "b@example.com"
+            ],
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "repeat": 3,
+          "every_ms": 1000
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "B@example.com, a@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "loop_repetition_detected",
+            "message": "Blocked: 3 near-identical emails already went to a@example.com,b@example.com within 60 minutes, which matches a retry or script loop; review the agent before sending more.",
+            "evidence": {
+              "signal_repetition": true,
+              "signal_entropy": false,
+              "matching_sends_in_window": 3,
+              "repetition_threshold": 3,
+              "closest_subject_similarity": 1,
+              "closest_body_similarity": 1,
+              "window_size": 3,
+              "distinct_recipients": 2,
+              "entropy_bits": 1,
+              "effective_recipients": 2,
+              "perplexity_floor": 3,
+              "candidate_recipient_share": 0.5,
+              "dominant_share_floor": 0.333,
+              "window_ms": 3600000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a custom window and threshold",
+      "config": {
+        "loop": {
+          "window_ms": 600000,
+          "max_identical_sends": 5
+        }
+      },
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799999340000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "repeat": 5,
+          "every_ms": 0
+        },
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "repeat": 4,
+          "every_ms": 1000
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "note": "four inside the 10-minute window: allowed",
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 4,
+              "distinct_recipients": 1,
+              "entropy_bits": 0,
+              "effective_recipients": 1
+            }
+          }
+        },
+        {
+          "op": "record",
+          "at": 1800000001000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000002000,
+          "send": {
+            "to": "victim@example.com",
+            "subject": "Quick question about your roadmap",
+            "text": "Hi, I wanted to follow up on my last note about your Q3 roadmap. Any interest?"
+          },
+          "note": "five inside: refused",
+          "expect": {
+            "outcome": "refuse",
+            "reason": "loop_repetition_detected",
+            "message": "Blocked: 5 near-identical emails already went to victim@example.com within 10 minutes, which matches a retry or script loop; review the agent before sending more.",
+            "evidence": {
+              "signal_repetition": true,
+              "signal_entropy": false,
+              "matching_sends_in_window": 5,
+              "repetition_threshold": 5,
+              "closest_subject_similarity": 1,
+              "closest_body_similarity": 1,
+              "window_size": 5,
+              "distinct_recipients": 1,
+              "entropy_bits": 0,
+              "effective_recipients": 1,
+              "perplexity_floor": 3,
+              "candidate_recipient_share": 1,
+              "dominant_share_floor": 0.333,
+              "window_ms": 600000
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

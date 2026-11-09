@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/agentisend/agent-email-guard/spec/vectors/vector.schema.json",
+  "title": "agent-email-guard conformance vector file",
+  "type": "object",
+  "required": [
+    "name",
+    "description",
+    "cases"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "config",
+          "steps"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "config": {
+            "$ref": "#/$defs/config"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/step"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "addressField": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "send": {
+      "type": "object",
+      "required": [
+        "to"
+      ],
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "to": {
+          "$ref": "#/$defs/addressField"
+        },
+        "cc": {
+          "$ref": "#/$defs/addressField"
+        },
+        "bcc": {
+          "$ref": "#/$defs/addressField"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "html": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "budgets": {
+          "type": "object",
+          "properties": {
+            "per_hour": {
+              "type": "integer"
+            },
+            "per_day": {
+              "type": "integer"
+            },
+            "per_month": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "rate": {
+          "type": "object",
+          "properties": {
+            "per_minute": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "loop": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "full",
+                "repetition_only",
+                "off"
+              ]
+            },
+            "window_ms": {
+              "type": "integer"
+            },
+            "similarity_threshold": {
+              "type": "number"
+            },
+            "max_identical_sends": {
+              "type": "integer"
+            },
+            "min_window_for_entropy": {
+              "type": "integer"
+            },
+            "recipient_perplexity_floor": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        },
+        "approval": {
+          "type": "object",
+          "properties": {
+            "new_recipients": {
+              "type": "boolean"
+            },
+            "recipients": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "require_for": {
+              "type": "object",
+              "required": [
+                "subject_contains"
+              ],
+              "properties": {
+                "subject_contains": {
+                  "type": "string"
+                },
+                "detail": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "suppress": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "namespace": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "outcome",
+        "reason",
+        "message",
+        "evidence"
+      ],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "allow",
+            "hold_for_approval",
+            "refuse"
+          ]
+        },
+        "reason": {
+          "enum": [
+            "ok",
+            "kill_switch_active",
+            "recipient_suppressed",
+            "loop_repetition_detected",
+            "recipient_entropy_collapse",
+            "recipient_requires_approval",
+            "rate_ceiling_exceeded",
+            "agent_budget_exceeded"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "pattern": "\\.$"
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "required": [
+        "op",
+        "at"
+      ],
+      "properties": {
+        "op": {
+          "enum": [
+            "check",
+            "send",
+            "record",
+            "release",
+            "pause",
+            "resume",
+            "read_state"
+          ]
+        },
+        "at": {
+          "type": "integer"
+        },
+        "note": {
+          "type": "string"
+        },
+        "send": {
+          "$ref": "#/$defs/send"
+        },
+        "approved": {
+          "type": "boolean"
+        },
+        "repeat": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "every_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "step": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string"
+        },
+        "by": {
+          "type": "string"
+        },
+        "expect": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/decision"
+            },
+            {
+              "type": "object",
+              "required": [
+                "resumed"
+              ],
+              "properties": {
+                "resumed": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": [
+                "state"
+              ],
+              "properties": {
+                "state": {}
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

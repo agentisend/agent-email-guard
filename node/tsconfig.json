@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "types": [
+      "node"
+    ],
+    "noEmit": true,
+    "paths": {
+      "agent-email-guard": [
+        "./src/index.ts"
+      ],
+      "agent-email-guard/agentisend": [
+        "./src/agentisend.ts"
+      ],
+      "agent-email-guard/redis": [
+        "./src/stores/redis.ts"
+      ],
+      "agent-email-guard/postgres": [
+        "./src/stores/postgres.ts"
+      ],
+      "agent-email-guard/policy": [
+        "./src/policy-file.ts"
+      ],
+      "agent-email-guard/nodemailer": [
+        "./src/nodemailer.ts"
+      ],
+      "agent-email-guard/openai-agents": [
+        "./src/openai-agents.ts"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "test",
+    "examples",
+    "scripts"
+  ]
+}

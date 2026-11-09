@@ -1,0 +1,129 @@
+{
+  "$schema": "./vector.schema.json",
+  "name": "suppression",
+  "description": "The suppression list refuses outright; it outranks loop detection and approval.",
+  "source": "packages/agent-guard/src/approval-policy.ts",
+  "cases": [
+    {
+      "name": "a mixed-case suppression rule is reported normalized",
+      "config": {
+        "suppress": [
+          "@Competitor.EXAMPLE"
+        ]
+      },
+      "steps": [
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "Sales@competitor.example",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "recipient_suppressed",
+            "message": "sales@competitor.example is on the suppression list (rule: @competitor.example), so this guard never sends to it.",
+            "evidence": {
+              "recipient": "sales@competitor.example",
+              "matched_rule": "@competitor.example"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "exact and domain suppression, through To, Cc and Bcc",
+      "config": {
+        "suppress": [
+          "regulator@gov.example",
+          "@competitor.example"
+        ],
+        "approval": {
+          "recipients": [
+            "regulator@gov.example"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "Regulator <regulator@gov.example>",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "recipient_suppressed",
+            "message": "regulator@gov.example is on the suppression list (rule: regulator@gov.example), so this guard never sends to it.",
+            "evidence": {
+              "recipient": "regulator@gov.example",
+              "matched_rule": "regulator@gov.example"
+            }
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "a@example.com",
+            "bcc": "sales@competitor.example",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "recipient_suppressed",
+            "message": "sales@competitor.example is on the suppression list (rule: @competitor.example), so this guard never sends to it.",
+            "evidence": {
+              "recipient": "sales@competitor.example",
+              "matched_rule": "@competitor.example"
+            }
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 0,
+              "distinct_recipients": 0,
+              "entropy_bits": 0,
+              "effective_recipients": 1
+            }
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "regulator@gov.example",
+            "subject": "Hi",
+            "text": "x"
+          },
+          "approved": true,
+          "expect": {
+            "outcome": "refuse",
+            "reason": "recipient_suppressed",
+            "message": "regulator@gov.example is on the suppression list (rule: regulator@gov.example), so this guard never sends to it.",
+            "evidence": {
+              "recipient": "regulator@gov.example",
+              "matched_rule": "regulator@gov.example"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

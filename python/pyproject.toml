@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-email-guard"
+version = "0.1.0"
+description = "Blast-radius control for agents that send email: budgets, a rate ceiling, loop detection, approval holds and a kill switch, in front of any provider."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "AgentiSend", email = "hello@agentisend.com" }]
+keywords = ["ai-agents", "email", "guardrails", "rate-limit", "mcp", "resend-alternative", "budget", "loop-detection", "kill-switch"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Communications :: Email",
+  "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+redis = ["redis>=4.2"]
+postgres = ["psycopg>=3.1"]
+dev = ["pytest>=7", "fakeredis[lua]>=2.20"]
+
+[project.urls]
+Homepage = "https://agentisend.com"
+Source = "https://github.com/agentisend/agent-email-guard"
+Issues = "https://github.com/agentisend/agent-email-guard/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_email_guard"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/agent_email_guard", "tests", "examples", "README.md", "LICENSE", "pyproject.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

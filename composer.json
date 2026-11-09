@@ -1,0 +1,81 @@
+{
+    "name": "agentisend/agent-email-guard",
+    "description": "Blast-radius control for agents that send email: budgets, a rate ceiling, loop detection, a kill switch and approval holds, in front of any provider.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "ai-agents",
+        "email",
+        "guardrails",
+        "rate-limit",
+        "laravel",
+        "symfony",
+        "resend-alternative"
+    ],
+    "homepage": "https://github.com/agentisend/agent-email-guard",
+    "authors": [
+        {
+            "name": "AgentiSend",
+            "email": "hello@agentisend.com",
+            "homepage": "https://agentisend.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/agentisend/agent-email-guard/issues",
+        "source": "https://github.com/agentisend/agent-email-guard",
+        "docs": "https://github.com/agentisend/agent-email-guard/tree/main/php"
+    },
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "agentisend/agentisend-php": "*",
+        "orchestra/testbench": "^9.0 || ^10.0 || ^11.0",
+        "phpmailer/phpmailer": "^6.9",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^10.5 || ^11.5 || ^12.0",
+        "predis/predis": "^2.2",
+        "resend/resend-php": "*",
+        "symfony/mailer": "^6.4 || ^7.0 || ^8.0"
+    },
+    "suggest": {
+        "ext-redis": "RedisStore with phpredis: share budgets and the kill switch across processes.",
+        "predis/predis": "RedisStore with Predis instead of phpredis.",
+        "ext-pdo": "PdoStore on Postgres, MySQL or SQLite.",
+        "ext-curl": "The AgentiSend hosted adapter (or pass your own HTTP callable).",
+        "symfony/mailer": "GuardedTransport for Symfony Mailer.",
+        "illuminate/support": "The Laravel service provider and the guarded mail transport."
+    },
+    "autoload": {
+        "psr-4": {
+            "AgentiSend\\AgentEmailGuard\\": "php/src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AgentiSend\\AgentEmailGuard\\Tests\\": "php/tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AgentiSend\\AgentEmailGuard\\Laravel\\AgentEmailGuardServiceProvider"
+            ],
+            "aliases": {
+                "AgentEmailGuard": "AgentiSend\\AgentEmailGuard\\Laravel\\Facades\\AgentEmailGuard"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": false
+        }
+    },
+    "scripts": {
+        "test": "phpunit -c php/phpunit.xml.dist",
+        "stan": "phpstan analyse -c php/phpstan.neon.dist --memory-limit=1G"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

@@ -1,0 +1,1151 @@
+{
+  "$schema": "./vector.schema.json",
+  "name": "loop_entropy_collapse",
+  "description": "A loop that rewrites its content each time still collapses onto one or two inboxes; entropy catches it where repetition cannot.",
+  "source": "packages/agent-guard/test/entropy-collapse-independent.test.ts",
+  "cases": [
+    {
+      "name": "two-recipient content-mutating loop",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 0 of my sequence",
+            "text": "Message 0: xxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 0."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999705000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 1 of my sequence",
+            "text": "Message 1: xxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 7919."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999710000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 2 of my sequence",
+            "text": "Message 2: xxxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 15838."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999715000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 3 of my sequence",
+            "text": "Message 3: xxxxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 23757."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999720000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 4 of my sequence",
+            "text": "Message 4: xxxxxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 31676."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999725000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 5 of my sequence",
+            "text": "Message 5: xxxxxxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 39595."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999730000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 6 of my sequence",
+            "text": "Message 6: xxxxxxxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 47514."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999735000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 7 of my sequence",
+            "text": "Message 7: xxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 55433."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999740000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 8 of my sequence",
+            "text": "Message 8: xxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 63352."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999745000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 9 of my sequence",
+            "text": "Message 9: xxxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 71271."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999750000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 10 of my sequence",
+            "text": "Message 10: xxxxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 79190."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999755000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 11 of my sequence",
+            "text": "Message 11: xxxxxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 87109."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 12 of my sequence",
+            "text": "Message 12: xxxxxxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 95028."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999765000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 13 of my sequence",
+            "text": "Message 13: xxxxxxxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 102947."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999770000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 14 of my sequence",
+            "text": "Message 14: xxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 110866."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999775000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 15 of my sequence",
+            "text": "Message 15: xxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 118785."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999780000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 16 of my sequence",
+            "text": "Message 16: xxxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 126704."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999785000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 17 of my sequence",
+            "text": "Message 17: xxxxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 134623."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999790000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 18 of my sequence",
+            "text": "Message 18: xxxxxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 142542."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999795000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 19 of my sequence",
+            "text": "Message 19: xxxxxxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 150461."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999800000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 20 of my sequence",
+            "text": "Message 20: xxxxxxxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 158380."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999805000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 21 of my sequence",
+            "text": "Message 21: xxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 166299."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999810000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 22 of my sequence",
+            "text": "Message 22: xxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 174218."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999815000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 23 of my sequence",
+            "text": "Message 23: xxxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 182137."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 24 of my sequence",
+            "text": "Message 24: xxxxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 190056."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999825000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 25 of my sequence",
+            "text": "Message 25: xxxxxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 197975."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999830000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 26 of my sequence",
+            "text": "Message 26: xxxxxxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 205894."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999835000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 27 of my sequence",
+            "text": "Message 27: xxxxxxxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 213813."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999840000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 28 of my sequence",
+            "text": "Message 28: xxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 221732."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999845000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 29 of my sequence",
+            "text": "Message 29: xxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 229651."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999850000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 30 of my sequence",
+            "text": "Message 30: xxxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 237570."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999855000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 31 of my sequence",
+            "text": "Message 31: xxxxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 245489."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999860000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 32 of my sequence",
+            "text": "Message 32: xxxxxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 253408."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999865000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 33 of my sequence",
+            "text": "Message 33: xxxxxxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 261327."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999870000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 34 of my sequence",
+            "text": "Message 34: xxxxxxxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 269246."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999875000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 35 of my sequence",
+            "text": "Message 35: xxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 277165."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 36 of my sequence",
+            "text": "Message 36: xxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 285084."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999885000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 37 of my sequence",
+            "text": "Message 37: xxxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 293003."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999890000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 38 of my sequence",
+            "text": "Message 38: xxxxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 300922."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999895000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 39 of my sequence",
+            "text": "Message 39: xxxxxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 308841."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999900000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 40 of my sequence",
+            "text": "Message 40: xxxxxxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 316760."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999905000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 41 of my sequence",
+            "text": "Message 41: xxxxxxxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 324679."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999910000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 42 of my sequence",
+            "text": "Message 42: xxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 332598."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999915000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 43 of my sequence",
+            "text": "Message 43: xxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 340517."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999920000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 44 of my sequence",
+            "text": "Message 44: xxxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 348436."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999925000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 45 of my sequence",
+            "text": "Message 45: xxxxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 356355."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999930000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 46 of my sequence",
+            "text": "Message 46: xxxxxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 364274."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999935000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 47 of my sequence",
+            "text": "Message 47: xxxxxxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 372193."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 48 of my sequence",
+            "text": "Message 48: xxxxxxxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 380112."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999945000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 49 of my sequence",
+            "text": "Message 49: xxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 388031."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999950000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 50 of my sequence",
+            "text": "Message 50: xxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 395950."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999955000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 51 of my sequence",
+            "text": "Message 51: xxxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 403869."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999960000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 52 of my sequence",
+            "text": "Message 52: xxxxxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 411788."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999965000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 53 of my sequence",
+            "text": "Message 53: xxxxxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 419707."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999970000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 54 of my sequence",
+            "text": "Message 54: xxxxxxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 427626."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999975000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 55 of my sequence",
+            "text": "Message 55: xxxxxxxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 435545."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999980000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 56 of my sequence",
+            "text": "Message 56: xxx quick thought on your pricing plans; happy to share what we learned with teams like yours this spring. Ref 443464."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999985000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 57 of my sequence",
+            "text": "Message 57: xxxx quick thought on your roadmap plans; happy to share what we learned with teams like yours this summer. Ref 451383."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999990000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 58 of my sequence",
+            "text": "Message 58: xxxxx quick thought on your team plans; happy to share what we learned with teams like yours this autumn. Ref 459302."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999995000,
+          "send": {
+            "to": "target2@example.com",
+            "subject": "Following up, note 59 of my sequence",
+            "text": "Message 59: xxxxxx quick thought on your growth plans; happy to share what we learned with teams like yours this winter. Ref 467221."
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "target@example.com",
+            "subject": "Following up, note 60 of my sequence",
+            "text": "Message 60: xxx quick thought on your pricing plans; totally new wording entirely unrelated to prior sends. Ref 474540."
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "recipient_entropy_collapse",
+            "message": "Blocked: the last 60 emails went to about 2 effective recipients, and this one goes to the same inbox again, which looks like a loop; mail to other recipients still sends.",
+            "evidence": {
+              "signal_repetition": false,
+              "signal_entropy": true,
+              "matching_sends_in_window": 0,
+              "repetition_threshold": 3,
+              "closest_subject_similarity": null,
+              "closest_body_similarity": null,
+              "window_size": 60,
+              "distinct_recipients": 2,
+              "entropy_bits": 1,
+              "effective_recipients": 2,
+              "perplexity_floor": 3,
+              "candidate_recipient_share": 0.5,
+              "dominant_share_floor": 0.333,
+              "window_ms": 3600000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a diverse window of the same size stays clean",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": "lead0@company0.com",
+            "subject": "Update 0",
+            "text": "Unique message 0 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999705000,
+          "send": {
+            "to": "lead1@company1.com",
+            "subject": "Update 1",
+            "text": "Unique message 1 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999710000,
+          "send": {
+            "to": "lead2@company2.com",
+            "subject": "Update 2",
+            "text": "Unique message 2 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999715000,
+          "send": {
+            "to": "lead3@company3.com",
+            "subject": "Update 3",
+            "text": "Unique message 3 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999720000,
+          "send": {
+            "to": "lead4@company4.com",
+            "subject": "Update 4",
+            "text": "Unique message 4 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999725000,
+          "send": {
+            "to": "lead5@company5.com",
+            "subject": "Update 5",
+            "text": "Unique message 5 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999730000,
+          "send": {
+            "to": "lead6@company6.com",
+            "subject": "Update 6",
+            "text": "Unique message 6 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999735000,
+          "send": {
+            "to": "lead7@company7.com",
+            "subject": "Update 7",
+            "text": "Unique message 7 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999740000,
+          "send": {
+            "to": "lead8@company8.com",
+            "subject": "Update 8",
+            "text": "Unique message 8 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999745000,
+          "send": {
+            "to": "lead9@company9.com",
+            "subject": "Update 9",
+            "text": "Unique message 9 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999750000,
+          "send": {
+            "to": "lead10@company10.com",
+            "subject": "Update 10",
+            "text": "Unique message 10 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999755000,
+          "send": {
+            "to": "lead11@company11.com",
+            "subject": "Update 11",
+            "text": "Unique message 11 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": "lead12@company12.com",
+            "subject": "Update 12",
+            "text": "Unique message 12 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999765000,
+          "send": {
+            "to": "lead13@company13.com",
+            "subject": "Update 13",
+            "text": "Unique message 13 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999770000,
+          "send": {
+            "to": "lead14@company14.com",
+            "subject": "Update 14",
+            "text": "Unique message 14 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999775000,
+          "send": {
+            "to": "lead15@company15.com",
+            "subject": "Update 15",
+            "text": "Unique message 15 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999780000,
+          "send": {
+            "to": "lead16@company16.com",
+            "subject": "Update 16",
+            "text": "Unique message 16 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999785000,
+          "send": {
+            "to": "lead17@company17.com",
+            "subject": "Update 17",
+            "text": "Unique message 17 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999790000,
+          "send": {
+            "to": "lead18@company18.com",
+            "subject": "Update 18",
+            "text": "Unique message 18 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999795000,
+          "send": {
+            "to": "lead19@company19.com",
+            "subject": "Update 19",
+            "text": "Unique message 19 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999800000,
+          "send": {
+            "to": "lead20@company20.com",
+            "subject": "Update 20",
+            "text": "Unique message 20 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999805000,
+          "send": {
+            "to": "lead21@company21.com",
+            "subject": "Update 21",
+            "text": "Unique message 21 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999810000,
+          "send": {
+            "to": "lead22@company22.com",
+            "subject": "Update 22",
+            "text": "Unique message 22 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999815000,
+          "send": {
+            "to": "lead23@company23.com",
+            "subject": "Update 23",
+            "text": "Unique message 23 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": "lead24@company24.com",
+            "subject": "Update 24",
+            "text": "Unique message 24 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999825000,
+          "send": {
+            "to": "lead25@company25.com",
+            "subject": "Update 25",
+            "text": "Unique message 25 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999830000,
+          "send": {
+            "to": "lead26@company26.com",
+            "subject": "Update 26",
+            "text": "Unique message 26 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999835000,
+          "send": {
+            "to": "lead27@company27.com",
+            "subject": "Update 27",
+            "text": "Unique message 27 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999840000,
+          "send": {
+            "to": "lead28@company28.com",
+            "subject": "Update 28",
+            "text": "Unique message 28 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999845000,
+          "send": {
+            "to": "lead29@company29.com",
+            "subject": "Update 29",
+            "text": "Unique message 29 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999850000,
+          "send": {
+            "to": "lead30@company0.com",
+            "subject": "Update 30",
+            "text": "Unique message 30 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999855000,
+          "send": {
+            "to": "lead31@company1.com",
+            "subject": "Update 31",
+            "text": "Unique message 31 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999860000,
+          "send": {
+            "to": "lead32@company2.com",
+            "subject": "Update 32",
+            "text": "Unique message 32 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999865000,
+          "send": {
+            "to": "lead33@company3.com",
+            "subject": "Update 33",
+            "text": "Unique message 33 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999870000,
+          "send": {
+            "to": "lead34@company4.com",
+            "subject": "Update 34",
+            "text": "Unique message 34 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999875000,
+          "send": {
+            "to": "lead35@company5.com",
+            "subject": "Update 35",
+            "text": "Unique message 35 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": "lead36@company6.com",
+            "subject": "Update 36",
+            "text": "Unique message 36 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999885000,
+          "send": {
+            "to": "lead37@company7.com",
+            "subject": "Update 37",
+            "text": "Unique message 37 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999890000,
+          "send": {
+            "to": "lead38@company8.com",
+            "subject": "Update 38",
+            "text": "Unique message 38 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999895000,
+          "send": {
+            "to": "lead39@company9.com",
+            "subject": "Update 39",
+            "text": "Unique message 39 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999900000,
+          "send": {
+            "to": "lead40@company10.com",
+            "subject": "Update 40",
+            "text": "Unique message 40 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999905000,
+          "send": {
+            "to": "lead41@company11.com",
+            "subject": "Update 41",
+            "text": "Unique message 41 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999910000,
+          "send": {
+            "to": "lead42@company12.com",
+            "subject": "Update 42",
+            "text": "Unique message 42 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999915000,
+          "send": {
+            "to": "lead43@company13.com",
+            "subject": "Update 43",
+            "text": "Unique message 43 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999920000,
+          "send": {
+            "to": "lead44@company14.com",
+            "subject": "Update 44",
+            "text": "Unique message 44 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999925000,
+          "send": {
+            "to": "lead45@company15.com",
+            "subject": "Update 45",
+            "text": "Unique message 45 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999930000,
+          "send": {
+            "to": "lead46@company16.com",
+            "subject": "Update 46",
+            "text": "Unique message 46 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999935000,
+          "send": {
+            "to": "lead47@company17.com",
+            "subject": "Update 47",
+            "text": "Unique message 47 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": "lead48@company18.com",
+            "subject": "Update 48",
+            "text": "Unique message 48 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999945000,
+          "send": {
+            "to": "lead49@company19.com",
+            "subject": "Update 49",
+            "text": "Unique message 49 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999950000,
+          "send": {
+            "to": "lead50@company20.com",
+            "subject": "Update 50",
+            "text": "Unique message 50 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999955000,
+          "send": {
+            "to": "lead51@company21.com",
+            "subject": "Update 51",
+            "text": "Unique message 51 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999960000,
+          "send": {
+            "to": "lead52@company22.com",
+            "subject": "Update 52",
+            "text": "Unique message 52 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999965000,
+          "send": {
+            "to": "lead53@company23.com",
+            "subject": "Update 53",
+            "text": "Unique message 53 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999970000,
+          "send": {
+            "to": "lead54@company24.com",
+            "subject": "Update 54",
+            "text": "Unique message 54 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999975000,
+          "send": {
+            "to": "lead55@company25.com",
+            "subject": "Update 55",
+            "text": "Unique message 55 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999980000,
+          "send": {
+            "to": "lead56@company26.com",
+            "subject": "Update 56",
+            "text": "Unique message 56 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999985000,
+          "send": {
+            "to": "lead57@company27.com",
+            "subject": "Update 57",
+            "text": "Unique message 57 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999990000,
+          "send": {
+            "to": "lead58@company28.com",
+            "subject": "Update 58",
+            "text": "Unique message 58 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999995000,
+          "send": {
+            "to": "lead59@company29.com",
+            "subject": "Update 59",
+            "text": "Unique message 59 with plenty of distinct trigrams to keep similarity far below threshold."
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "lead60@company30.com",
+            "subject": "Update 60",
+            "text": "A fresh unique message."
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 60,
+              "distinct_recipients": 60,
+              "entropy_bits": 5.907,
+              "effective_recipients": 60
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

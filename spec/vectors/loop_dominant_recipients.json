@@ -1,0 +1,1830 @@
+{
+  "$schema": "./vector.schema.json",
+  "name": "loop_dominant_recipients",
+  "description": "Entropy collapse holds only a send addressed to one of the inboxes the window collapsed on; mail to anyone else keeps flowing.",
+  "source": "packages/agent-guard/test/sp04_entropy_collapse_holds_only_dominant_recipients.test.ts",
+  "cases": [
+    {
+      "name": "a new recipient passes a collapsed window",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799998200000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 0: disk on host 0",
+            "text": "Check 0 crossed its threshold at step 0;  north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998260000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 1: queue on host 13",
+            "text": "Check 1 crossed its threshold at step 7919; z south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998320000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 2: latency on host 26",
+            "text": "Check 2 crossed its threshold at step 15838; zz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998380000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 3: errors on host 39",
+            "text": "Check 3 crossed its threshold at step 23757; zzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998440000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 4: disk on host 52",
+            "text": "Check 4 crossed its threshold at step 31676; zzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998500000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 5: queue on host 65",
+            "text": "Check 5 crossed its threshold at step 39595; zzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998560000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 6: latency on host 78",
+            "text": "Check 6 crossed its threshold at step 47514; zzzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998620000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 7: errors on host 91",
+            "text": "Check 7 crossed its threshold at step 55433; zzzzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998680000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 8: disk on host 104",
+            "text": "Check 8 crossed its threshold at step 63352; zzzzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998740000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 9: queue on host 117",
+            "text": "Check 9 crossed its threshold at step 71271;  south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998800000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 10: latency on host 130",
+            "text": "Check 10 crossed its threshold at step 79190; z east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998860000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 11: errors on host 143",
+            "text": "Check 11 crossed its threshold at step 87109; zz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998920000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 12: disk on host 156",
+            "text": "Check 12 crossed its threshold at step 95028; zzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998980000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 13: queue on host 169",
+            "text": "Check 13 crossed its threshold at step 102947; zzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999040000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 14: latency on host 182",
+            "text": "Check 14 crossed its threshold at step 110866; zzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999100000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 15: errors on host 195",
+            "text": "Check 15 crossed its threshold at step 118785; zzzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999160000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 16: disk on host 208",
+            "text": "Check 16 crossed its threshold at step 126704; zzzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999220000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 17: queue on host 221",
+            "text": "Check 17 crossed its threshold at step 134623; zzzzzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999280000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 18: latency on host 234",
+            "text": "Check 18 crossed its threshold at step 142542;  east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999340000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 19: errors on host 247",
+            "text": "Check 19 crossed its threshold at step 150461; z west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999400000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 20: disk on host 260",
+            "text": "Check 20 crossed its threshold at step 158380; zz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999460000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 21: queue on host 273",
+            "text": "Check 21 crossed its threshold at step 166299; zzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999520000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 22: latency on host 286",
+            "text": "Check 22 crossed its threshold at step 174218; zzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999580000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 23: errors on host 299",
+            "text": "Check 23 crossed its threshold at step 182137; zzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999640000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 24: disk on host 312",
+            "text": "Check 24 crossed its threshold at step 190056; zzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 25: queue on host 325",
+            "text": "Check 25 crossed its threshold at step 197975; zzzzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 26: latency on host 338",
+            "text": "Check 26 crossed its threshold at step 205894; zzzzzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 27: errors on host 351",
+            "text": "Check 27 crossed its threshold at step 213813;  west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 28: disk on host 364",
+            "text": "Check 28 crossed its threshold at step 221732; z north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 29: queue on host 377",
+            "text": "Check 29 crossed its threshold at step 229651; zz south region."
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "new-user@example.com",
+            "subject": "Your sign-in code",
+            "text": "Your code is 481 902."
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "window_size": 30,
+              "distinct_recipients": 1,
+              "entropy_bits": 0,
+              "effective_recipients": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the collapsed inbox is held",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799998200000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 0: disk on host 0",
+            "text": "Check 0 crossed its threshold at step 0;  north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998260000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 1: queue on host 13",
+            "text": "Check 1 crossed its threshold at step 7919; z south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998320000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 2: latency on host 26",
+            "text": "Check 2 crossed its threshold at step 15838; zz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998380000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 3: errors on host 39",
+            "text": "Check 3 crossed its threshold at step 23757; zzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998440000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 4: disk on host 52",
+            "text": "Check 4 crossed its threshold at step 31676; zzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998500000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 5: queue on host 65",
+            "text": "Check 5 crossed its threshold at step 39595; zzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998560000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 6: latency on host 78",
+            "text": "Check 6 crossed its threshold at step 47514; zzzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998620000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 7: errors on host 91",
+            "text": "Check 7 crossed its threshold at step 55433; zzzzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998680000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 8: disk on host 104",
+            "text": "Check 8 crossed its threshold at step 63352; zzzzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998740000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 9: queue on host 117",
+            "text": "Check 9 crossed its threshold at step 71271;  south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998800000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 10: latency on host 130",
+            "text": "Check 10 crossed its threshold at step 79190; z east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998860000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 11: errors on host 143",
+            "text": "Check 11 crossed its threshold at step 87109; zz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998920000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 12: disk on host 156",
+            "text": "Check 12 crossed its threshold at step 95028; zzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998980000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 13: queue on host 169",
+            "text": "Check 13 crossed its threshold at step 102947; zzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999040000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 14: latency on host 182",
+            "text": "Check 14 crossed its threshold at step 110866; zzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999100000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 15: errors on host 195",
+            "text": "Check 15 crossed its threshold at step 118785; zzzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999160000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 16: disk on host 208",
+            "text": "Check 16 crossed its threshold at step 126704; zzzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999220000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 17: queue on host 221",
+            "text": "Check 17 crossed its threshold at step 134623; zzzzzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999280000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 18: latency on host 234",
+            "text": "Check 18 crossed its threshold at step 142542;  east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999340000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 19: errors on host 247",
+            "text": "Check 19 crossed its threshold at step 150461; z west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999400000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 20: disk on host 260",
+            "text": "Check 20 crossed its threshold at step 158380; zz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999460000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 21: queue on host 273",
+            "text": "Check 21 crossed its threshold at step 166299; zzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999520000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 22: latency on host 286",
+            "text": "Check 22 crossed its threshold at step 174218; zzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999580000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 23: errors on host 299",
+            "text": "Check 23 crossed its threshold at step 182137; zzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999640000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 24: disk on host 312",
+            "text": "Check 24 crossed its threshold at step 190056; zzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 25: queue on host 325",
+            "text": "Check 25 crossed its threshold at step 197975; zzzzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 26: latency on host 338",
+            "text": "Check 26 crossed its threshold at step 205894; zzzzzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 27: errors on host 351",
+            "text": "Check 27 crossed its threshold at step 213813;  west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 28: disk on host 364",
+            "text": "Check 28 crossed its threshold at step 221732; z north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 29: queue on host 377",
+            "text": "Check 29 crossed its threshold at step 229651; zz south region."
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "owner@example.test",
+            "subject": "Alert 30: new wording",
+            "text": "A different sentence entirely."
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "recipient_entropy_collapse",
+            "message": "Blocked: the last 30 emails went to about 1 effective recipient, and this one goes to the same inbox again, which looks like a loop; mail to other recipients still sends.",
+            "evidence": {
+              "signal_repetition": false,
+              "signal_entropy": true,
+              "matching_sends_in_window": 0,
+              "repetition_threshold": 3,
+              "closest_subject_similarity": null,
+              "closest_body_similarity": null,
+              "window_size": 30,
+              "distinct_recipients": 1,
+              "entropy_bits": 0,
+              "effective_recipients": 1,
+              "perplexity_floor": 3,
+              "candidate_recipient_share": 1,
+              "dominant_share_floor": 0.333,
+              "window_ms": 3600000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "each address on a send counts",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799998200000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 0: disk on host 0",
+            "text": "Check 0 crossed its threshold at step 0;  north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998260000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 1: queue on host 13",
+            "text": "Check 1 crossed its threshold at step 7919; z south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998320000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 2: latency on host 26",
+            "text": "Check 2 crossed its threshold at step 15838; zz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998380000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 3: errors on host 39",
+            "text": "Check 3 crossed its threshold at step 23757; zzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998440000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 4: disk on host 52",
+            "text": "Check 4 crossed its threshold at step 31676; zzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998500000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 5: queue on host 65",
+            "text": "Check 5 crossed its threshold at step 39595; zzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998560000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 6: latency on host 78",
+            "text": "Check 6 crossed its threshold at step 47514; zzzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998620000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 7: errors on host 91",
+            "text": "Check 7 crossed its threshold at step 55433; zzzzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998680000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 8: disk on host 104",
+            "text": "Check 8 crossed its threshold at step 63352; zzzzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998740000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 9: queue on host 117",
+            "text": "Check 9 crossed its threshold at step 71271;  south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998800000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 10: latency on host 130",
+            "text": "Check 10 crossed its threshold at step 79190; z east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998860000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 11: errors on host 143",
+            "text": "Check 11 crossed its threshold at step 87109; zz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998920000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 12: disk on host 156",
+            "text": "Check 12 crossed its threshold at step 95028; zzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998980000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 13: queue on host 169",
+            "text": "Check 13 crossed its threshold at step 102947; zzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999040000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 14: latency on host 182",
+            "text": "Check 14 crossed its threshold at step 110866; zzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999100000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 15: errors on host 195",
+            "text": "Check 15 crossed its threshold at step 118785; zzzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999160000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 16: disk on host 208",
+            "text": "Check 16 crossed its threshold at step 126704; zzzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999220000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 17: queue on host 221",
+            "text": "Check 17 crossed its threshold at step 134623; zzzzzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999280000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 18: latency on host 234",
+            "text": "Check 18 crossed its threshold at step 142542;  east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999340000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 19: errors on host 247",
+            "text": "Check 19 crossed its threshold at step 150461; z west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999400000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 20: disk on host 260",
+            "text": "Check 20 crossed its threshold at step 158380; zz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999460000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 21: queue on host 273",
+            "text": "Check 21 crossed its threshold at step 166299; zzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999520000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 22: latency on host 286",
+            "text": "Check 22 crossed its threshold at step 174218; zzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999580000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 23: errors on host 299",
+            "text": "Check 23 crossed its threshold at step 182137; zzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999640000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 24: disk on host 312",
+            "text": "Check 24 crossed its threshold at step 190056; zzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 25: queue on host 325",
+            "text": "Check 25 crossed its threshold at step 197975; zzzzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 26: latency on host 338",
+            "text": "Check 26 crossed its threshold at step 205894; zzzzzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 27: errors on host 351",
+            "text": "Check 27 crossed its threshold at step 213813;  west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 28: disk on host 364",
+            "text": "Check 28 crossed its threshold at step 221732; z north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": [
+              "owner@example.test",
+              "cfo@example.test"
+            ],
+            "subject": "Alert 29: queue on host 377",
+            "text": "Check 29 crossed its threshold at step 229651; zz south region."
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "owner@example.test",
+            "subject": "Something else",
+            "text": "Unrelated copy."
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "recipient_entropy_collapse",
+            "message": "Blocked: the last 30 emails went to about 2 effective recipients, and this one goes to the same inbox again, which looks like a loop; mail to other recipients still sends.",
+            "evidence": {
+              "signal_repetition": false,
+              "signal_entropy": true,
+              "matching_sends_in_window": 0,
+              "repetition_threshold": 3,
+              "closest_subject_similarity": null,
+              "closest_body_similarity": null,
+              "window_size": 30,
+              "distinct_recipients": 2,
+              "entropy_bits": 1,
+              "effective_recipients": 2,
+              "perplexity_floor": 3,
+              "candidate_recipient_share": 0.5,
+              "dominant_share_floor": 0.333,
+              "window_ms": 3600000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a dominant inbox reached through cc is held",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799998200000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 0: disk on host 0",
+            "text": "Check 0 crossed its threshold at step 0;  north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998260000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 1: queue on host 13",
+            "text": "Check 1 crossed its threshold at step 7919; z south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998320000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 2: latency on host 26",
+            "text": "Check 2 crossed its threshold at step 15838; zz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998380000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 3: errors on host 39",
+            "text": "Check 3 crossed its threshold at step 23757; zzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998440000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 4: disk on host 52",
+            "text": "Check 4 crossed its threshold at step 31676; zzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998500000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 5: queue on host 65",
+            "text": "Check 5 crossed its threshold at step 39595; zzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998560000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 6: latency on host 78",
+            "text": "Check 6 crossed its threshold at step 47514; zzzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998620000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 7: errors on host 91",
+            "text": "Check 7 crossed its threshold at step 55433; zzzzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998680000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 8: disk on host 104",
+            "text": "Check 8 crossed its threshold at step 63352; zzzzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998740000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 9: queue on host 117",
+            "text": "Check 9 crossed its threshold at step 71271;  south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998800000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 10: latency on host 130",
+            "text": "Check 10 crossed its threshold at step 79190; z east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998860000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 11: errors on host 143",
+            "text": "Check 11 crossed its threshold at step 87109; zz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998920000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 12: disk on host 156",
+            "text": "Check 12 crossed its threshold at step 95028; zzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998980000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 13: queue on host 169",
+            "text": "Check 13 crossed its threshold at step 102947; zzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999040000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 14: latency on host 182",
+            "text": "Check 14 crossed its threshold at step 110866; zzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999100000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 15: errors on host 195",
+            "text": "Check 15 crossed its threshold at step 118785; zzzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999160000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 16: disk on host 208",
+            "text": "Check 16 crossed its threshold at step 126704; zzzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999220000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 17: queue on host 221",
+            "text": "Check 17 crossed its threshold at step 134623; zzzzzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999280000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 18: latency on host 234",
+            "text": "Check 18 crossed its threshold at step 142542;  east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999340000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 19: errors on host 247",
+            "text": "Check 19 crossed its threshold at step 150461; z west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999400000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 20: disk on host 260",
+            "text": "Check 20 crossed its threshold at step 158380; zz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999460000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 21: queue on host 273",
+            "text": "Check 21 crossed its threshold at step 166299; zzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999520000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 22: latency on host 286",
+            "text": "Check 22 crossed its threshold at step 174218; zzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999580000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 23: errors on host 299",
+            "text": "Check 23 crossed its threshold at step 182137; zzzzz west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999640000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 24: disk on host 312",
+            "text": "Check 24 crossed its threshold at step 190056; zzzzzz north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 25: queue on host 325",
+            "text": "Check 25 crossed its threshold at step 197975; zzzzzzz south region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 26: latency on host 338",
+            "text": "Check 26 crossed its threshold at step 205894; zzzzzzzz east region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 27: errors on host 351",
+            "text": "Check 27 crossed its threshold at step 213813;  west region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 28: disk on host 364",
+            "text": "Check 28 crossed its threshold at step 221732; z north region."
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": [
+              "owner@example.test"
+            ],
+            "subject": "Alert 29: queue on host 377",
+            "text": "Check 29 crossed its threshold at step 229651; zz south region."
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "new-user@example.com",
+            "cc": "owner@example.test",
+            "subject": "Welcome",
+            "text": "Welcome aboard."
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "recipient_entropy_collapse",
+            "message": "Blocked: the last 30 emails went to about 1 effective recipient, and this one goes to the same inbox again, which looks like a loop; mail to other recipients still sends.",
+            "evidence": {
+              "signal_repetition": false,
+              "signal_entropy": true,
+              "matching_sends_in_window": 0,
+              "repetition_threshold": 3,
+              "closest_subject_similarity": null,
+              "closest_body_similarity": null,
+              "window_size": 30,
+              "distinct_recipients": 1,
+              "entropy_bits": 0,
+              "effective_recipients": 1,
+              "perplexity_floor": 3,
+              "candidate_recipient_share": 1,
+              "dominant_share_floor": 0.333,
+              "window_ms": 3600000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "cc recipients in the window are counted",
+      "config": {},
+      "steps": [
+        {
+          "op": "record",
+          "at": 1799998200000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 0: disk on host 0",
+            "text": "Check 0 crossed its threshold at step 0;  north region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998260000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 1: queue on host 13",
+            "text": "Check 1 crossed its threshold at step 7919; z south region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998320000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 2: latency on host 26",
+            "text": "Check 2 crossed its threshold at step 15838; zz east region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998380000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 3: errors on host 39",
+            "text": "Check 3 crossed its threshold at step 23757; zzz west region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998440000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 4: disk on host 52",
+            "text": "Check 4 crossed its threshold at step 31676; zzzz north region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998500000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 5: queue on host 65",
+            "text": "Check 5 crossed its threshold at step 39595; zzzzz south region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998560000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 6: latency on host 78",
+            "text": "Check 6 crossed its threshold at step 47514; zzzzzz east region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998620000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 7: errors on host 91",
+            "text": "Check 7 crossed its threshold at step 55433; zzzzzzz west region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998680000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 8: disk on host 104",
+            "text": "Check 8 crossed its threshold at step 63352; zzzzzzzz north region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998740000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 9: queue on host 117",
+            "text": "Check 9 crossed its threshold at step 71271;  south region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998800000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 10: latency on host 130",
+            "text": "Check 10 crossed its threshold at step 79190; z east region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998860000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 11: errors on host 143",
+            "text": "Check 11 crossed its threshold at step 87109; zz west region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998920000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 12: disk on host 156",
+            "text": "Check 12 crossed its threshold at step 95028; zzz north region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799998980000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 13: queue on host 169",
+            "text": "Check 13 crossed its threshold at step 102947; zzzz south region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999040000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 14: latency on host 182",
+            "text": "Check 14 crossed its threshold at step 110866; zzzzz east region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999100000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 15: errors on host 195",
+            "text": "Check 15 crossed its threshold at step 118785; zzzzzz west region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999160000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 16: disk on host 208",
+            "text": "Check 16 crossed its threshold at step 126704; zzzzzzz north region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999220000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 17: queue on host 221",
+            "text": "Check 17 crossed its threshold at step 134623; zzzzzzzz south region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999280000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 18: latency on host 234",
+            "text": "Check 18 crossed its threshold at step 142542;  east region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999340000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 19: errors on host 247",
+            "text": "Check 19 crossed its threshold at step 150461; z west region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999400000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 20: disk on host 260",
+            "text": "Check 20 crossed its threshold at step 158380; zz north region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999460000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 21: queue on host 273",
+            "text": "Check 21 crossed its threshold at step 166299; zzz south region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999520000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 22: latency on host 286",
+            "text": "Check 22 crossed its threshold at step 174218; zzzz east region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999580000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 23: errors on host 299",
+            "text": "Check 23 crossed its threshold at step 182137; zzzzz west region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999640000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 24: disk on host 312",
+            "text": "Check 24 crossed its threshold at step 190056; zzzzzz north region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999700000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 25: queue on host 325",
+            "text": "Check 25 crossed its threshold at step 197975; zzzzzzz south region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999760000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 26: latency on host 338",
+            "text": "Check 26 crossed its threshold at step 205894; zzzzzzzz east region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999820000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 27: errors on host 351",
+            "text": "Check 27 crossed its threshold at step 213813;  west region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999880000,
+          "send": {
+            "to": "rotating-0@example.test",
+            "subject": "Alert 28: disk on host 364",
+            "text": "Check 28 crossed its threshold at step 221732; z north region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "record",
+          "at": 1799999940000,
+          "send": {
+            "to": "rotating-1@example.test",
+            "subject": "Alert 29: queue on host 377",
+            "text": "Check 29 crossed its threshold at step 229651; zz south region.",
+            "cc": "owner@example.test"
+          }
+        },
+        {
+          "op": "check",
+          "at": 1800000000000,
+          "send": {
+            "to": "owner@example.test",
+            "subject": "s",
+            "text": "b"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "recipient_entropy_collapse",
+            "message": "Blocked: the last 30 emails went to about 2.828 effective recipients, and this one goes to the same inbox again, which looks like a loop; mail to other recipients still sends.",
+            "evidence": {
+              "signal_repetition": false,
+              "signal_entropy": true,
+              "matching_sends_in_window": 0,
+              "repetition_threshold": 3,
+              "closest_subject_similarity": null,
+              "closest_body_similarity": null,
+              "window_size": 30,
+              "distinct_recipients": 3,
+              "entropy_bits": 1.5,
+              "effective_recipients": 2.828,
+              "perplexity_floor": 3,
+              "candidate_recipient_share": 0.5,
+              "dominant_share_floor": 0.333,
+              "window_ms": 3600000
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

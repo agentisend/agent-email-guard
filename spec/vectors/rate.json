@@ -1,0 +1,355 @@
+{
+  "$schema": "./vector.schema.json",
+  "name": "rate",
+  "description": "A sliding one-minute ceiling per key, independent of the budgets.",
+  "source": "packages/agent-guard/test/b08-budget-race.test.ts",
+  "cases": [
+    {
+      "name": "the sixth send in a minute with a ceiling of 5 is refused",
+      "config": {
+        "rate": {
+          "per_minute": 5
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "send",
+          "at": 1800000000000,
+          "send": {
+            "to": "r0@example.com",
+            "subject": "0",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "rate_used": 1,
+              "rate_ceiling": 5
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000001000,
+          "send": {
+            "to": "r1@example.com",
+            "subject": "1",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "rate_used": 2,
+              "rate_ceiling": 5
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000002000,
+          "send": {
+            "to": "r2@example.com",
+            "subject": "2",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "rate_used": 3,
+              "rate_ceiling": 5
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000003000,
+          "send": {
+            "to": "r3@example.com",
+            "subject": "3",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "rate_used": 4,
+              "rate_ceiling": 5
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000004000,
+          "send": {
+            "to": "r4@example.com",
+            "subject": "4",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "rate_used": 5,
+              "rate_ceiling": 5
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000010000,
+          "send": {
+            "to": "r5@example.com",
+            "subject": "5",
+            "text": "x"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "rate_ceiling_exceeded",
+            "message": "Key \"default\" reached its ceiling of 5 sends per minute; wait 50 seconds and try again.",
+            "evidence": {
+              "key": "default",
+              "sends_in_window": 5,
+              "ceiling_per_minute": 5,
+              "retry_after_seconds": 50
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000059999,
+          "send": {
+            "to": "r5@example.com",
+            "subject": "5",
+            "text": "x"
+          },
+          "note": "still five inside the minute",
+          "expect": {
+            "outcome": "refuse",
+            "reason": "rate_ceiling_exceeded",
+            "message": "Key \"default\" reached its ceiling of 5 sends per minute; wait 1 second and try again.",
+            "evidence": {
+              "key": "default",
+              "sends_in_window": 5,
+              "ceiling_per_minute": 5,
+              "retry_after_seconds": 1
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000060000,
+          "send": {
+            "to": "r5@example.com",
+            "subject": "5",
+            "text": "x"
+          },
+          "note": "the first send left the window",
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "rate_used": 5,
+              "rate_ceiling": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a ceiling refusal reserves no budget",
+      "config": {
+        "rate": {
+          "per_minute": 1
+        },
+        "budgets": {
+          "per_day": 10
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "send",
+          "at": 1800000000000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "1",
+            "text": "one"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "rate_used": 1,
+              "rate_ceiling": 1,
+              "day_used": 1,
+              "day_budget": 10
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000000001,
+          "send": {
+            "to": "a@example.com",
+            "subject": "2",
+            "text": "two"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "rate_ceiling_exceeded",
+            "message": "Key \"default\" reached its ceiling of 1 send per minute; wait 60 seconds and try again.",
+            "evidence": {
+              "key": "default",
+              "sends_in_window": 1,
+              "ceiling_per_minute": 1,
+              "retry_after_seconds": 60
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000060000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "3",
+            "text": "three"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "rate_used": 1,
+              "rate_ceiling": 1,
+              "day_used": 2,
+              "day_budget": 10
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a budget refusal gives back its rate slot",
+      "config": {
+        "rate": {
+          "per_minute": 2
+        },
+        "budgets": {
+          "per_hour": 1
+        },
+        "loop": {
+          "mode": "off"
+        }
+      },
+      "steps": [
+        {
+          "op": "send",
+          "at": 1800000000000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "1",
+            "text": "one"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "rate_used": 1,
+              "rate_ceiling": 2,
+              "hour_used": 1,
+              "hour_budget": 1
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000000001,
+          "send": {
+            "to": "a@example.com",
+            "subject": "2",
+            "text": "two"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "agent_budget_exceeded",
+            "message": "Key \"default\" has used its hourly budget of 1 email; it resets at 2027-01-15T09:00:00Z.",
+            "evidence": {
+              "key": "default",
+              "period": "hour",
+              "budget": 1,
+              "used": 1,
+              "resets_at": 1800003600000
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800000000002,
+          "send": {
+            "to": "a@example.com",
+            "subject": "3",
+            "text": "three"
+          },
+          "expect": {
+            "outcome": "refuse",
+            "reason": "agent_budget_exceeded",
+            "message": "Key \"default\" has used its hourly budget of 1 email; it resets at 2027-01-15T09:00:00Z.",
+            "evidence": {
+              "key": "default",
+              "period": "hour",
+              "budget": 1,
+              "used": 1,
+              "resets_at": 1800003600000
+            }
+          }
+        },
+        {
+          "op": "send",
+          "at": 1800003600000,
+          "send": {
+            "to": "a@example.com",
+            "subject": "4",
+            "text": "four"
+          },
+          "expect": {
+            "outcome": "allow",
+            "reason": "ok",
+            "message": "No limit, loop or approval rule blocks this send.",
+            "evidence": {
+              "key": "default",
+              "rate_used": 1,
+              "rate_ceiling": 2,
+              "hour_used": 1,
+              "hour_budget": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
