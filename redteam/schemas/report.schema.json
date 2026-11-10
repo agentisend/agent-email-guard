@@ -17,7 +17,7 @@
     "package": { "const": "agent-email-guard-test" },
     "benchmarkId": { "type": "string" },
     "benchmarkVersion": { "type": "integer" },
-    "guard": { "enum": ["reference", "node"] },
+    "guard": { "const": "agent-email-guard" },
     "policyPath": { "type": "string" },
     "pass": { "type": "boolean" },
     "scenarios": {
@@ -30,13 +30,14 @@
     "scenario": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "name", "headline", "control", "pass", "withoutGuard", "withGuard"],
+      "required": ["id", "name", "headline", "control", "pass", "coverage", "withoutGuard", "withGuard"],
       "properties": {
         "id": { "type": "string" },
         "name": { "type": "string" },
         "headline": { "type": "boolean" },
         "control": { "type": "boolean" },
         "pass": { "type": "boolean" },
+        "coverage": { "type": "string", "minLength": 8 },
         "withoutGuard": { "$ref": "#/$defs/mode" },
         "withGuard": { "$ref": "#/$defs/mode" }
       }

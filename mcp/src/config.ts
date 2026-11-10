@@ -1,12 +1,10 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { isAbsolute, resolve } from 'node:path';
+import type { GuardConfig } from 'agent-email-guard';
+import { loadPolicy } from 'agent-email-guard/policy';
 
 export interface ResolvedConfig {
-  readonly perDay: number;
-  readonly perHour?: number;
-  readonly perMinute?: number;
-  readonly loopMode: 'off' | 'full';
-  readonly approvalRecipients: readonly string[];
+  readonly guard: GuardConfig;
   readonly store: 'memory' | 'file';
   readonly storePath: string;
   readonly controlFile: string;
@@ -16,19 +14,6 @@ export interface ResolvedConfig {
   readonly wrap?: string;
   readonly wrapUrl?: string;
   readonly headers: Readonly<Record<string, string>>;
-}
-
-interface FileConfig {
-  // The spec's policy file (SPEC section 2.9) uses snake_case; the camelCase names are kept for 0.1.0 files.
-  budgets?: { per_day?: unknown; per_hour?: unknown; perDay?: unknown; perHour?: unknown };
-  rate?: { per_minute?: unknown; perMinute?: unknown };
-  loop?: { mode?: unknown };
-  approval?: { recipients?: unknown };
-  store?: { kind?: unknown; path?: unknown };
-  controlFile?: unknown;
-  approvalsFile?: unknown;
-  key?: unknown;
-  sendTools?: unknown;
 }
 
 export interface CliFlags {
@@ -46,7 +31,7 @@ export interface CliFlags {
   readonly perDay?: number;
   readonly perHour?: number;
   readonly perMinute?: number;
-  readonly loop?: 'off' | 'full';
+  readonly loop?: 'off' | 'full' | 'repetition_only';
   readonly store?: 'memory' | 'file';
   readonly storePath?: string;
   readonly controlFile?: string;
@@ -67,7 +52,7 @@ export function parseArgs(argv: readonly string[]): CliFlags {
     if (next === 'approve') {
       approveId = rest.shift();
       if (!approveId || approveId.startsWith('--')) {
-        throw new Error('approve needs the id from agent-email-guard approvals.');
+        throw new Error('approve needs the id from agent-email-guard-mcp approvals.');
       }
     }
     if (next === 'hook') {
@@ -90,7 +75,7 @@ export function parseArgs(argv: readonly string[]): CliFlags {
   let perDay: number | undefined;
   let perHour: number | undefined;
   let perMinute: number | undefined;
-  let loop: 'off' | 'full' | undefined;
+  let loop: 'off' | 'full' | 'repetition_only' | undefined;
   let store: 'memory' | 'file' | undefined;
   let storePath: string | undefined;
   let controlFile: string | undefined;
@@ -117,7 +102,7 @@ export function parseArgs(argv: readonly string[]): CliFlags {
       continue;
     }
     if (!token.startsWith('--')) {
-      throw new Error(`Unexpected argument ${token}. Run agent-email-guard --help.`);
+      throw new Error(`Unexpected argument ${token}. Run agent-email-guard-mcp --help.`);
     }
     const value = take(token, i);
     i += 1;
@@ -150,7 +135,9 @@ export function parseArgs(argv: readonly string[]): CliFlags {
         perMinute = integerFlag(token, value);
         break;
       case '--loop':
-        if (value !== 'off' && value !== 'full') throw new Error('--loop is off or full.');
+        if (value !== 'off' && value !== 'full' && value !== 'repetition_only') {
+          throw new Error('--loop is off, full, or repetition_only.');
+        }
         loop = value;
         break;
       case '--store':
@@ -167,7 +154,7 @@ export function parseArgs(argv: readonly string[]): CliFlags {
         approvalsFile = value;
         break;
       default:
-        throw new Error(`Unknown flag ${token}. Run agent-email-guard --help.`);
+        throw new Error(`Unknown flag ${token}. Run agent-email-guard-mcp --help.`);
     }
   }
 
@@ -206,99 +193,41 @@ export function loadConfig(flags: CliFlags, cwd: string, env: NodeJS.ProcessEnv 
     : existsSync(resolve(cwd, 'agent-email-guard.json'))
       ? resolve(cwd, 'agent-email-guard.json')
       : undefined;
-  const file = filePath ? readConfigFile(filePath) : {};
-
-  const perDay =
-    flags.perDay ??
-    numberField(file.budgets?.per_day, 'budgets.per_day') ??
-    numberField(file.budgets?.perDay, 'budgets.perDay') ??
-    100;
-  const perHour =
-    flags.perHour ??
-    numberField(file.budgets?.per_hour, 'budgets.per_hour') ??
-    numberField(file.budgets?.perHour, 'budgets.perHour');
-  const perMinute =
-    flags.perMinute ??
-    numberField(file.rate?.per_minute, 'rate.per_minute') ??
-    numberField(file.rate?.perMinute, 'rate.perMinute');
-  const loopMode = flags.loop ?? loopField(file.loop?.mode) ?? 'full';
-  const approvalRecipients = stringList(file.approval?.recipients);
-  const store = flags.store ?? (file.store?.kind === 'file' ? 'file' : 'memory');
-  const storePath = abs(cwd, flags.storePath ?? stringField(file.store?.path) ?? resolve(dir, 'store.json'));
-  const controlFile = abs(cwd, flags.controlFile ?? stringField(file.controlFile) ?? resolve(dir, 'control.json'));
-  const approvalsFile = abs(cwd, flags.approvalsFile ?? stringField(file.approvalsFile) ?? resolve(dir, 'approvals.json'));
-  const key = flags.key ?? stringField(file.key);
-  const sendTools = flags.sendTools !== undefined ? splitList(flags.sendTools) : stringListOrNull(file.sendTools);
+  const fromFile = filePath ? loadPolicy(filePath) : {};
+  const budgets = {
+    ...(fromFile.budgets ?? {}),
+    ...(flags.perDay !== undefined ? { perDay: flags.perDay } : {}),
+    ...(flags.perHour !== undefined ? { perHour: flags.perHour } : {}),
+  };
+  const rate = {
+    ...(fromFile.rate ?? {}),
+    ...(flags.perMinute !== undefined ? { perMinute: flags.perMinute } : {}),
+  };
+  const loop = {
+    ...(fromFile.loop ?? {}),
+    ...(flags.loop !== undefined ? { mode: flags.loop } : {}),
+  };
+  const key = flags.key ?? fromFile.key;
+  const guard: GuardConfig = {
+    ...fromFile,
+    ...(Object.keys(budgets).length > 0 ? { budgets } : {}),
+    ...(Object.keys(rate).length > 0 ? { rate } : {}),
+    ...(Object.keys(loop).length > 0 ? { loop } : {}),
+    ...(key !== undefined ? { key } : {}),
+  };
 
   return {
-    perDay,
-    ...(perHour !== undefined ? { perHour } : {}),
-    ...(perMinute !== undefined ? { perMinute } : {}),
-    loopMode,
-    approvalRecipients,
-    store,
-    storePath,
-    controlFile,
-    approvalsFile,
+    guard,
+    store: flags.store ?? 'memory',
+    storePath: abs(cwd, flags.storePath ?? resolve(dir, 'store.json')),
+    controlFile: abs(cwd, flags.controlFile ?? resolve(dir, 'control.json')),
+    approvalsFile: abs(cwd, flags.approvalsFile ?? resolve(dir, 'approvals.json')),
     ...(key !== undefined ? { key } : {}),
-    sendTools,
+    sendTools: flags.sendTools !== undefined ? splitList(flags.sendTools) : null,
     ...(flags.wrap !== undefined ? { wrap: flags.wrap } : {}),
     ...(flags.wrapUrl !== undefined ? { wrapUrl: flags.wrapUrl } : {}),
     headers: parseHeaders(flags.headers, env),
   };
-}
-
-function readConfigFile(path: string): FileConfig {
-  let text: string;
-  try {
-    text = readFileSync(path, 'utf8');
-  } catch (err) {
-    throw new Error(`Could not read ${path}: ${(err as Error).message}`);
-  }
-  try {
-    const parsed = JSON.parse(text) as unknown;
-    if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) {
-      throw new Error('the file must be a JSON object');
-    }
-    return parsed as FileConfig;
-  } catch (err) {
-    throw new Error(`Could not parse ${path}: ${(err as Error).message}`);
-  }
-}
-
-function numberField(value: unknown, label: string): number | undefined {
-  if (value === undefined) return undefined;
-  if (typeof value !== 'number' || !Number.isInteger(value) || value < 0) {
-    throw new Error(`${label} must be a whole number.`);
-  }
-  return value;
-}
-
-function loopField(value: unknown): 'off' | 'full' | undefined {
-  if (value === undefined) return undefined;
-  if (value === 'off' || value === 'full') return value;
-  throw new Error('loop.mode is off or full.');
-}
-
-function stringField(value: unknown): string | undefined {
-  if (typeof value !== 'string' || value.length === 0) return undefined;
-  return value;
-}
-
-function stringList(value: unknown): string[] {
-  if (value === undefined) return [];
-  if (!Array.isArray(value) || value.some((item) => typeof item !== 'string')) {
-    throw new Error('approval.recipients must be a list of strings.');
-  }
-  return value as string[];
-}
-
-function stringListOrNull(value: unknown): string[] | null {
-  if (value === undefined) return null;
-  if (!Array.isArray(value) || value.some((item) => typeof item !== 'string')) {
-    throw new Error('sendTools must be a list of strings.');
-  }
-  return value as string[];
 }
 
 function splitList(value: string): string[] {

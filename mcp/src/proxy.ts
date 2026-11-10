@@ -13,10 +13,10 @@ import {
 import { classifyCall } from './classify.js';
 import { decisionLine, toolErrorText } from './log.js';
 import { splitCommand } from './split-command.js';
-import type { SpecDecision, SpecGuard, SpecSend } from './spec-guard.js';
+import type { CheckedSend, OpenedGuard } from './runtime.js';
 
 export const SERVER_NAME = 'agent-email-guard-mcp';
-export const SERVER_VERSION = '0.1.0';
+export const SERVER_VERSION = '0.2.0';
 
 export interface UpstreamTarget {
   readonly wrap?: string;
@@ -63,7 +63,7 @@ export async function connectUpstream(target: UpstreamTarget): Promise<Client> {
 }
 
 export interface GuardServerOptions {
-  readonly guard: SpecGuard;
+  readonly guard: OpenedGuard;
   /** null means the name-and-arguments heuristic. */
   readonly sendTools: ReadonlySet<string> | null;
   readonly key?: string;
@@ -113,11 +113,11 @@ export function createGuardServer(upstream: Client, options: GuardServerOptions)
       return upstream.callTool({ name, arguments: args });
     }
 
-    const decided: Array<{ send: SpecSend; decision: SpecDecision }> = [];
+    const decided: CheckedSend[] = [];
     for (const send of classified.messages) {
       const decision = await options.guard.check(send);
-      decided.push({ send, decision });
-      write(decisionLine(decision, send.key));
+      decided.push(decision);
+      write(decisionLine(decision, send.key ?? keyFor()));
       if (decision.outcome !== 'allow') {
         await releaseReserved(options.guard, decided);
         return {
@@ -148,22 +148,14 @@ function isToolError(result: unknown): boolean {
   return result !== null && typeof result === 'object' && (result as { isError?: unknown }).isError === true;
 }
 
-async function releaseReserved(
-  guard: SpecGuard,
-  decided: readonly { decision: SpecDecision }[],
-): Promise<void> {
+async function releaseReserved(guard: OpenedGuard, decided: readonly CheckedSend[]): Promise<void> {
   for (const row of decided) {
-    if (row.decision.outcome === 'allow' && row.decision.reservationId) {
-      await guard.release(row.decision.reservationId);
-    }
+    if (row.outcome === 'allow') await guard.release(row);
   }
 }
 
-async function recordReserved(
-  guard: SpecGuard,
-  decided: readonly { decision: SpecDecision }[],
-): Promise<void> {
+async function recordReserved(guard: OpenedGuard, decided: readonly CheckedSend[]): Promise<void> {
   for (const row of decided) {
-    if (row.decision.reservationId) await guard.record(row.decision.reservationId);
+    if (row.outcome === 'allow') await guard.record(row);
   }
 }

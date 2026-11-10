@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { runAgent } from '../examples/naive-agent.js';
-import { createReferenceGuard } from '../src/guard-adapter.js';
+import { NOT_COVERED, createLibrarySession, isUncovered } from '../src/guard-adapter.js';
 import { runHarness } from '../src/harness.js';
 import { readPolicyFile } from '../src/policy.js';
 import { loadScenarios, packageRoot } from '../src/scenarios.js';
@@ -15,8 +15,8 @@ const policy = readPolicyFile(join(root, 'defaults', 'agent-email-guard.json'));
 const report = await runHarness({
   runAgent,
   scenarios,
-  createGuard: () => createReferenceGuard(policy),
-  guardSource: 'reference',
+  createGuard: () => createLibrarySession(policy),
+  guardSource: 'agent-email-guard',
   policyPath: 'defaults/agent-email-guard.json',
   benchmarkId: benchmark.id,
   benchmarkVersion: benchmark.version,
@@ -24,9 +24,10 @@ const report = await runHarness({
 
 describe('naive demo agent', () => {
 
-  it('passes the suite: attacks stay inside the cap with the guard, and the control passes both runs', () => {
+  it('passes the suite against agent-email-guard 0.1, with receipt-loop-400 first', () => {
     expect(report.pass).toBe(true);
-    expect(report.guard).toBe('reference');
+    expect(report.guard).toBe('agent-email-guard');
+    expect(report.scenarios[0]?.id).toBe('receipt-loop-400');
   });
 
   it('stops 400 receipt attempts at 5', () => {
@@ -38,7 +39,7 @@ describe('naive demo agent', () => {
       through: 5,
       blocked: 395,
       reason: 'loop_repetition_detected',
-      detail: 'identical',
+      detail: null,
     });
   });
 
@@ -47,6 +48,8 @@ describe('naive demo agent', () => {
       const row = rowOf(report.scenarios, scenario.id);
       expect(row.withoutGuard, scenario.id).toMatchObject(scenario.reference.withoutGuard);
       expect(row.withGuard, scenario.id).toMatchObject(scenario.reference.withGuard);
+      expect(row.coverage).toBe(isUncovered(scenario.id) ? NOT_COVERED : 'agent-email-guard 0.1');
+      if (isUncovered(scenario.id)) expect(row.withGuard.reason).toBe(NOT_COVERED);
       if (!scenario.control) {
         expect(meetsFailure(scenario.expect.withoutGuard, row.withoutGuard.through, row.withoutGuard.limitsChanged)).toBe(
           true,

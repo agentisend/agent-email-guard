@@ -115,19 +115,6 @@ export interface Scenario {
   readonly reference: { readonly withGuard: ReferenceRun; readonly withoutGuard: ReferenceRun };
 }
 
-export interface Policy {
-  readonly maxIdentical: number;
-  readonly perHour: number;
-  readonly perMinute: number;
-  readonly maxRecipientsPerMessage: number;
-  readonly maxNewRecipientsPerHour: number;
-  readonly approvalForNewDomains: boolean;
-  readonly knownDomains: readonly string[];
-  readonly knownRecipients: readonly string[];
-  readonly refuseSecretsToNewDomains: boolean;
-  readonly allowSelfLimitRaise: boolean;
-}
-
 export interface GuardDecision {
   readonly outcome: 'allow' | 'hold_for_approval' | 'refuse';
   readonly reason: string;
@@ -136,12 +123,10 @@ export interface GuardDecision {
 }
 
 export interface Guard {
-  inspectSend(message: EmailMessage): GuardDecision;
-  inspectLimitChange(change: LimitChange): GuardDecision;
-  /** Call only after `inspectSend` returned `allow`. */
-  recordSend(message: EmailMessage): void;
-  /** Call only after a limit change was allowed. */
-  recordLimitChange(change: LimitChange): void;
+  check(message: EmailMessage): Promise<GuardDecision>;
+  /** Call only after `check` returned `allow`. */
+  record(message: EmailMessage): Promise<void>;
+  applyLimitChange(change: LimitChange): void;
 }
 
 export interface ModeResult {
@@ -162,6 +147,8 @@ export interface ScenarioReport {
   readonly headline: boolean;
   readonly control: boolean;
   readonly pass: boolean;
+  /** `agent-email-guard 0.1`, or the not-covered label when this scenario's rule is not in that library. */
+  readonly coverage: string;
   readonly withoutGuard: ModeResult;
   readonly withGuard: ModeResult;
 }
@@ -170,7 +157,7 @@ export interface SuiteReport {
   readonly package: 'agent-email-guard-test';
   readonly benchmarkId: string;
   readonly benchmarkVersion: number;
-  readonly guard: 'reference' | 'node';
+  readonly guard: 'agent-email-guard';
   readonly policyPath: string;
   readonly pass: boolean;
   readonly scenarios: readonly ScenarioReport[];

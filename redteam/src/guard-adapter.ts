@@ -1,215 +1,123 @@
 /**
- * Swap point for `@agentisend/agent-guard`.
- *
- * `oss/agent-guard/node/` was not on origin/main when this package was written
- * (main was b1a5213a, and `oss/agent-guard/spec/SPEC.md` was absent). The
- * reference below implements the decisions this harness needs. When the Node
- * package lands, change `loadGuard` so it constructs that package's §2 guard
- * and delete `createReferenceGuard`. Callers of `Guard` stay as they are.
+ * The only place this package talks to agent-email-guard.
+ * createGuard and loadPolicy are the published 0.1 API. There is no second
+ * rule engine: a scenario the library does not implement is labeled, not
+ * decided here.
  */
 
-import type { EmailMessage, Guard, GuardDecision, LimitChange, Policy } from './types.js';
+import { createGuard, MemoryStore, type Guard, type GuardConfig, type GuardSend } from 'agent-email-guard';
+import { loadPolicy } from 'agent-email-guard/policy';
 
-const HOUR_MS = 60 * 60 * 1000;
-const MINUTE_MS = 60 * 1000;
-const SECRET = /sk_test_[A-Za-z0-9_]+/;
+import type { EmailMessage, GuardDecision, LimitChange } from './types.js';
 
-interface RecordedSend {
-  readonly at: number;
-  readonly key: string;
-  readonly recipients: readonly string[];
+export const NOT_COVERED = 'not covered by agent-email-guard 0.1';
+
+/** Scenarios whose rule is not in agent-email-guard 0.1. */
+export const UNCOVERED_SCENARIOS: ReadonlySet<string> = new Set([
+  'secret-exfil-new-domain',
+  'inbound-contact-list',
+  'raise-own-limits',
+]);
+
+export function isUncovered(id: string): boolean {
+  return UNCOVERED_SCENARIOS.has(id);
 }
 
-export interface LoadedGuard {
-  readonly create: () => Guard;
-  readonly source: 'reference' | 'node';
+export interface Session {
+  check(message: EmailMessage): Promise<GuardDecision>;
+  /** Call only after check() allowed. Feeds loop memory. Budget was already reserved by check(). */
+  record(message: EmailMessage): Promise<void>;
+  /**
+   * 0.1 has no API that refuses a self-raised limit. This rebuilds the guard
+   * with the new numbers so the following sends show what that policy lets through.
+   */
+  applyLimitChange(change: LimitChange): void;
 }
 
-class ReferenceGuard implements Guard {
-  #policy: Policy;
-  #now: number;
-  readonly #sends: RecordedSend[] = [];
-  readonly #newRecipients = new Set<string>();
-
-  constructor(policy: Policy, now: number) {
-    this.#policy = policy;
-    this.#now = now;
-  }
-
-  inspectSend(message: EmailMessage): GuardDecision {
-    const recipients = addressesOf(message);
-    if (recipients.length === 0) {
-      return hold('recipient_requires_approval', 'malformed', 'Held for a person. The message has no recipient.');
-    }
-    const body = `${message.text ?? ''}\n${message.html ?? ''}`;
-    const outside = recipients.filter((address) => !domainKnown(address, this.#policy));
-    if (this.#policy.refuseSecretsToNewDomains && SECRET.test(body) && outside.length > 0) {
-      return refuse(
-        'secret_in_body',
-        'secret_pattern',
-        'Refused. The body matches a test secret pattern and a recipient domain is outside the known list.',
-      );
-    }
-    if (recipients.length > this.#policy.maxRecipientsPerMessage) {
-      return hold(
-        'recipient_requires_approval',
-        'recipients_per_message',
-        `Held for a person. The message names ${recipients.length} recipients, and the policy allows ${this.#policy.maxRecipientsPerMessage} per message.`,
-      );
-    }
-    if (this.#policy.approvalForNewDomains && outside.length > 0) {
-      return hold(
-        'recipient_requires_approval',
-        'new_domain',
-        `Held for a person. ${outside[0]} is outside the domains this policy allows without a person.`,
-      );
-    }
-    const fresh = recipients.filter(
-      (address) => !this.#policy.knownRecipients.includes(address) && !this.#newRecipients.has(address),
-    );
-    if (this.#newRecipients.size + fresh.length > this.#policy.maxNewRecipientsPerHour) {
-      return hold(
-        'recipient_requires_approval',
-        'new_recipient_cap',
-        `Held for a person. This would be new recipient ${this.#newRecipients.size + fresh.length} in the current hour, and the policy allows ${this.#policy.maxNewRecipientsPerHour}.`,
-      );
-    }
-    const key = fingerprint(message, recipients);
-    const identical = this.#sends.filter((send) => send.key === key).length;
-    if (identical >= this.#policy.maxIdentical) {
-      return refuse(
-        'loop_repetition_detected',
-        'identical',
-        `Refused. This is identical copy ${identical + 1} of this message, and the policy allows ${this.#policy.maxIdentical}.`,
-      );
-    }
-    const inMinute = this.#sends.filter((send) => this.#now - send.at < MINUTE_MS).length;
-    if (inMinute >= this.#policy.perMinute) {
-      return refuse(
-        'rate_ceiling_exceeded',
-        'per_minute',
-        `Refused. This send would be number ${inMinute + 1} in the current minute, and the policy allows ${this.#policy.perMinute}.`,
-      );
-    }
-    const inHour = this.#sends.filter((send) => this.#now - send.at < HOUR_MS).length;
-    if (inHour >= this.#policy.perHour) {
-      return refuse(
-        'agent_budget_exceeded',
-        'per_hour',
-        `Refused. This send would be number ${inHour + 1} in the current hour, and the policy allows ${this.#policy.perHour}.`,
-      );
-    }
-    return {
-      outcome: 'allow',
-      reason: 'ok',
-      detail: null,
-      message: 'Allowed. The send is inside the policy.',
-    };
-  }
-
-  inspectLimitChange(change: LimitChange): GuardDecision {
-    if (!this.#policy.allowSelfLimitRaise) {
-      return refuse(
-        'limit_change_refused',
-        'self_limit',
-        'Refused. This agent cannot raise its own send limits.',
-      );
-    }
-    if (change.perHour === undefined && change.perMinute === undefined && change.maxIdentical === undefined) {
-      return refuse('limit_change_refused', 'self_limit', 'Refused. The limit change named no field.');
-    }
-    return {
-      outcome: 'allow',
-      reason: 'ok',
-      detail: null,
-      message: 'Allowed. The policy permits this agent to change its own limits.',
-    };
-  }
-
-  recordSend(message: EmailMessage): void {
-    const recipients = addressesOf(message);
-    this.#sends.push({ at: this.#now, key: fingerprint(message, recipients), recipients });
-    for (const address of recipients) {
-      if (!this.#policy.knownRecipients.includes(address)) this.#newRecipients.add(address);
-    }
-    this.#now += 1;
-  }
-
-  recordLimitChange(change: LimitChange): void {
-    this.#policy = {
-      ...this.#policy,
-      perHour: change.perHour ?? this.#policy.perHour,
-      perMinute: change.perMinute ?? this.#policy.perMinute,
-      maxIdentical: change.maxIdentical ?? this.#policy.maxIdentical,
-    };
-  }
+export function readLibraryPolicy(path: string): GuardConfig {
+  return loadPolicy(path);
 }
 
-function allowPass(): Guard {
+export function createLibrarySession(config: GuardConfig): Session {
+  return new LibrarySession(config);
+}
+
+export function createOpenSession(): Session {
   return {
-    inspectSend: () => ({
-      outcome: 'allow',
-      reason: 'ok',
-      detail: null,
-      message: 'Allowed. The guard is off for this run.',
-    }),
-    inspectLimitChange: () => ({
-      outcome: 'allow',
-      reason: 'ok',
-      detail: null,
-      message: 'Allowed. The guard is off for this run.',
-    }),
-    recordSend: () => undefined,
-    recordLimitChange: () => undefined,
+    check: () =>
+      Promise.resolve({
+        outcome: 'allow',
+        reason: 'ok',
+        detail: null,
+        message: 'Allowed. The guard is off for this run.',
+      }),
+    record: () => Promise.resolve(),
+    applyLimitChange: () => undefined,
   };
 }
 
-export function createReferenceGuard(policy: Policy): Guard {
-  return new ReferenceGuard(policy, 1_700_000_000_000);
-}
+class LibrarySession implements Session {
+  #config: GuardConfig;
+  #guard: Guard;
+  #now = 1_700_000_000_000;
 
-export function createOpenGuard(): Guard {
-  return allowPass();
-}
-
-/**
- * Prefer the Node package when it exports `createEmailGuard(policy)`.
- * Any other shape, or a missing package, keeps the reference guard.
- */
-export async function loadGuard(policy: Policy): Promise<LoadedGuard> {
-  const specifier: string = '@agentisend/agent-guard';
-  try {
-    const loaded: unknown = await import(specifier);
-    if (isRecord(loaded) && typeof loaded.createEmailGuard === 'function') {
-      const factory = loaded.createEmailGuard;
-      return {
-        source: 'node',
-        create: () => {
-          const created: unknown = factory(policy);
-          if (!isGuard(created)) throw new Error('createEmailGuard did not return a guard.');
-          return created;
-        },
-      };
-    }
-  } catch (error) {
-    if (error instanceof Error && error.message === 'createEmailGuard did not return a guard.') throw error;
-    // The package is optional until oss/agent-guard/node is published in-repo.
+  constructor(config: GuardConfig) {
+    this.#config = config;
+    this.#guard = this.#build();
   }
-  return { source: 'reference', create: () => createReferenceGuard(policy) };
+
+  async check(message: EmailMessage): Promise<GuardDecision> {
+    const decision = await this.#guard.check(toSend(message));
+    const rule = decision.evidence.rule;
+    const period = decision.evidence.period;
+    return {
+      outcome: decision.outcome,
+      reason: decision.reason,
+      message: decision.message,
+      detail: typeof rule === 'string' ? rule : typeof period === 'string' ? period : null,
+    };
+  }
+
+  async record(message: EmailMessage): Promise<void> {
+    await this.#guard.record(toSend(message));
+  }
+
+  applyLimitChange(change: LimitChange): void {
+    const budgets = { ...this.#config.budgets };
+    if (change.perHour !== undefined) budgets.perHour = change.perHour;
+    this.#config = {
+      ...this.#config,
+      budgets,
+      rate: change.perMinute !== undefined ? { perMinute: change.perMinute } : this.#config.rate,
+      loop:
+        change.maxIdentical !== undefined
+          ? { ...this.#config.loop, maxIdenticalSends: change.maxIdentical }
+          : this.#config.loop,
+    };
+    this.#guard = this.#build();
+  }
+
+  #build(): Guard {
+    return createGuard({
+      ...this.#config,
+      store: new MemoryStore(),
+      clock: () => {
+        const now = this.#now;
+        this.#now += 1;
+        return now;
+      },
+    });
+  }
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
-function isGuard(value: unknown): value is Guard {
-  if (!isRecord(value)) return false;
-  return (
-    typeof value.inspectSend === 'function' &&
-    typeof value.inspectLimitChange === 'function' &&
-    typeof value.recordSend === 'function' &&
-    typeof value.recordLimitChange === 'function'
-  );
+function toSend(message: EmailMessage): GuardSend {
+  return {
+    to: [...message.to],
+    cc: message.cc === undefined ? undefined : [...message.cc],
+    subject: message.subject,
+    text: message.text,
+    html: message.html,
+  };
 }
 
 export function addressesOf(message: EmailMessage): string[] {
@@ -222,32 +130,4 @@ export function addressesOf(message: EmailMessage): string[] {
     out.push(address);
   }
   return out;
-}
-
-function domainOf(address: string): string | null {
-  const at = address.lastIndexOf('@');
-  if (at < 1 || at === address.length - 1) return null;
-  return address.slice(at + 1);
-}
-
-function domainKnown(address: string, policy: Policy): boolean {
-  const domain = domainOf(address);
-  return domain !== null && policy.knownDomains.includes(domain);
-}
-
-function fingerprint(message: EmailMessage, recipients: readonly string[]): string {
-  return JSON.stringify({
-    to: [...recipients].sort(),
-    subject: message.subject.trim().toLowerCase(),
-    text: (message.text ?? '').trim().toLowerCase(),
-    html: (message.html ?? '').trim().toLowerCase(),
-  });
-}
-
-function refuse(reason: string, detail: string, message: string): GuardDecision {
-  return { outcome: 'refuse', reason, detail, message };
-}
-
-function hold(reason: string, detail: string, message: string): GuardDecision {
-  return { outcome: 'hold_for_approval', reason, detail, message };
 }

@@ -13,9 +13,7 @@ import {
   ReadResourceRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { createGuardServer } from '../src/proxy.js';
-import { createFileApprovals, createFileLedger, createMemoryLedger, createSpecGuard } from '../src/spec-guard.js';
-import type { SpecGuard } from '../src/spec-guard.js';
-import { readPaused } from '../src/control.js';
+import { openGuard, type OpenedGuard } from '../src/runtime.js';
 
 export interface FakeCounts {
   sendEmail: number;
@@ -103,26 +101,32 @@ export function guardFor(
   files: GuardFiles,
   limits: { perDay: number; perHour?: number; loopMode?: 'off' | 'full'; approvalRecipients?: string[] },
   ledger: 'memory' | 'file' = 'memory',
-): SpecGuard {
-  return createSpecGuard({
-    limits: {
-      perDay: limits.perDay,
-      ...(limits.perHour !== undefined ? { perHour: limits.perHour } : {}),
-      loopMode: limits.loopMode ?? 'full',
-      loopWindowMs: 60 * 60 * 1000,
-      approvalRecipients: limits.approvalRecipients ?? [],
+): OpenedGuard {
+  return openGuard({
+    guard: {
+      budgets: {
+        perDay: limits.perDay,
+        ...(limits.perHour !== undefined ? { perHour: limits.perHour } : {}),
+      },
+      loop: { mode: limits.loopMode ?? 'full' },
+      ...(limits.approvalRecipients !== undefined && limits.approvalRecipients.length > 0
+        ? { approval: { recipients: limits.approvalRecipients } }
+        : {}),
     },
-    ledger: ledger === 'file' ? createFileLedger(files.store) : createMemoryLedger(),
-    approvals: createFileApprovals(files.approvals),
-    isPaused: () => readPaused(files.control),
+    store: ledger,
+    storePath: files.store,
+    controlFile: files.control,
+    approvalsFile: files.approvals,
+    sendTools: null,
+    headers: {},
   });
 }
 
-export async function connectHost(upstream: Server, guard: SpecGuard): Promise<{
+export async function connectHost(upstream: Server, guard: OpenedGuard): Promise<{
   client: Client;
   close: () => Promise<void>;
 }> {
-  const upstreamClient = new Client({ name: 'agent-email-guard-mcp', version: '0.1.0' }, { capabilities: {} });
+  const upstreamClient = new Client({ name: 'agent-email-guard-mcp', version: '0.2.0' }, { capabilities: {} });
   const [upstreamClientSide, upstreamServerSide] = InMemoryTransport.createLinkedPair();
   await upstream.connect(upstreamServerSide);
   await upstreamClient.connect(upstreamClientSide);

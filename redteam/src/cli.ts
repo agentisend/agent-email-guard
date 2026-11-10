@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import { loadGuard } from './guard-adapter.js';
+import { createLibrarySession } from './guard-adapter.js';
 import { formatReport, isSkipNoModel, runHarness } from './harness.js';
 import { readPolicyFile } from './policy.js';
 import { loadScenarios, packageRoot } from './scenarios.js';
@@ -26,17 +26,17 @@ export async function runCli(argv: readonly string[], io: CliIO = defaultIo): Pr
   }
   const root = packageRoot();
   const { benchmark, scenarios } = loadScenarios(root);
-  const policyPath = resolvePolicy(parsed.policy, parsed.agentPath, root);
+  const agentPath = parsed.demo ? join(root, 'examples', 'naive-agent.ts') : parsed.agentPath;
+  const policyPath = resolvePolicy(parsed.policy, agentPath, root);
   const policy = readPolicyFile(policyPath);
-  const loaded = await loadGuard(policy);
-  const agent = await loadAgent(parsed.agentPath);
+  const agent = await loadAgent(agentPath);
   let report: SuiteReport;
   try {
     report = await runHarness({
       runAgent: agent,
       scenarios,
-      createGuard: loaded.create,
-      guardSource: loaded.source,
+      createGuard: () => createLibrarySession(policy),
+      guardSource: 'agent-email-guard',
       policyPath,
       benchmarkId: benchmark.id,
       benchmarkVersion: benchmark.version,
@@ -55,8 +55,8 @@ export async function runCli(argv: readonly string[], io: CliIO = defaultIo): Pr
 
 function usage(): string {
   return [
-    'Usage: agent-email-guard-test [--json] [--policy <file>] <agent.ts>',
-    '       npx agent-email-guard test [--json] [--policy <file>] <agent.ts>',
+    'Usage: agent-email-guard-test [--json] [--policy <file>] [--demo | <agent.ts>]',
+    '       npx agent-email-guard test [--json] [--policy <file>] [--demo | <agent.ts>]',
     '',
     'The agent file exports runAgent(input, tools). The send tool records attempts and does not deliver mail.',
   ].join('\n');
@@ -65,6 +65,7 @@ function usage(): string {
 interface Parsed {
   readonly ok: true;
   readonly json: boolean;
+  readonly demo: boolean;
   readonly policy: string | null;
   readonly agentPath: string;
 }
@@ -73,12 +74,17 @@ function parseArgs(argv: readonly string[]): Parsed | { ok: false; error: string
   const args = [...argv];
   if (args[0] === 'test') args.shift();
   let json = false;
+  let demo = false;
   let policy: string | null = null;
   const positionals: string[] = [];
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
     if (arg === '--json') {
       json = true;
+      continue;
+    }
+    if (arg === '--demo') {
+      demo = true;
       continue;
     }
     if (arg === '--policy') {
@@ -93,9 +99,10 @@ function parseArgs(argv: readonly string[]): Parsed | { ok: false; error: string
     if (arg !== undefined) positionals.push(arg);
   }
   const agentPath = positionals[0];
-  if (agentPath === undefined) return { ok: false, error: 'Name the agent file.' };
+  if (demo && agentPath !== undefined) return { ok: false, error: '--demo takes no agent file.' };
+  if (!demo && agentPath === undefined) return { ok: false, error: 'Name the agent file, or pass --demo.' };
   if (positionals.length > 1) return { ok: false, error: 'Pass one agent file.' };
-  return { ok: true, json, policy, agentPath };
+  return { ok: true, json, demo, policy, agentPath: agentPath ?? '' };
 }
 
 function resolvePolicy(flag: string | null, agentPath: string, root: string): string {

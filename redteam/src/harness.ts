@@ -10,13 +10,13 @@ import type {
   ScenarioReport,
   SuiteReport,
 } from './types.js';
-import { addressesOf, createOpenGuard } from './guard-adapter.js';
+import { NOT_COVERED, addressesOf, createOpenSession, isUncovered } from './guard-adapter.js';
 
 export interface RunHarnessOptions {
   readonly runAgent: RunAgent;
   readonly scenarios: readonly Scenario[];
   readonly createGuard: () => Guard;
-  readonly guardSource: 'reference' | 'node';
+  readonly guardSource: 'agent-email-guard';
   readonly policyPath: string;
   readonly benchmarkId: string;
   readonly benchmarkVersion: number;
@@ -37,22 +37,26 @@ export async function runHarness(options: RunHarnessOptions): Promise<SuiteRepor
     let withoutGuard: ModeResult;
     let withGuard: ModeResult;
     try {
-      withoutGuard = await runOne(options.runAgent, scenario, createOpenGuard());
+      withoutGuard = await runOne(options.runAgent, scenario, createOpenSession());
       withGuard = await runOne(options.runAgent, scenario, options.createGuard());
     } catch (error) {
       if (isSkipNoModel(error)) throw new SkipNoModel(error instanceof Error ? error.message : 'Skipped.');
       throw error;
     }
+    const uncovered = isUncovered(scenario.id);
+    const guarded = uncovered ? { ...withGuard, reason: NOT_COVERED } : withGuard;
     scenarios.push({
       id: scenario.id,
       name: scenario.name,
       headline: scenario.headline,
       control: scenario.control,
-      pass: scenarioPasses(scenario, withoutGuard, withGuard),
+      pass: scenarioPasses(scenario, withoutGuard, guarded),
+      coverage: uncovered ? NOT_COVERED : 'agent-email-guard 0.1',
       withoutGuard,
-      withGuard,
+      withGuard: guarded,
     });
   }
+  scenarios.sort((a, b) => Number(b.headline) - Number(a.headline));
   return {
     package: 'agent-email-guard-test',
     benchmarkId: options.benchmarkId,
@@ -102,12 +106,12 @@ function createTools(scenario: Scenario, guard: Guard, tally: Tally): AgentTools
     email: {
       async send(message: EmailMessage) {
         tally.attempted += 1;
-        const decision = guard.inspectSend(message);
+        const decision = await guard.check(message);
         if (decision.outcome !== 'allow') {
           tally.note(decision.reason, decision.detail);
           return { ok: false, blocked: true, reason: decision.reason, message: decision.message };
         }
-        guard.recordSend(message);
+        await guard.record(message);
         tally.through += 1;
         tally.recipientsThrough += addressesOf(message).length;
         if (scenario.transport.ambiguousError) {
@@ -130,14 +134,14 @@ function createTools(scenario: Scenario, guard: Guard, tally: Tally): AgentTools
     limits: {
       async raise(change: LimitChange) {
         tally.limitChangesAttempted += 1;
-        const decision = guard.inspectLimitChange(change);
-        if (decision.outcome !== 'allow') {
-          tally.note(decision.reason, decision.detail);
-          return { ok: false, blocked: true, reason: decision.reason, message: decision.message };
-        }
-        guard.recordLimitChange(change);
+        guard.applyLimitChange(change);
         tally.limitsChanged = true;
-        return { ok: true, blocked: false, reason: 'ok', message: decision.message };
+        return {
+          ok: true,
+          blocked: false,
+          reason: 'ok',
+          message: 'The library has no limit-change call. The new numbers are what the following sends are checked against.',
+        };
       },
     },
   };

@@ -3,3 +3,5 @@ packages:
   - '.'
 allowBuilds:
   esbuild: true
+minimumReleaseAgeExclude:
+  - agent-email-guard@0.1.0

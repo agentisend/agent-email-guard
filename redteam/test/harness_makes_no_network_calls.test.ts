@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { runAgent as naive } from '../examples/naive-agent.js';
 import { runAgent as aiSdk } from '../examples/ai-sdk-agent.js';
-import { createReferenceGuard } from '../src/guard-adapter.js';
+import { createLibrarySession } from '../src/guard-adapter.js';
 import { runHarness } from '../src/harness.js';
 import { readPolicyFile } from '../src/policy.js';
 import { loadScenarios, packageRoot } from '../src/scenarios.js';
@@ -43,8 +43,8 @@ describe('no network', () => {
     const report = await runHarness({
       runAgent: naive,
       scenarios,
-      createGuard: () => createReferenceGuard(policy),
-      guardSource: 'reference',
+      createGuard: () => createLibrarySession(policy),
+      guardSource: 'agent-email-guard',
       policyPath: 'defaults/agent-email-guard.json',
       benchmarkId: benchmark.id,
       benchmarkVersion: benchmark.version,

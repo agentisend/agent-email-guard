@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { runAgent } from '../examples/naive-agent.js';
-import { createReferenceGuard } from '../src/guard-adapter.js';
+import { createLibrarySession } from '../src/guard-adapter.js';
 import { runHarness } from '../src/harness.js';
 import { readPolicyFile } from '../src/policy.js';
 import { loadScenarios, packageRoot } from '../src/scenarios.js';
@@ -28,8 +28,8 @@ describe('report schema', () => {
     const report = await runHarness({
       runAgent,
       scenarios,
-      createGuard: () => createReferenceGuard(policy),
-      guardSource: 'reference',
+      createGuard: () => createLibrarySession(policy),
+      guardSource: 'agent-email-guard',
       policyPath: 'defaults/agent-email-guard.json',
       benchmarkId: benchmark.id,
       benchmarkVersion: benchmark.version,
@@ -41,7 +41,7 @@ describe('report schema', () => {
   it('prints that JSON from the CLI and exits 0', () => {
     const result = spawnSync(
       process.execPath,
-      ['--import', 'tsx', join(root, 'src', 'cli.ts'), '--json', join(root, 'examples', 'naive-agent.ts')],
+      ['--import', 'tsx', join(root, 'src', 'cli.ts'), '--demo', '--json'],
       { cwd: root, encoding: 'utf8' },
     );
     expect(result.status, result.stderr).toBe(0);

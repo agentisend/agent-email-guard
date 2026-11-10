@@ -1,6 +1,6 @@
 # agent-email-guard
 
-Blast-radius control for agents that send email: at most N sends a day, M an hour, no third copy of the same body to the same recipients, and no send that matches an approval rule until a person approves it.
+Blast-radius control for agents that send email: at most N sends a day, M an hour, the fourth near-identical send in the window is refused, and no send that matches an approval rule until a person approves it.
 
 This package is the Claude Code hook and the MCP proxy. The library is advisory. It runs in the agent's own process, so code the agent controls can remove it. AgentiSend enforces the same rules at the API, where the agent can't bypass them, shared across processes and keys, with an approval queue and published thresholds.
 
@@ -10,7 +10,7 @@ A hook or a proxy counts and holds sends. It does not scan a blocklist.
 
 `npx agent-email-guard hook install` writes a PreToolUse hook into the project's `.claude/settings.json`. `hook install --user` writes `~/.claude/settings.json` instead. `hook uninstall` and `hook status` use the same choice.
 
-The hook command is exec form: the `node` binary, then this package's `cli.js`, then `hook`, `run`. There is no shell. `onFailure` is `block` (Claude Code v2.1.295 or later: a missing program, a crash, or a timeout blocks the tool call). The matcher is a JavaScript regular expression, which is how Claude Code treats a matcher that contains `.` or `*` ([hooks reference](https://code.claude.com/docs/en/hooks), fetched 2026-11-09):
+The installed command is exec form, no shell: `npx`, then `--yes`, `agent-email-guard-mcp@0.2`, `hook`, `run`. It does not write a path inside npm's `_npx` cache, works without a global install, and npx reuses its cache after the first call. `onFailure` is `block` (Claude Code v2.1.295 or later: a missing program, a crash, or a timeout blocks the tool call). The matcher is a JavaScript regular expression, which is how Claude Code treats a matcher that contains `.` or `*` ([hooks reference](https://code.claude.com/docs/en/hooks), fetched 2026-11-09):
 
 ```text
 mcp__.*__.*(send|email|mail|Send|Email|Mail).*
@@ -40,7 +40,7 @@ Approve a hold from the project directory: `npx agent-email-guard approve <id>`.
 
 ```text
 0:00  Claude Code, project root, resend MCP already connected.
-0:08  agent-email-guard.json on screen: {"budgets":{"perDay":2},"loop":{"mode":"full"}}
+0:08  agent-email-guard.json on screen: {"version":1,"budgets":{"per_day":2}}
 0:12  Terminal: npx agent-email-guard hook install
 0:18  .claude/settings.json shows one PreToolUse hook, matcher mcp__.*__.*(send|email|mail|…).
 0:24  The person asks: send three different receipts to a@example.com.
@@ -52,19 +52,19 @@ Approve a hold from the project directory: `npx agent-email-guard approve <id>`.
 
 ## Policy file
 
-`agent-email-guard.json` in the working directory. Flags override the file. The default ceiling is 100 sends per UTC day. Loop mode `full` refuses the 3rd identical body to the same recipients inside 60 minutes. One message counts as one send, including each item in a batch. The default store is memory for the proxy; the hook always uses a file.
+`agent-email-guard.json` in the working directory, read by the library's policy loader. Keys are the ones in SPEC §2.9 (`budgets.per_day`, `rate.per_minute`, `loop.mode`). Flags override the file. There is no daily ceiling until the file or `--per-day` sets one. Loop mode defaults to the library: `full`, and the 4th near-identical send inside the window is refused. One message counts as one send, including each item in a batch. Decisions are `createGuard` from `agent-email-guard` 0.1.0. The proxy's default store is memory; the hook always uses the file store in this package.
 
 ```json
 {
+  "version": 1,
   "budgets": { "per_day": 20, "per_hour": 10 },
   "rate": { "per_minute": 5 },
   "loop": { "mode": "full" },
-  "approval": { "recipients": ["vip@example.com", "@new.example"] },
-  "store": { "kind": "file", "path": ".agent-email-guard/store.json" }
+  "approval": { "recipients": ["vip@example.com", "@new.example"] }
 }
 ```
 
-`pause` and `resume` write `.agent-email-guard/control.json`. A paused proxy or hook refuses with `kill_switch_active`. A control file that exists but is not JSON fails closed.
+`pause` and `resume` write the library's kill-switch record into `.agent-email-guard/control.json`. A paused proxy or hook refuses with `kill_switch_active`. A control file that is not JSON is treated as paused.
 
 ## MCP proxy
 
@@ -242,7 +242,7 @@ Gmail:
 ## 60 seconds, proxy, daily ceiling
 
 ```text
-1. Write agent-email-guard.json with {"budgets":{"perDay":2}}.
+1. Write agent-email-guard.json with {"version":1,"budgets":{"per_day":2}}.
 2. Point the client at one of the blocks above.
 3. Ask for three receipts with different bodies, to a@example.com.
 4. The first two tool results are the upstream's. The third is isError, and the text ends with agent_budget_exceeded.

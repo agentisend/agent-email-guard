@@ -15,7 +15,7 @@ describe('perDay 20 refuses the 21st send', () => {
     for (let n = 1; n <= 20; n += 1) {
       const result = await first.client.callTool({
         name: 'send_email',
-        arguments: { to: 'a@example.com', subject: `Receipt ${n}`, text: `body ${n}` },
+        arguments: { to: `user${n}@example.com`, subject: `Receipt ${n}`, text: `body ${n}` },
       });
       expect(result.isError).not.toBe(true);
     }
@@ -26,7 +26,7 @@ describe('perDay 20 refuses the 21st send', () => {
     closers.push(second.close);
     const refused = await second.client.callTool({
       name: 'send_email',
-      arguments: { to: 'a@example.com', subject: 'Receipt 21', text: 'body 21' },
+      arguments: { to: 'user21@example.com', subject: 'Receipt 21', text: 'body 21' },
     });
     expect(refused.isError).toBe(true);
     expect(textOf(refused)).toContain('agent_budget_exceeded');

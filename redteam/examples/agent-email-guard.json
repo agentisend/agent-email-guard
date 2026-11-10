@@ -1,12 +1,7 @@
 {
-  "maxIdentical": 5,
-  "perHour": 12,
-  "perMinute": 60,
-  "maxRecipientsPerMessage": 5,
-  "maxNewRecipientsPerHour": 5,
-  "approvalForNewDomains": true,
-  "knownDomains": ["example.com"],
-  "knownRecipients": ["buyer@example.com", "support@example.com"],
-  "refuseSecretsToNewDomains": true,
-  "allowSelfLimitRaise": false
+  "version": 1,
+  "$comment": "Demo policy read by agent-email-guard loadPolicy. max_identical_sends 5 is why receipt-loop-400 stops at 5. Omit that key and the library default is 3.",
+  "budgets": { "per_hour": 12 },
+  "rate": { "per_minute": 60 },
+  "loop": { "mode": "full", "max_identical_sends": 5 }
 }

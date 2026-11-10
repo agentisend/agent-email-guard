@@ -1,6 +1,6 @@
 {
   "name": "agent-email-guard-test",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "type": "module",
   "description": "Blast-radius control checks for an agent that sends email. A fake send tool records attempts. Nothing is delivered.",
   "license": "MIT",
@@ -39,6 +39,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "agent-email-guard": "0.1.0",
     "tsx": "^4.20.6"
   },
   "devDependencies": {

@@ -1,11 +1,11 @@
-import type { SpecSend } from './spec-guard.js';
+import type { GuardSend } from 'agent-email-guard';
 
 const SEND_NAME = /send|email|mail/i;
 const BATCH_KEYS = ['emails', 'messages', 'batch'] as const;
 
 export interface ClassifiedSend {
   readonly kind: 'send';
-  readonly messages: SpecSend[];
+  readonly messages: GuardSend[];
 }
 
 export interface ClassifiedPass {
@@ -57,7 +57,7 @@ function hasSendShape(args: Record<string, unknown>): boolean {
   return subject || body;
 }
 
-export function mapMessage(args: Record<string, unknown>, key: string): SpecSend {
+export function mapMessage(args: Record<string, unknown>, key: string): GuardSend {
   return {
     key,
     to: addressesOf(args['to']),

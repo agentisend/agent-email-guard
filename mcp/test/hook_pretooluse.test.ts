@@ -66,7 +66,7 @@ describe('Claude Code PreToolUse hook', () => {
     const dir = project();
     const path = settingsFile(false, dir);
     writeFileSync(join(dir, '.claude-skip'), '');
-    installHook(path, join(root, 'src/cli.ts'));
+    installHook(path);
     const other = { hooks: [{ type: 'command', command: 'echo keep' }] };
     const settings = JSON.parse(readFileSync(path, 'utf8')) as {
       hooks: { PreToolUse: Array<{ matcher: string; hooks: Array<{ command: string; args: string[]; onFailure: string }> }> };
@@ -76,7 +76,7 @@ describe('Claude Code PreToolUse hook', () => {
       hooks: [other.hooks[0] as unknown as { command: string; args: string[]; onFailure: string }],
     });
     writeFileSync(path, JSON.stringify(settings));
-    installHook(path, join(root, 'src/cli.ts'));
+    installHook(path);
     const twice = JSON.parse(readFileSync(path, 'utf8')) as {
       hooks: { PreToolUse: Array<{ matcher: string; hooks: unknown[] }> };
     };
@@ -84,8 +84,9 @@ describe('Claude Code PreToolUse hook', () => {
     expect(ours).toHaveLength(1);
     expect(twice.hooks.PreToolUse.some((group) => group.matcher === 'Bash')).toBe(true);
     const handler = ours[0]?.hooks[0] as { command: string; args: string[]; onFailure: string };
-    expect(handler.command).toBe(process.execPath);
-    expect(handler.args.slice(-2)).toEqual(['hook', 'run']);
+    expect(handler.command).toBe('npx');
+    expect(handler.args).toEqual(['--yes', 'agent-email-guard-mcp@0.2', 'hook', 'run']);
+    expect(handler.args.join(' ')).not.toContain('_npx');
     expect(handler.onFailure).toBe('block');
     expect(hookStatus(path).installed).toBe(true);
     expect(uninstallHook(path)).toBe(true);
@@ -109,47 +110,48 @@ describe('Claude Code PreToolUse hook', () => {
 
   it('allows a send, records it, and denies the 21st without running a server', async () => {
     const dir = project();
-    writePolicy(dir, { budgets: { perDay: 20 }, store: { kind: 'file', path: join(dir, 'store.json') } });
+    writePolicy(dir, { version: 1, budgets: { per_day: 20 } });
     for (let n = 1; n <= 20; n += 1) {
-      const result = await call('mcp__resend__send-email', { to: 'a@example.com', subject: `S${n}`, text: `body ${n}` }, dir);
+      const result = await call('mcp__resend__send-email', { to: `user${n}@example.com`, subject: `S${n}`, text: `body ${n}` }, dir);
       expect(result.decision).toBe('allow');
     }
-    const refused = await call('mcp__resend__send-email', { to: 'a@example.com', subject: 'S21', text: 'body 21' }, dir);
+    const refused = await call('mcp__resend__send-email', { to: 'user21@example.com', subject: 'S21', text: 'body 21' }, dir);
     expect(refused.decision).toBe('deny');
     expect(refused.reason).toContain('agent_budget_exceeded');
     expect(refused.reason).toContain('20');
   });
 
-  it('denies the third identical body', async () => {
+  it('denies the fourth identical body', async () => {
     const dir = project();
-    writePolicy(dir, { budgets: { perDay: 20 } });
+    writePolicy(dir, { version: 1, budgets: { per_day: 20 } });
     const args = { to: 'a@example.com', subject: 'Receipt', text: 'same-body' };
     expect((await call('mcp__gmail__send_email', args, dir)).decision).toBe('allow');
     expect((await call('mcp__gmail__send_email', args, dir)).decision).toBe('allow');
-    const third = await call('mcp__gmail__send_email', args, dir);
-    expect(third.decision).toBe('deny');
-    expect(third.reason).toContain('loop_repetition_detected');
+    expect((await call('mcp__gmail__send_email', args, dir)).decision).toBe('allow');
+    const fourth = await call('mcp__gmail__send_email', args, dir);
+    expect(fourth.decision).toBe('deny');
+    expect(fourth.reason).toContain('loop_repetition_detected');
   });
 
   it('denies a held send with approval required, then allows it after approve', async () => {
     const dir = project();
     writePolicy(dir, {
-      budgets: { perDay: 20 },
+      version: 1,
+      budgets: { per_day: 20 },
       approval: { recipients: ['vip@example.com'] },
-      approvalsFile: join(dir, 'approvals.json'),
     });
     const args = { to: ['vip@example.com'], subject: 'Hi', body: 'hello' };
     const held = await call('mcp__agentisend__send_email', args, dir);
     expect(held.decision).toBe('deny');
     expect(held.reason).toContain('approval required');
     const id = held.reason.match(/ap_[a-f0-9]+/)?.[0] ?? '';
-    expect(await run(['approve', id, '--approvals', join(dir, 'approvals.json')], { cwd: dir, stdout: () => undefined })).toBe(0);
+    expect(await run(['approve', id], { cwd: dir, stdout: () => undefined })).toBe(0);
     expect((await call('mcp__agentisend__send_email', args, dir)).decision).toBe('allow');
   });
 
   it('does not deny or count a non-send, and a batch of 2 spends 2', async () => {
     const dir = project();
-    writePolicy(dir, { budgets: { perDay: 2 } });
+    writePolicy(dir, { version: 1, budgets: { per_day: 2 } });
     const labels = await call('mcp__gmail__list_labels', {}, dir);
     expect(labels.decision).toBe('');
     expect(labels.stdout).toBe('');
@@ -171,7 +173,7 @@ describe('Claude Code PreToolUse hook', () => {
 
   it('prints only the decision JSON on stdout', async () => {
     const dir = project();
-    writePolicy(dir, { budgets: { perDay: 5 }, key: 'hook-stdio' });
+    writePolicy(dir, { version: 1, budgets: { per_day: 5 }, key: 'hook-stdio' });
     const input = JSON.stringify({
       hook_event_name: 'PreToolUse',
       tool_name: 'mcp__resend__send-email',

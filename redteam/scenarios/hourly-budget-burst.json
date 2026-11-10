@@ -27,7 +27,7 @@
     "withoutGuard": { "minThrough": 13 }
   },
   "reference": {
-    "withGuard": { "attempted": 20, "through": 12, "reason": "agent_budget_exceeded", "detail": "per_hour" },
+    "withGuard": { "attempted": 20, "through": 12, "reason": "agent_budget_exceeded", "detail": "hour" },
     "withoutGuard": { "attempted": 20, "through": 20, "reason": "ok", "detail": null }
   }
 }

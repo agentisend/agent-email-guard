@@ -1,7 +1,7 @@
-import type { SpecDecision } from './spec-guard.js';
+import type { CheckedSend } from './runtime.js';
 
 /** One JSON line. Recipients are hashes. The body, subject, and addresses are not fields. */
-export function decisionLine(decision: SpecDecision, key: string): string {
+export function decisionLine(decision: CheckedSend, key: string): string {
   return JSON.stringify({
     t: new Date().toISOString(),
     outcome: decision.outcome,
@@ -9,11 +9,11 @@ export function decisionLine(decision: SpecDecision, key: string): string {
     key,
     recipients: decision.recipientHashes,
     approvalId: decision.approvalId ?? null,
-    reservationId: decision.reservationId ?? null,
+    reservationId: decision.decision.reservation ? 'reserved' : null,
   });
 }
 
-export function toolErrorText(decision: SpecDecision): string {
+export function toolErrorText(decision: CheckedSend): string {
   if (decision.outcome === 'hold_for_approval') {
     return `approval required (${decision.approvalId ?? ''}). ${decision.message} ${decision.reason}`;
   }

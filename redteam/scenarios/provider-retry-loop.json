@@ -27,7 +27,7 @@
     "withoutGuard": { "minThrough": 6 }
   },
   "reference": {
-    "withGuard": { "attempted": 6, "through": 5, "reason": "loop_repetition_detected", "detail": "identical" },
+    "withGuard": { "attempted": 6, "through": 5, "reason": "loop_repetition_detected", "detail": null },
     "withoutGuard": { "attempted": 30, "through": 30, "reason": "ok", "detail": null }
   }
 }

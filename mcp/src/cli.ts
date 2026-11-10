@@ -3,37 +3,40 @@ import { realpathSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { createFileApprovals } from './spec-guard.js';
 import { loadConfig, parseArgs } from './config.js';
-import { writePaused } from './control.js';
 import { evaluateHook, hookStatus, installHook, settingsFile, uninstallHook } from './hook.js';
 import { connectUpstream, createGuardServer } from './proxy.js';
 import { openGuard, sendToolSet } from './runtime.js';
 
-export const USAGE = `agent-email-guard — blast-radius control for agents that send email.
+export const USAGE = `agent-email-guard-mcp — blast-radius control for agents that send email.
 
-  agent-email-guard hook install          Claude Code PreToolUse hook (project)
-  agent-email-guard hook install --user   same hook, under your user settings
-  agent-email-guard hook uninstall [--user]
-  agent-email-guard hook status [--user]
-  agent-email-guard mcp --wrap "<command>"
-  agent-email-guard mcp --wrap-url <https url> --header "Name: value"
-  agent-email-guard pause | resume | approvals | approve <id>
+  agent-email-guard-mcp hook install          Claude Code PreToolUse hook (project)
+  agent-email-guard-mcp hook install --user   same hook, under your user settings
+  agent-email-guard-mcp hook uninstall [--user]
+  agent-email-guard-mcp hook status [--user]
+  agent-email-guard-mcp --wrap "<command>"
+  agent-email-guard-mcp --wrap-url <https url> --header "Name: value"
+  agent-email-guard-mcp pause | resume | approvals | approve <id>
+
+The published library's bin is agent-email-guard. It forwards hook and mcp
+to this package. This package does not install that bin.
 
 The proxy speaks MCP on stdin/stdout. Decisions are JSON lines on stderr.
 Recipients in those lines are hashes. Message bodies are not logged.
 
-The hook reads agent-email-guard.json and a file store. On a refusal or a
-hold it prints a PreToolUse deny and exits 0. On an allow it records the
-send and prints allow. A tool that is not a send prints nothing.
+The hook reads agent-email-guard.json (the library's policy loader) and a
+file store. On a refusal or a hold it prints a PreToolUse deny and exits 0.
+On an allow it records the send and prints allow. A tool that is not a send
+prints nothing. The installed command is \`npx --yes agent-email-guard-mcp@0.2 hook run\`,
+which uses the copy already on disk and does not store an npx cache path.
 
-Flags and agent-email-guard.json:
-  --send-tools send_email,send_batch   default: a name matching send/email/mail
-                                       whose arguments carry to plus subject or a body
-  --per-day 100                        default 100, UTC day, one count per message
-  --per-hour N
-  --per-minute N
-  --loop full|off                      default full (3rd identical body is refused)
+Flags override the policy file. The policy file uses the library's keys
+(budgets.per_day, rate.per_minute, loop.mode). There is no daily ceiling
+until the policy or --per-day sets one. Loop mode defaults to the library:
+full, and the 4th near-identical send in the window is refused.
+  --send-tools send_email,send_batch
+  --per-day N   --per-hour N   --per-minute N
+  --loop full|repetition_only|off
   --key <name>                         default: the upstream server name
   --store memory|file                  default memory (the hook always uses a file)
   --store-path --control --approvals  default under ./.agent-email-guard/
@@ -67,13 +70,19 @@ export async function run(
     return 1;
   }
 
+  const opened = openGuard(config);
   if (flags.command === 'pause' || flags.command === 'resume') {
-    writePaused(config.controlFile, flags.command === 'pause');
-    stdout(flags.command === 'pause' ? 'paused\n' : 'resumed\n');
+    if (flags.command === 'pause') {
+      await opened.guard.killSwitch.pause('paused from the command line', 'agent-email-guard-mcp');
+      stdout('paused\n');
+    } else {
+      const resumed = await opened.guard.killSwitch.resume('agent-email-guard-mcp');
+      stdout(resumed ? 'resumed\n' : 'not paused\n');
+    }
     return 0;
   }
 
-  const approvals = createFileApprovals(config.approvalsFile);
+  const approvals = opened.approvals;
   if (flags.command === 'approvals') {
     const rows = await approvals.list();
     if (rows.length === 0) {
@@ -90,7 +99,7 @@ export async function run(
     const id = flags.approveId ?? '';
     const ok = await approvals.approve(id);
     if (!ok) {
-      stderr(`No held send has id ${id}. Run agent-email-guard approvals.\n`);
+      stderr(`No held send has id ${id}. Run agent-email-guard-mcp approvals.\n`);
       return 1;
     }
     stdout(`approved ${id}\n`);
@@ -108,9 +117,8 @@ export async function run(
       return result.exitCode;
     }
     const path = settingsFile(flags.userScope, cwd);
-    const cliPath = fileURLToPath(import.meta.url);
     if (action === 'install') {
-      installHook(path, cliPath);
+      installHook(path);
       stdout(`installed ${path}\n`);
       return 0;
     }
@@ -135,7 +143,7 @@ export async function run(
       headers: config.headers,
     });
     const server = createGuardServer(upstream, {
-      guard: openGuard(config),
+      guard: opened,
       sendTools: sendToolSet(config),
       ...(config.key !== undefined ? { key: config.key } : {}),
     });

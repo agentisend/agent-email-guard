@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      agent-email-guard:
+        specifier: 0.1.0
+        version: 0.1.0
       tsx:
         specifier: ^4.20.6
         version: 4.23.15
@@ -366,6 +369,19 @@ packages:
 
   '@vitest/utils@3.2.7':
     resolution: {integrity: sha512-x6BDOd7dyo3PFLY3I9/HJ25X/6OurhGXk2/B9gOZNPF7XDVjeBK4k01lQE5uvDpbuheErh91qYuE1E2OEjK3Rw==}
+
+  agent-email-guard@0.1.0:
+    resolution: {integrity: sha512-mztY69PsxVYufqNkO+oJGrDb9tWsR4CKIfRKveEPfp/xCF4cWuat4TeknzRpYc35BCZZGs6+3OusZlav41ibCQ==}
+    engines: {node: '>=18'}
+    hasBin: true
+    peerDependencies:
+      ioredis: '>=5'
+      pg: '>=8'
+    peerDependenciesMeta:
+      ioredis:
+        optional: true
+      pg:
+        optional: true
 
   assertion-error@2.0.1:
     resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
@@ -808,6 +824,8 @@ snapshots:
       '@vitest/pretty-format': 3.2.7
       loupe: 3.2.1
       tinyrainbow: 2.0.0
+
+  agent-email-guard@0.1.0: {}
 
   assertion-error@2.0.1: {}
 

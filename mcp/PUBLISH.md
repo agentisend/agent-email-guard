@@ -1,6 +1,6 @@
 # Publish agent-email-guard-mcp
 
-Do not run these until launch day. Nothing in this file has been executed.
+Do not run these. Nothing in this file has been executed. 0.2.0 is not published.
 
 ```bash
 cd oss/agent-guard/mcp
@@ -10,6 +10,6 @@ pnpm run build
 npm publish
 ```
 
-The package name is the unscoped `agent-email-guard-mcp`. Bins: `agent-email-guard` and `agent-email-guard-mcp`.
+The package name is the unscoped `agent-email-guard-mcp` at version 0.2.0. The only bin is `agent-email-guard-mcp`.
 
-When `oss/agent-guard/node` publishes `agent-email-guard`, that package owns the `agent-email-guard` bin and should forward `hook` and `mcp` here. Drop this package's `agent-email-guard` bin in the same change so the two packages do not both install that name.
+`agent-email-guard` 0.1.0 (published) owns the `agent-email-guard` bin and forwards `hook` and `mcp` to this package. This package depends on that library for `createGuard`, `check` / `record` / `release`, and `loadPolicy`.

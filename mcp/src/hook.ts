@@ -6,7 +6,7 @@ import { loadConfig, parseArgs } from './config.js';
 import { decisionLine, toolErrorText } from './log.js';
 import { openGuard } from './runtime.js';
 import type { ResolvedConfig } from './config.js';
-import type { SpecDecision } from './spec-guard.js';
+import type { CheckedSend } from './runtime.js';
 
 /**
  * PreToolUse matcher. Claude Code tests this with JavaScript
@@ -28,27 +28,22 @@ export interface HookHandlerJson {
   onFailure: 'block';
 }
 
-/** Exec form: `node <cli> hook run`. A real `node` binary, no shell, so a path with spaces stays one argument. */
-/** The package spec the hook runs through npx when the CLI itself was started from npx's temporary cache. */
-export const NPX_PACKAGE_SPEC = 'agent-email-guard-mcp@0.1';
+/**
+ * Exec form that does not embed a path under npm's `_npx` cache.
+ * `npx --yes agent-email-guard-mcp@0.2` works whether or not the package is installed: most people run
+ * `npx agent-email-guard hook install` without installing anything, and `--no-install` would then fail
+ * every call, which `onFailure: block` turns into blocking every email tool. npx reuses its cache after
+ * the first run; anything it prints goes to stderr, which Claude Code ignores on exit 0.
+ */
+export const HOOK_PACKAGE_SPEC = 'agent-email-guard-mcp@0.2';
+export const HOOK_ARGS = ['--yes', HOOK_PACKAGE_SPEC, 'hook', 'run'] as const;
 
-export function hookHandler(cliPath: string): HookHandlerJson {
-  // `npx agent-email-guard hook install` runs this CLI from npx's cache, a folder npm may clear at any time.
-  // Point the hook at the package instead of at that path, so it keeps working after the cache is cleaned.
-  if (/[\\/]_npx[\\/]/.test(cliPath)) {
-    return {
-      type: 'command',
-      command: 'npx',
-      args: ['--yes', NPX_PACKAGE_SPEC, 'hook', 'run'],
-      timeout: 30,
-      onFailure: 'block',
-    };
-  }
+export function hookHandler(): HookHandlerJson {
   return {
     type: 'command',
-    command: process.execPath,
-    args: [cliPath, 'hook', 'run'],
-    timeout: 15,
+    command: 'npx',
+    args: [...HOOK_ARGS],
+    timeout: 30,
     onFailure: 'block',
   };
 }
@@ -56,17 +51,21 @@ export function hookHandler(cliPath: string): HookHandlerJson {
 export function isOurHook(handler: unknown): boolean {
   if (handler === null || typeof handler !== 'object') return false;
   const row = handler as { command?: unknown; args?: unknown };
-  if (Array.isArray(row.args) && row.args.at(-2) === 'hook' && row.args.at(-1) === 'run') {
-    return typeof row.command === 'string';
+  if (typeof row.command !== 'string') return false;
+  const args = Array.isArray(row.args) ? row.args.map(String) : [];
+  if (row.command === 'npx' && args.some((a) => a.startsWith('agent-email-guard-mcp')) && args.at(-2) === 'hook' && args.at(-1) === 'run') {
+    return true;
   }
-  return typeof row.command === 'string' && row.command.includes('agent-email-guard') && row.command.includes('hook run');
+  // 0.1.0 wrote `node <cli path> hook run`, often a path inside the npx cache.
+  if (args.at(-2) === 'hook' && args.at(-1) === 'run' && args.join(' ').includes('agent-email-guard')) return true;
+  return row.command.includes('agent-email-guard') && row.command.includes('hook run');
 }
 
 export function settingsFile(userScope: boolean, cwd: string, home = homedir()): string {
   return userScope ? resolve(home, '.claude', 'settings.json') : resolve(cwd, '.claude', 'settings.json');
 }
 
-export function installHook(settingsPath: string, cliPath: string): void {
+export function installHook(settingsPath: string): void {
   const settings = readSettings(settingsPath);
   const hooks = objectField(settings, 'hooks');
   const groups: Record<string, unknown>[] = arrayField(hooks, 'PreToolUse').flatMap((group) => {
@@ -74,7 +73,7 @@ export function installHook(settingsPath: string, cliPath: string): void {
     if (handlers.length === 0) return [];
     return [{ ...group, hooks: handlers }];
   });
-  groups.push({ matcher: HOOK_MATCHER, hooks: [hookHandler(cliPath)] } as Record<string, unknown>);
+  groups.push({ matcher: HOOK_MATCHER, hooks: [hookHandler()] } as Record<string, unknown>);
   hooks['PreToolUse'] = groups;
   settings['hooks'] = hooks;
   writeSettings(settingsPath, settings);
@@ -173,21 +172,17 @@ export async function evaluateHook(raw: string, cwd: string): Promise<HookResult
 
   const guard = openGuard(config);
   const lines: string[] = [];
-  const reserved: SpecDecision[] = [];
+  const reserved: CheckedSend[] = [];
   for (const send of classified.messages) {
     const decision = await guard.check(send);
-    lines.push(decisionLine(decision, send.key));
+    lines.push(decisionLine(decision, send.key ?? key));
     if (decision.outcome !== 'allow') {
-      for (const prior of reserved) {
-        if (prior.reservationId) await guard.release(prior.reservationId);
-      }
+      for (const prior of reserved) await guard.release(prior);
       return deny(toolErrorText(decision), lines.join('\n'));
     }
     reserved.push(decision);
   }
-  for (const decision of reserved) {
-    if (decision.reservationId) await guard.record(decision.reservationId);
-  }
+  for (const decision of reserved) await guard.record(decision);
   const reason = reserved[0] ? toolErrorText(reserved[0]) : 'Send reserved. ok';
   return {
     exitCode: 0,
