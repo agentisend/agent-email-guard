@@ -34,7 +34,7 @@ What that JSON means, from the same docs page, and only that:
 
 This repo has not run Claude Code in `default`, `plan`, `acceptEdits`, `auto`, `dontAsk`, or `bypassPermissions`. The hook does not read `permission_mode`. Do not treat it as tested in those modes. The model cannot skip the hook for a matched tool call in that session. It can still edit `.claude/settings.json` with a file tool, which removes the hook for the next session.
 
-Approve a hold from the project directory: `npx agent-email-guard approve <id>`. `npx agent-email-guard approvals` lists ids and recipient hashes.
+Approve a hold from the project directory: `npx agent-email-guard mcp approve <id>`. `npx agent-email-guard mcp approvals` lists ids and recipient hashes.
 
 ### Refused call, as a 60-second shot list
 

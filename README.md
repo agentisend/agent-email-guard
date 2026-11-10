@@ -88,6 +88,10 @@ echo '{"to":"cto@bigcustomer.com"}' | npx agent-email-guard check   # exit 0 all
 - **OpenAI Agents SDK**: `tool({ ..., inputGuardrails: [emailInputGuardrail(guard)] })`; a refusal becomes the content the model reads
 - **Vercel AI SDK**: an agent tool whose send is wrapped, so a refusal becomes the tool result the model reads ([example](node/examples/vercel-ai-tool.ts))
 
+## Coding-agent skill
+
+`npx skills add agentisend/agent-email-guard` installs the `agent-email-safety` [Agent Skill](skills/agent-email-safety/SKILL.md) for Claude Code, Cursor, Codex and other agents that read `SKILL.md`. It tells the coding agent to wrap any send path it writes, install the hook, and keep the caps. A Cursor rule ([rules/agent-email-safety.mdc](rules/agent-email-safety.mdc)) and `AGENTS.md` / `CLAUDE.md` snippets are in [skills/](skills/).
+
 ## Languages
 
 | Language | Package | Directory |

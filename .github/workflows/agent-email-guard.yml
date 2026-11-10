@@ -26,6 +26,15 @@ jobs:
             if [ -d "$d" ]; then echo "$d=true" >> "$GITHUB_OUTPUT"; else echo "$d=false" >> "$GITHUB_OUTPUT"; fi
           done
 
+  skills:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node --test skills/test/*.test.mjs
+
   node:
     needs: detect
     if: needs.detect.outputs.node == 'true'
