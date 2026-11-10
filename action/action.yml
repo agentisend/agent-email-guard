@@ -1,0 +1,21 @@
+name: agent-email-guard check
+description: Warn when agent code sends email without a policy file or a guard import.
+branding:
+  icon: shield
+  color: gray
+inputs:
+  fail:
+    description: Exit 1 when a finding exists. Default is a warning annotation.
+    required: false
+    default: 'false'
+  scope:
+    description: agent flags agent-SDK files and email MCP configs. all flags every send call.
+    required: false
+    default: agent
+  path:
+    description: Directory to scan, relative to the workspace. Default is the repository root.
+    required: false
+    default: '.'
+runs:
+  using: node20
+  main: lib/index.js

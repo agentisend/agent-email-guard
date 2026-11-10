@@ -1,0 +1,14 @@
+{
+  "name": "agent-email-guard-action",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GitHub Action that warns when agent code sends email without a policy file or a guard import.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  }
+}

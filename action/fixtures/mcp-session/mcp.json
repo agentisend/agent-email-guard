@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "session": {
+      "command": "npx",
+      "args": ["-y", "session-store"]
+    }
+  }
+}

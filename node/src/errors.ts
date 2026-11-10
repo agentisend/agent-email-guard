@@ -11,12 +11,13 @@ function branded(value: unknown, brand: symbol): boolean {
 
 /** Thrown by a wrapped send when the guard refused it. Nothing was sent. */
 export class GuardRefused extends Error {
-  static [Symbol.hasInstance](value: unknown): boolean {
+  static override [Symbol.hasInstance](value: unknown): boolean {
     return branded(value, REFUSED);
   }
   readonly [REFUSED] = true;
   readonly decision: Decision;
   readonly reason: Decision['reason'];
+  override name: string;
   constructor(decision: Decision) {
     super(decision.message);
     this.name = 'GuardRefused';
@@ -31,9 +32,10 @@ export class GuardRefused extends Error {
  * run every other check again and send.
  */
 export class ApprovalRequired<R = unknown> extends Error {
-  static [Symbol.hasInstance](value: unknown): boolean {
+  static override [Symbol.hasInstance](value: unknown): boolean {
     return branded(value, APPROVAL);
   }
+  override name: string;
   readonly [APPROVAL] = true;
   readonly decision: Decision;
   readonly reason: Decision['reason'];

@@ -129,6 +129,37 @@ jobs:
       - run: composer install --no-interaction --no-progress
       - run: vendor/bin/phpunit
 
+  proxy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: resend-proxy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: resend-proxy/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: resend-proxy/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  action:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: action
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node --test test/*.test.mjs
+
   go:
     needs: detect
     if: needs.detect.outputs.go == 'true'

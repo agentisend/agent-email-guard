@@ -56,10 +56,16 @@ export function createOpenSession(): Session {
   };
 }
 
+/** Clock origin for every guarded run. The monthly benchmark records this seed. */
+export const CLOCK_SEED_MS = 1_700_000_000_000;
+
+/** Added after each check and record, so two runs with the same script match. */
+export const CLOCK_STEP_MS = 1;
+
 class LibrarySession implements Session {
   #config: GuardConfig;
   #guard: Guard;
-  #now = 1_700_000_000_000;
+  #now = CLOCK_SEED_MS;
 
   constructor(config: GuardConfig) {
     this.#config = config;
@@ -103,7 +109,7 @@ class LibrarySession implements Session {
       store: new MemoryStore(),
       clock: () => {
         const now = this.#now;
-        this.#now += 1;
+        this.#now += CLOCK_STEP_MS;
         return now;
       },
     });

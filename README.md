@@ -82,12 +82,16 @@ echo '{"to":"cto@bigcustomer.com"}' | npx agent-email-guard check   # exit 0 all
 - **AgentiSend**: local guard around the SDK, or the hosted adapter above ([example](node/examples/agentisend.ts))
 - **nodemailer**: `transporter.use('compile', nodemailerGuard(loadPolicy()))`, or `guard.wrap((mail) => transporter.sendMail(mail))` ([example](node/examples/nodemailer.ts))
 - **Amazon SES** (SDK v3): wrap `client.send(new SendEmailCommand(input))` with a five-line field mapping ([example](node/examples/ses.ts))
-- **Resend**: wrap `resend.emails.send` and throw on `{ error }` ([example](node/examples/resend.ts))
+- **Resend**: wrap `resend.emails.send` and throw on `{ error }` ([example](node/examples/resend.ts)). For a cap with no code change, [`agent-email-guard-proxy`](resend-proxy/) speaks `POST /emails` and `POST /emails/batch`, checks each message, and forwards an allowed request unchanged. It is not affiliated with Resend.
 - **Postmark**: wrap `client.sendEmail({ From, To, Subject, TextBody })` with `toGuardSend: (m) => ({ to: m.To, subject: m.Subject, text: m.TextBody, html: m.HtmlBody })`
 - **SMTP**: any client, same pattern as nodemailer
 - **OpenAI Agents SDK**: `tool({ ..., inputGuardrails: [emailInputGuardrail(guard)] })`; a refusal becomes the content the model reads
 - **Vercel AI SDK**: an agent tool whose send is wrapped, so a refusal becomes the tool result the model reads ([example](node/examples/vercel-ai-tool.ts))
 - **LangChain / LangGraph, Mastra, CrewAI, OpenAI Agents (JS and Python), Vercel AI SDK**: tested tool wrappers in [integrations/](integrations/); a hold becomes a LangGraph `interrupt()` or a Mastra `suspend`, and an approved resume still goes through the budgets
+
+## CI check
+
+[action/](action/) is a GitHub Action, `agent-email-guard check`. It warns when a pull request adds an email send in agent code and that file does not import the guard and no `agent-email-guard.json` covers it. `fail: true` makes the check exit 1. The action reads the checkout and does not call the network.
 
 ## Coding-agent skill
 

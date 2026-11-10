@@ -85,5 +85,9 @@ The package also ships the `agent-email-guard` CLI (`bin`). Its `mcp`, `hook` an
 ## 4. After publishing
 
 - `npm view`, `pip index versions agent-email-guard`, the Packagist page and `go list -m github.com/agentisend/agent-email-guard/go@v0.1.0` each show 0.1.0.
-- The public repo's Actions run is green on all four jobs.
+- The public repo's Actions run is green, including the `action` job (`node --test` in `action/`, no install).
 - Install from each registry into an empty project and run the README example.
+
+## 5. GitHub Action
+
+`action/` is the `agent-email-guard check` Action. Publish steps, including the Marketplace repository (not created here), are in [action/PUBLISH.md](action/PUBLISH.md). Tag `v1` on the public repository only after `action/lib/` is in that tree. Do not create the Marketplace repository from an agent session.
