@@ -1,0 +1,24 @@
+{
+  "name": "agent-email-guard-langchain",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "keywords": [
+    "ai-agents",
+    "email",
+    "rate-limit",
+    "mcp",
+    "nodemailer"
+  ],
+  "dependencies": {
+    "agent-email-guard": "0.1.0",
+    "@langchain/core": "1.3.5",
+    "@langchain/langgraph": "1.7.2",
+    "langchain": "1.6.3",
+    "zod": "4.6.7"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test test/hold-maps-to-interrupt.test.ts",
+    "example": "node --experimental-strip-types examples/stub-send.ts"
+  }
+}

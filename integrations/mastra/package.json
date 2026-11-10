@@ -1,0 +1,22 @@
+{
+  "name": "agent-email-guard-mastra",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "keywords": [
+    "ai-agents",
+    "email",
+    "rate-limit",
+    "mcp",
+    "nodemailer"
+  ],
+  "dependencies": {
+    "agent-email-guard": "0.1.0",
+    "@mastra/core": "1.82.0",
+    "zod": "4.6.7"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test test/hold-suspends.test.ts",
+    "example": "node --experimental-strip-types examples/stub-send.ts"
+  }
+}

@@ -8,3 +8,6 @@
 /php/phpunit.xml.dist export-ignore
 /php/phpstan.neon.dist export-ignore
 /php/PUBLISH.md export-ignore
+/integrations export-ignore
+/skills export-ignore
+/rules export-ignore

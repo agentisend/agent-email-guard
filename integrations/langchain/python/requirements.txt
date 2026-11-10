@@ -1,0 +1,4 @@
+agent-email-guard==0.1.0
+langchain==1.4.9
+langgraph==1.2.20
+pytest==8.4.2

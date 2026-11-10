@@ -1,0 +1,22 @@
+{
+  "name": "agent-email-guard-openai-agents",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "keywords": [
+    "ai-agents",
+    "email",
+    "rate-limit",
+    "mcp",
+    "nodemailer"
+  ],
+  "dependencies": {
+    "agent-email-guard": "0.1.0",
+    "@openai/agents": "0.21.0",
+    "zod": "4.6.7"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test test/refused-send-trips-guardrail.test.ts",
+    "example": "node --experimental-strip-types examples/stub-send.ts"
+  }
+}

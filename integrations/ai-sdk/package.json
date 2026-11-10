@@ -1,0 +1,22 @@
+{
+  "name": "agent-email-guard-ai-sdk",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "keywords": [
+    "ai-agents",
+    "email",
+    "rate-limit",
+    "mcp",
+    "nodemailer"
+  ],
+  "dependencies": {
+    "agent-email-guard": "0.1.0",
+    "ai": "7.0.166",
+    "zod": "4.6.7"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test test/refusal-is-tool-result.test.ts",
+    "example": "node --experimental-strip-types examples/stub-send.ts"
+  }
+}

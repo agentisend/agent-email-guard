@@ -1,0 +1,11 @@
+{
+  "name": "agent-email-guard-integrations",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "ai-sdk",
+    "openai-agents/js",
+    "langchain/js",
+    "mastra"
+  ]
+}

@@ -87,6 +87,7 @@ echo '{"to":"cto@bigcustomer.com"}' | npx agent-email-guard check   # exit 0 all
 - **SMTP**: any client, same pattern as nodemailer
 - **OpenAI Agents SDK**: `tool({ ..., inputGuardrails: [emailInputGuardrail(guard)] })`; a refusal becomes the content the model reads
 - **Vercel AI SDK**: an agent tool whose send is wrapped, so a refusal becomes the tool result the model reads ([example](node/examples/vercel-ai-tool.ts))
+- **LangChain / LangGraph, Mastra, CrewAI, OpenAI Agents (JS and Python), Vercel AI SDK**: tested tool wrappers in [integrations/](integrations/); a hold becomes a LangGraph `interrupt()` or a Mastra `suspend`, and an approved resume still goes through the budgets
 
 ## Coding-agent skill
 
