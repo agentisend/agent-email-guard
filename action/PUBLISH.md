@@ -1,27 +1,12 @@
 # Publishing the agent-email-guard GitHub Action
 
-Nothing here has been run. Do not create a repository, push a tag, or open a Marketplace listing from a cloud agent. The supervisor does that after this branch is on `main` and the public tree includes `action/`.
+Published 2026-11-10: `agentisend/agent-email-guard-action`, tags `v1` and `v1.0.0`, listed on the Marketplace. Do not create a repository, push a tag, or change the listing from a cloud agent.
 
 The action runtime is `lib/index.js` (built by `tsc -p tsconfig.build.json`). GitHub runs that file with Node 20. There is no `npm install` in the action.
 
-## A. Use it from the existing public repository
+## A. No tags on the library repository
 
-`github.com/agentisend/agent-email-guard` is the split of `oss/agent-guard/` (`scripts/oss-agent-guard-mirror.sh --push` in the parent [PUBLISH.md](../PUBLISH.md)). After this directory is in that repository:
-
-```bash
-# in the public repository, on the commit that contains action/action.yml
-git tag v1
-git tag v1.0.0
-git push origin v1 v1.0.0
-```
-
-Users then write:
-
-```yaml
-uses: agentisend/agent-email-guard/action@v1
-```
-
-Pin `v1` to the newest 1.x commit when you ship a later tag, and leave `v1.0.0` on this commit. This path does not appear in the GitHub Marketplace. Marketplace reads `action.yml` from the repository root, and this file lives at `action/action.yml`.
+Do not tag `v1` or `v1.0.0` on `github.com/agentisend/agent-email-guard`. Packagist reads every tag there as a version of the PHP library, so a `v1.0.0` tag published the 0.1 library as 1.0.0 (tags removed 2026-11-11). The only supported path is `uses: agentisend/agent-email-guard-action@v1`.
 
 ## B. List it on GitHub Marketplace
 

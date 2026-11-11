@@ -14,13 +14,13 @@ on: [pull_request]
 jobs:
   check:
     runs-on: ubuntu-latest
-    steps: [{ uses: actions/checkout@v4 }, { uses: agentisend/agent-email-guard/action@v1 }]
+    steps: [{ uses: actions/checkout@v4 }, { uses: agentisend/agent-email-guard-action@v1 }]
 ```
 
 To fail the job, add one step input:
 
 ```yaml
-- uses: agentisend/agent-email-guard/action@v1
+- uses: agentisend/agent-email-guard-action@v1
   with:
     fail: true
 ```
@@ -65,6 +65,6 @@ The action writes at most 200 annotations. The log line states the full count.
 
 ## Publish
 
-Marketplace listing needs a public repository whose root is this directory, plus a tag. The steps are in [PUBLISH.md](PUBLISH.md). They have not been run. Until that repository exists, a tag on `github.com/agentisend/agent-email-guard` serves this action as `agentisend/agent-email-guard/action@v1`.
+Listed on the GitHub Marketplace as [agent-email-guard check](https://github.com/marketplace/actions/agent-email-guard-check), from `github.com/agentisend/agent-email-guard-action` (tags `v1`, `v1.0.0`). Release steps: [PUBLISH.md](PUBLISH.md).
 
 License: [LICENSE](LICENSE) (MIT).

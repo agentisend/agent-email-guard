@@ -20,7 +20,7 @@ test('the README badge and the six-line workflow match the example file', () => 
   assert.equal(lines.length, 6);
   const example = readFileSync(join(root, 'examples', 'agent-email-guard.yml'), 'utf8').replace(/\n$/, '');
   assert.equal(snippet, example);
-  assert.match(snippet, /uses: agentisend\/agent-email-guard\/action@v1/);
+  assert.match(snippet, /uses: agentisend\/agent-email-guard-action@v1/);
   assert.match(readme, /fail: true/);
 });
 
